@@ -12,37 +12,36 @@ const Experience = () => {
       type: 'education',
       period: '2023 - 2027',
       location: 'Hyderabad, India',
-      description: 'Acquiring deep mathematical and algorithmic foundations. Focusing heavily on Probability, Stochastic Processes, Linear Algebra, Machine Learning, and Design & Analysis of Algorithms.',
+      description: 'Acquiring solid mathematical and algorithmic foundations. Focusing heavily on design and analysis of algorithms, probability, statistics, and machine learning architectures.',
       bullets: [
-        'Selected Coursework: Data Structures, Algorithms, Advanced Linear Algebra, Stochastic Calculus foundations.',
-        'Actively implementing theoretical mathematical frameworks into C++ and Python models.',
-        'Academic ID: SE23UCSE001. Maintained high academic standing with a strong focus on computational science.',
+        'Selected Coursework: Design & Analysis of Algorithms, Probability & Statistics, Optimization Techniques, Deep Learning, Reinforcement Learning.',
+        'Actively implementing mathematical optimization models and neural networks in Python.',
+        'Student ID: SE23UCSE001. Maintaining a solid academic performance (CGPA: 7.96/10) with active involvement in technical groups.',
       ],
     },
     {
-      title: 'Quantitative Finance Researcher (Self-Directed)',
-      organization: 'Computational Finance Projects',
+      title: 'AI/ML & Software Projects Developer',
+      organization: 'Independent & Academic Development',
       type: 'research',
       period: '2024 - Present',
-      location: 'Mahindra University',
-      description: 'Conducting intensive personal research on mathematical pricing frameworks, LOB modeling, and volatility dynamics.',
+      location: 'Mahindra University Lab',
+      description: 'Developing Python projects implementing predictive modeling, time-series forecasting, and reinforcement learning agents.',
       bullets: [
-        'Calibrated Heston & SABR local-stochastic volatility models using Finite Difference Methods and Monte Carlo simulations.',
-        'Engineered an high-frequency limit order book (LOB) signal detector in C++ operating at sub-millisecond latencies.',
-        'Backtested mathematical allocation schemes including Hierarchical Risk Parity (HRP) and Black-Litterman portfolios.',
+        'Programmed model-free RL agents (Q-Learning and SARSA) from scratch in Python to prove convergence bounds.',
+        'Built deep sequence models in PyTorch using LSTM cells to forecast weather patterns, achieving 14.8% MAE error reduction.',
+        'Created asset prediction scripts in Scikit-learn (Random Forests) wrapped in FastAPI backend endpoints.',
       ],
     },
     {
-      title: 'Machine Learning Architect & Core Builder',
-      organization: 'Open Source Machine Learning & Web Systems',
+      title: 'Operations Lead & Logistics Lead',
+      organization: 'TEDx & Mahindra University Math Club',
       type: 'work',
-      period: '2024 - 2025',
-      location: 'Mahindra University Lab',
-      description: 'Architecting custom deep learning pipelines and web systems that visualize heavy analytics.',
+      period: '2023 - 2024',
+      location: 'Mahindra University',
+      description: 'Directing logistical coordination, schedules, and event planning budgets.',
       bullets: [
-        'Built neural networks from scratch in PyTorch, testing LSTM, Transformer, and GAN layers for time-series forecasting.',
-        'Created Zenith Intelligence, a platform for real-time dynamic web analytics and predictive tracking.',
-        'Developed Veltrix Terminal, an institutional-grade financial dashboard aggregating charts, risk statistics, and macro flows.',
+        'Operations Lead @ TEDx Mahindra University: Managed stage coordination, attendee ticketing, and speaker timelines for a 500+ audience event.',
+        'Logistics Head @ Math Club: Coordinated venue setup, scheduling, and promotions for math modeling events, engaging over 300+ students.',
       ],
     },
   ];
@@ -55,7 +54,7 @@ const Experience = () => {
         <div className="mb-16">
           <span className="text-xs font-bold uppercase tracking-widest text-accent-cyan">Timeline</span>
           <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-text-main mt-2">
-            Education & Academic Milestones
+            Education & Project Milestones
           </h2>
           <div className="w-20 h-1 bg-gradient-to-r from-accent-cyan to-accent-teal mt-4 rounded-full" />
         </div>

@@ -42,7 +42,7 @@ const Resume = () => {
                 A Venkata Vinesh Kumar Reddy
               </h3>
               <p className="text-sm font-semibold text-accent-cyan font-mono tracking-wider uppercase">
-                Computer Science & Quantitative Finance Student
+                Computer Science & AI/ML Student
               </p>
               <div className="text-xs text-text-sub font-mono">
                 Student ID: SE23UCSE001
@@ -94,8 +94,8 @@ const Resume = () => {
                   B.Tech in Computer Science & Engineering
                 </p>
                 <p className="text-xs text-text-sub mt-2 leading-relaxed">
-                  Focusing on advanced algorithms, numerical computing, probability structures, linear algebra, 
-                  and artificial intelligence frameworks.
+                  Focusing on design and analysis of algorithms, probability theory, statistics, optimization techniques, 
+                  machine learning models, and deep sequence predictors.
                 </p>
               </div>
             </div>
@@ -110,25 +110,25 @@ const Resume = () => {
               <div className="space-y-1">
                 <span className="font-bold text-text-main uppercase tracking-wider block">Programming Languages</span>
                 <span className="text-text-sub font-medium leading-relaxed block">
-                  C++, Python, High-Performance Python (NumPy, SciPy, Pandas), JavaScript, HTML/CSS
-                </span>
-              </div>
-              <div className="space-y-1">
-                <span className="font-bold text-text-main uppercase tracking-wider block">Quantitative Finance</span>
-                <span className="text-text-sub font-medium leading-relaxed block">
-                  Stochastic Volatility Models (SABR, Heston), Black-Litterman Portfolio Optimization, Finite Difference pricing, Monte Carlo simulators
+                  Python (Primary), JavaScript, SQL, C++ (Algorithms & systems fundamentals)
                 </span>
               </div>
               <div className="space-y-1">
                 <span className="font-bold text-text-main uppercase tracking-wider block">AI / Machine Learning</span>
                 <span className="text-text-sub font-medium leading-relaxed block">
-                  PyTorch, TensorFlow, Transformers, Reinforcement Learning (PPO), LSTM sequence mapping, Weights & Biases
+                  PyTorch, TensorFlow, Scikit-learn, Reinforcement Learning, LSTM/GRU models, Time-Series forecasting
                 </span>
               </div>
               <div className="space-y-1">
-                <span className="font-bold text-text-main uppercase tracking-wider block">Developer Practices</span>
+                <span className="font-bold text-text-main uppercase tracking-wider block">Software Engineering</span>
                 <span className="text-text-sub font-medium leading-relaxed block">
-                  Linux systems, Git Version Control, API endpoints, Responsive UI design, Performance engineering
+                  React, FastAPI, Docker, REST APIs, Git, Algorithms & Data Structures, OOP
+                </span>
+              </div>
+              <div className="space-y-1">
+                <span className="font-bold text-text-main uppercase tracking-wider block">Mathematics & Analytics</span>
+                <span className="text-text-sub font-medium leading-relaxed block">
+                  Probability, Statistics, Mathematical Optimization, Financial Mathematics, Data Analysis
                 </span>
               </div>
             </div>
@@ -137,49 +137,49 @@ const Resume = () => {
           {/* Project & Research Experience */}
           <div className="space-y-4">
             <h4 className="text-xs font-bold uppercase tracking-widest text-accent-cyan flex items-center gap-2">
-              <Briefcase size={16} /> Research & Projects
+              <Briefcase size={16} /> Technical Projects
             </h4>
             <div className="pl-6 border-l border-border-custom space-y-6">
               
-              {/* Computational Finance Solver */}
+              {/* Asset Prediction */}
               <div className="space-y-1">
                 <div className="flex justify-between items-baseline gap-4 flex-wrap">
                   <h5 className="text-sm font-bold text-text-main">
-                    Computational Finance Derivatives Solver
+                    Asset Price Prediction Platform
                   </h5>
-                  <span className="text-xs font-semibold text-text-sub font-mono">Quant Project</span>
+                  <span className="text-xs font-semibold text-text-sub font-mono">Python Project</span>
                 </div>
                 <p className="text-xs text-text-sub leading-relaxed">
-                  Implemented multi-threaded Crank-Nicolson finite difference schemes and Monte Carlo paths in C++ 
-                  to price exotic barriers and options. Calibrated parameters under SABR/Heston dynamics, converging in less than 1.2ms.
+                  Coded price direction forecasting estimators using Scikit-learn (Random Forests and Gradient Boosting Regressors) on historical pricing metrics. 
+                  Wrapped predictions inside FastAPI endpoints containerized in Docker, delivering &lt; 15ms inference latencies.
                 </p>
               </div>
 
-              {/* DL Architectures */}
+              {/* Weather Time-Series */}
               <div className="space-y-1">
                 <div className="flex justify-between items-baseline gap-4 flex-wrap">
                   <h5 className="text-sm font-bold text-text-main">
-                    Deep Learning Financial Sequence Modeler
+                    Weather Time-Series Forecasting Model
                   </h5>
-                  <span className="text-xs font-semibold text-text-sub font-mono">AI/ML Project</span>
+                  <span className="text-xs font-semibold text-text-sub font-mono">Deep Learning Project</span>
                 </div>
                 <p className="text-xs text-text-sub leading-relaxed">
-                  Engineered custom transformer encoder blocks and recurrent LSTM paths in PyTorch to forecast 
-                  volatility curves. Used Reinforcement Learning models (PPO) for signal tracking and Weights & Biases for monitoring training loss.
+                  Structured an LSTM sequence forecasting neural network in PyTorch, implementing stacked recurrent cells to model multivariate atmospheric time-series patterns. 
+                  Reduced Mean Absolute Error (MAE) metrics by 14.8% over traditional statistical ARIMA baselines.
                 </p>
               </div>
 
-              {/* Veltrix Terminal */}
+              {/* RL Lab */}
               <div className="space-y-1">
                 <div className="flex justify-between items-baseline gap-4 flex-wrap">
                   <h5 className="text-sm font-bold text-text-main">
-                    Veltrix Institutional Financial Terminal
+                    Reinforcement Learning Experiment Lab
                   </h5>
-                  <span className="text-xs font-semibold text-text-sub font-mono">Software Project</span>
+                  <span className="text-xs font-semibold text-text-sub font-mono">Algorithms Project</span>
                 </div>
                 <p className="text-xs text-text-sub leading-relaxed">
-                  Developed a 12-page financial console drawing live statistical overlays, correlation structures, 
-                  and historical asset pricing indices using HTML5 canvas layers, React state systems, and web analytics.
+                  Programmed tabular Q-Learning and SARSA models from scratch in Python to simulate pathfinding optimization on custom GridWorlds. 
+                  Demonstrated value iterations and policy convergence curves under Bellman constraints.
                 </p>
               </div>
             </div>
@@ -188,14 +188,14 @@ const Resume = () => {
           {/* Strategic Achievements */}
           <div className="space-y-4">
             <h4 className="text-xs font-bold uppercase tracking-widest text-accent-cyan flex items-center gap-2">
-              <Award size={16} /> Strategic & Sports Merits
+              <Award size={16} /> Extracurricular Activities
             </h4>
             <div className="pl-6 border-l border-border-custom space-y-3 text-xs">
               <div>
-                <span className="font-bold text-text-main block">International FIDE-Rated Chess Competitor</span>
+                <span className="font-bold text-text-main block">Competitive Chess & Strategic Calculation</span>
                 <span className="text-text-sub block">
-                  Bangkok Chess Open 2024 | Teplice Chess Open 2024. Active competitive chess player, 
-                  which builds deep logical thinking, risk assessment, and game-theoretic strategy models.
+                  Bangkok Open & Teplice Open 2024 participant. Active competitive chess player, which builds analytical reasoning, 
+                  calculation depth, search boundaries, and strategic execution under tight time limits.
                 </span>
               </div>
             </div>

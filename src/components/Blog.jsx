@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BookOpen, Calendar, Clock, ChevronRight, X, ArrowLeft } from 'lucide-react';
+import { BookOpen, Calendar, Clock, ChevronRight, ArrowLeft } from 'lucide-react';
 
 const Blog = () => {
   const [selectedPost, setSelectedPost] = useState(null);
@@ -8,175 +8,171 @@ const Blog = () => {
   const posts = [
     {
       id: 1,
-      title: 'Bellman Optimality & Temporal Difference Bounds in RL',
+      title: 'Understanding Bellman Equations Through Reinforcement Learning',
       date: 'May 12, 2026',
       readTime: '6 min read',
       category: 'Reinforcement Learning',
-      summary: 'An analytical review of policy improvement bounds under Bellman equation constraints. Implements basic temporal difference updates and explores state transitions.',
-      content: `### Introduction to Bellman Optimality
+      summary: 'A simple breakdown of how agents calculate step-by-step value expectations and search policies using tabular Q-learning scripts.',
+      content: `### What is the Bellman Equation?
 
-In reinforcement learning, the Bellman Optimality Equation defines the optimal value function $V^*(s)$, representing the maximum expected cumulative reward starting from state $s$. The optimality equation is formulated recursively as:
+At its core, the Bellman Equation is a recursive formula that defines how we calculate state values in reinforcement learning. It states that the value of your current state is the immediate reward you receive, plus the discounted value of the next state you transition into:
 
-$$V^*(s) = \\max_{a} \\sum_{s', r} p(s', r | s, a) \\left[ r + \\gamma V^*(s') \\right]$$
+$$V(s) = \\max_{a} \\sum_{s', r} p(s', r | s, a) \\left[ r + \\gamma V(s') \\right]$$
 
-This recursive formulation bounds the optimal policy iteration. The goal is to update policy $\\pi(a|s)$ until it converges to the optimal bounds.
+Instead of calculating entire trajectories, the agent computes state updates step-by-step.
 
-### Temporal Difference Learning (TD)
+### Tabular Q-Learning
 
-Temporal Difference (TD) learning allows an agent to learn value updates without a complete transition model. In $TD(0)$, the state-value update rule is:
+Tabular Q-learning is a model-free RL algorithm. It maintains a grid of estimated state-action values called a Q-table. When the agent takes action $a$ in state $s$ and transitions to $s'$ with reward $r$, it performs a Temporal Difference (TD) value update:
 
-$$V(S_t) \\leftarrow V(S_t) + \\alpha \\left[ R_{t+1} + \\gamma V(S_{t+1}) - V(S_t) \\right]$$
+$$Q(s, a) \\leftarrow Q(s, a) + \\alpha \\left[ r + \\gamma \\max_{a'} Q(s', a') - Q(s, a) \\right]$$
 
-where $R_{t+1} + \\gamma V(S_{t+1}) - V(S_t)$ is the temporal difference error, representing the discrepancy between our estimated value and a single-step sample estimate.
+Here, $\\alpha$ is the learning rate, and $\\gamma$ is the discount factor.
 
-### Python Implementation of Q-Learning Step
+### Python Implementation of a Q-learning Step
 
-Below is an optimized snippet implementing a single Q-value updating step under $\\epsilon$-greedy exploration policies:
+Here is a clean Python function showing how this value iteration is coded:
 
 \`\`\`python
 import numpy as np
 
-def update_q_table(q_table, state, action, reward, next_state, alpha, gamma):
+def update_q_value(q_table, state, action, reward, next_state, alpha, gamma):
     \"\"\"
-    Performs a Bellman-equation Q-value update step.
+    Performs a standard Q-value update based on Bellman value iteration.
     \"\"\"
-    # Find the maximum estimated Q-value for the next state
+    # 1. Find the best action for the next state from current estimates
     best_next_action = np.argmax(q_table[next_state])
     
-    # Calculate TD target
+    # 2. Compute the Temporal Difference Target (reward + discounted future value)
     td_target = reward + gamma * q_table[next_state][best_next_action]
     
-    # Calculate TD error
+    # 3. Calculate the TD Error
     td_error = td_target - q_table[state][action]
     
-    # Perform standard update
+    # 4. Perform Q-value incremental update
     q_table[state][action] += alpha * td_error
     return q_table
 \`\`\`
 
-### Summary & Bound Convergence
-
-Through value iteration and policy mapping, TD algorithms converge to the optimal Bellman boundary, assuming that all state-action pairs are visited infinitely often and the learning rate satisfies standard stochastic approximation conditions.`
+### Epilson-Decay Policies
+During early episodes, the agent explores random paths (high epsilon). Over time, we decay epsilon so the agent exploits its Q-table parameters, converging to the optimal policy bounds.`
     },
     {
       id: 2,
-      title: 'Stochastic Option Pricing: Solvers for Heston Drift Dynamics',
+      title: 'Building a Simple Portfolio Optimization Model with Python',
       date: 'April 20, 2026',
       readTime: '8 min read',
-      category: 'Quantitative Finance',
-      summary: 'Exploring stochastic calculus asset simulations. Calibrates local volatilities under correlated random walks using the Heston model equations.',
-      content: `### Heston Model Formulation
+      category: 'Mathematics & Finance',
+      summary: 'Using SciPy to optimize asset weights, calculate Sharpe Ratios, and plot Markowitz Efficient Frontiers in Python.',
+      content: `### Portfolio Mean & Variance
 
-The Heston Model is a stochastic volatility model where asset price $S_t$ and its volatility variance $v_t$ follow correlated stochastic differential equations (SDEs):
+When constructing an asset portfolio, our goals are to maximize expected returns and minimize volatility variance. For portfolio weights vector $w$, historical returns vector $\\mu$, and asset covariance matrix $\\Sigma$, the expected return and variance are:
 
-$$dS_t = \\mu S_t dt + \\sqrt{v_t} S_t dW_t^S$$
-$$dv_t = \\kappa (\\theta - v_t) dt + \\xi \\sqrt{v_t} dW_t^v$$
+$$\\mu_p = w^T \\mu$$
+$$\\sigma_p^2 = w^T \\Sigma w$$
 
-Here, $\\kappa$ represents the speed of variance reversion, $\\theta$ represents the long-term mean variance, and $\\xi$ is the volatility of volatility. The Brownian motions are correlated:
+The Sharpe Ratio measures excess return per unit of standard deviation: $SR = \\frac{\\mu_p - R_f}{\\sigma_p}$, where $R_f$ is the risk-free rate.
 
-$$d\\langle W^S, W^v \\rangle_t = \\rho dt$$
+### Optimization under Constraints
 
-This correlation $\\rho$ models the leverage effect, where variance increases as asset price falls.
+To find the optimal portfolio, we minimize negative Sharpe Ratio under constraints (weights must sum to 1, and no short-selling is allowed: $0 \\le w_i \\le 1$):
 
-### Numerical Path Discretization
+$$\\min_{w} \\quad -\\frac{w^T \\mu - R_f}{\\sqrt{w^T \\Sigma w}}$$
 
-To price options under these dynamics, we discretize the continuous SDEs using the Euler-Maruyama approximation method over time step $\\Delta t$:
+### Python SciPy Optimization Script
 
-$$S_{t+1} = S_t + \\mu S_t \\Delta t + \\sqrt{v_t^+} S_t Z_S \\sqrt{\\Delta t}$$
-$$v_{t+1} = v_t + \\kappa (\\theta - v_t^+) \\Delta t + \\xi \\sqrt{v_t^+} Z_v \\sqrt{\\Delta t}$$
-
-where $Z_S$ and $Z_v$ are correlated standard normal variables: $Z_v = \\rho Z_S + \\sqrt{1 - \\rho^2} Z_{\\text{orthogonal}}$.
-
-### Python Simulation Core
-
-The following script simulates Heston price paths to price European calls:
+We can solve this optimization problem in Python using \`scipy.optimize\`:
 
 \`\`\`python
 import numpy as np
+import scipy.optimize as sco
 
-def simulate_heston_paths(S0, v0, mu, kappa, theta, xi, rho, T, steps, paths):
-    dt = T / steps
-    S = np.zeros((steps + 1, paths))
-    v = np.zeros((steps + 1, paths))
-    S[0] = S0
-    v[0] = v0
+def max_sharpe_ratio(mean_returns, cov_matrix, risk_free_rate=0.0):
+    num_assets = len(mean_returns)
     
-    for t in range(1, steps + 1):
-        # Generate correlated normals
-        Z_S = np.random.normal(0, 1, paths)
-        Z_orthogonal = np.random.normal(0, 1, paths)
-        Z_v = rho * Z_S + np.sqrt(1 - rho**2) * Z_orthogonal
+    # Define objectives
+    def objective(weights):
+        p_return = np.sum(mean_returns * weights)
+        p_volatility = np.sqrt(np.dot(weights.T, np.dot(cov_matrix, weights)))
+        return -(p_return - risk_free_rate) / p_volatility
         
-        # Keep variance positive using full truncation scheme
-        v_prev = np.maximum(v[t-1], 0)
-        
-        # Euler step
-        S[t] = S[t-1] + mu * S[t-1] * dt + np.sqrt(v_prev) * S[t-1] * Z_S * np.sqrt(dt)
-        v[t] = v[t-1] + kappa * (theta - v_prev) * dt + xi * np.sqrt(v_prev) * Z_v * np.sqrt(dt)
-        
-    return S, v
+    # Weights must sum to 1
+    constraints = ({'type': 'eq', 'fun': lambda x: np.sum(x) - 1.0})
+    # Boundaries: weights between 0 and 1
+    bounds = tuple((0.0, 1.0) for _ in range(num_assets))
+    # Initial guess
+    init_guess = num_assets * [1.0 / num_assets]
+    
+    results = sco.minimize(
+        objective, 
+        init_guess, 
+        method='SLSQP', 
+        bounds=bounds, 
+        constraints=constraints
+    )
+    return results.x  # Returns optimal asset weights
 \`\`\`
 
-### Quantitative Pricing Applications
+### Analyzing the Efficient Frontier
 
-Option values are computed by taking the risk-neutral expected value of the payoffs, e.g., $\\mathbb{E}[\\max(S_T - K, 0)]$, discounted back to time zero. This C++ simulation completes pricing tasks with high speed.`
+By resolving this minimization for different target returns, we map the boundary curve known as the Markowitz Efficient Frontier, which represents the optimal portfolio layouts for any given risk tolerance.`
     },
     {
       id: 3,
-      title: 'LSTM Sequence Mapping for Weather Predictions',
+      title: 'Weather Forecasting: Implementing LSTMs for Time-Series Data',
       date: 'March 05, 2026',
       readTime: '5 min read',
       category: 'Deep Learning',
-      summary: 'Deep dive into cell state controls, LSTM gate functions, and how they minimize error on multivariate weather forecasting signals.',
-      content: `### LSTM Cell Mechanics
+      summary: 'A look at how Recurrent Networks and LSTM gates capture temporal weather trends, coded in PyTorch.',
+      content: `### Cell States & Recurrent Gates
 
-Long Short-Term Memory (LSTM) cells are designed to solve the vanishing gradient problem in recurrent networks. They control information flow via three gates:
+Standard recurrent neural networks (RNNs) suffer from vanishing gradients when training on long time-series sequences. Long Short-Term Memory (LSTM) cells bypass this by maintaining a cell state $C_t$ and using three gate networks:
 
-1. **Forget Gate ($f_t$):** Controls what context to drop from the cell state.
+1. **Forget Gate ($f_t$):** Decides what context data to drop.
    $$f_t = \\sigma(W_f [h_{t-1}, x_t] + b_f)$$
-2. **Input Gate ($i_t$):** Controls what new data to write to the cell state.
+2. **Input Gate ($i_t$):** Decides what new data to write to memory.
    $$i_t = \\sigma(W_i [h_{t-1}, x_t] + b_i)$$
-   $$\\tilde{C}_t = \\tanh(W_c [h_{t-1}, x_t] + b_c)$$
-3. **Output Gate ($o_t$):** Controls what hidden state to export.
-   $$o_t = \\sigma(W_o [h_{t-1}, x_t] + b_o)$$
+3. **Output Gate ($o_t$):** Decides what hidden state to export to the next cell.
    $$h_t = o_t \\odot \\tanh(C_t)$$
 
-The cell state $C_t$ is updated linearly: $C_t = f_t \\odot C_{t-1} + i_t \\odot \\tilde{C}_t$, allowing gradients to flow back easily during training.
+The cell state is updated linearly, allowing gradients to flow back easily.
 
-### PyTorch Sequence Layer Definition
+### PyTorch Time-Series Forecast Layer
 
-Here is a typical PyTorch model implementation of a sequence forecast layer combining LSTM and Linear projections:
+Here is how we construct a forecasting LSTM model using PyTorch:
 
 \`\`\`python
 import torch
 import torch.nn as nn
 
-class WeatherSequenceModel(nn.Module):
+class WeatherForecastingLSTM(nn.Module):
     def __init__(self, input_dim, hidden_dim, num_layers, output_dim):
-        super(WeatherSequenceModel, self).__init__()
+        super(WeatherForecastingLSTM, self).__init__()
+        # PyTorch recurrent layer
         self.lstm = nn.LSTM(
             input_size=input_dim, 
             hidden_size=hidden_dim, 
             num_layers=num_layers, 
             batch_first=True
         )
+        # Fully connected projection output layer
         self.fc = nn.Linear(hidden_dim, output_dim)
         
     def forward(self, x):
-        # x shape: (batch, seq_len, input_dim)
+        # x input shape: (batch_size, sequence_length, input_features)
         lstm_out, (hn, cn) = self.lstm(x)
         
-        # Take the output of the final time step
-        last_step = lstm_out[:, -1, :]
+        # Take sequence output of the final time step
+        final_time_step_output = lstm_out[:, -1, :]
         
-        # Project to target forecast dimension
-        out = self.fc(last_step)
-        return out
+        # Project output to predictions
+        predictions = self.fc(final_time_step_output)
+        return predictions
 \`\`\`
 
-### Loss Minimization Bounds
+### Data Formatting & Forecasting MAE
 
-During training, we minimize Mean Absolute Error (MAE) or Mean Squared Error (MSE) loss metrics over target dimensions. Mixed precision FP16 and attention mechanisms help improve training convergence speed and prediction accuracy.`
+Multivariate sequences must be formatted as rolling window frames (e.g. past 24 hours of sensors to forecast next hour). We train the model by minimizing Mean Absolute Error (MAE) loss, checking prediction curves against true values.`
     }
   ];
 
@@ -197,7 +193,7 @@ During training, we minimize Mean Absolute Error (MAE) or Mean Squared Error (MS
               <div>
                 <span className="text-xs font-bold uppercase tracking-widest text-accent-cyan">Technical Writing</span>
                 <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-text-main mt-2">
-                  Articles & Technical Analyses
+                  Articles & Curious Logs
                 </h2>
                 <div className="w-20 h-1 bg-gradient-to-r from-accent-cyan to-accent-teal mt-4 rounded-full" />
               </div>

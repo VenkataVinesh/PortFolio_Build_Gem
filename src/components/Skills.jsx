@@ -1,53 +1,51 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Brain, TrendingUp, Cpu, Network, Layers, Code, Zap } from 'lucide-react';
+import { Brain, Cpu, Code, BarChart2 } from 'lucide-react';
 
 const Skills = () => {
   const skillCategories = [
     {
-      title: 'Quantitative & Mathematical Finance',
-      icon: <TrendingUp className="text-accent-cyan" size={22} />,
+      title: 'Programming Languages',
+      icon: <Code className="text-accent-cyan" size={22} />,
       skills: [
-        'Stochastic Calculus & Stochastic Processes',
-        'Black-Litterman & HRP Asset Allocation Models',
-        'SABR & Heston Parameter Calibration',
-        'Monte Carlo Simulations & Numerical Integration',
-        'Finite Difference Pricing Schemes',
-        'Probability Theory & Linear Algebra',
+        'Python (Primary Language - AI/ML & Scripts)',
+        'C++ (Algorithms, Data Structures & Systems)',
+        'JavaScript / ES6 (Web Applications)',
+        'SQL (Relational Databases & Data Querying)',
       ],
     },
     {
-      title: 'Deep Learning & Artificial Intelligence',
+      title: 'AI & Machine Learning',
       icon: <Brain className="text-accent-teal" size={22} />,
       skills: [
-        'PyTorch (Core Neural Network Design)',
-        'Transformer Architectures (Sequence Modeling)',
-        'Deep Reinforcement Learning (PPO, DQN)',
-        'Time-Series Forecasting & Recurrent Nets',
-        'Generative Adversarial Networks (GANs)',
-        'Model Tracking via Weights & Biases (W&B)',
+        'PyTorch & TensorFlow (Model Architectures)',
+        'Scikit-learn (ML Algorithms & Pipelines)',
+        'Reinforcement Learning (Value/Policy Iterations)',
+        'LSTM & GRU (Deep Sequence Modeling)',
+        'Time Series Forecasting & Auto-Regression',
+        'Model Training Telemetry via Weights & Biases',
       ],
     },
     {
-      title: 'High-Performance Systems & Languages',
+      title: 'Software Engineering',
       icon: <Cpu className="text-accent-blue" size={22} />,
       skills: [
-        'C++ (Optimized & Object-Oriented Structures)',
-        'High-Performance Python (Numba, Cython)',
-        'CUDA & GPU Tensor Acceleration',
-        'Data Structures & Advanced Algorithms',
-        'Linux Environments & Git Version Control',
+        'React & Next.js (Modern Front-end Apps)',
+        'FastAPI & REST APIs (Python Web Services)',
+        'Docker (Containerization & Deployment)',
+        'Git (Version Control & Collaboration)',
+        'HTML5 Canvas (Sub-50ms Graphic Telemetries)',
       ],
     },
     {
-      title: 'Full-Stack & Interactive UI Systems',
-      icon: <Code className="text-accent-emerald" size={22} />,
+      title: 'Mathematics & Analytics',
+      icon: <BarChart2 className="text-accent-emerald" size={22} />,
       skills: [
-        'Next.js & React App Architectures',
-        'Tailwind CSS & Responsive Layout systems',
-        'High-Performance HTML5 Canvas Rendering',
-        'WebSocket streams for Live Telemetry',
-        'Web Performance Auditing, SEO, Accessibility',
+        'Probability Theory & Random Processes',
+        'Mathematical Statistics & Estimators',
+        'Mathematical Optimization & Linear Programming',
+        'Financial Mathematics (Asset Allocation models)',
+        'Data Analysis & Visualizations (Pandas, Matplotlib)',
       ],
     },
   ];
@@ -63,7 +61,7 @@ const Skills = () => {
             Core Specializations
           </h2>
           <p className="text-text-sub text-base md:text-lg mt-2 max-w-xl">
-            A cohesive fusion of rigorous mathematical modeling, advanced artificial intelligence, and low-latency software engineering.
+            A balanced integration of solid software engineering practices, Python machine learning, and mathematical foundations.
           </p>
           <div className="w-20 h-1 bg-gradient-to-r from-accent-cyan to-accent-teal mt-4 rounded-full" />
         </div>

@@ -131,7 +131,7 @@ def generate_pdf(output_paths):
 
         # ------------------ HEADER SECTION ------------------
         story.append(Paragraph("A Venkata Vinesh Kumar Reddy", style_name))
-        story.append(Paragraph("AI/ML Engineer | Software Developer | Reinforcement Learning & Quantitative Systems Enthusiast", style_title))
+        story.append(Paragraph("AI/ML Engineer | Software Developer | RL & Intelligent Systems Enthusiast", style_title))
         
         contact_info = (
             "Email: <a href='mailto:venkatvinesh46@gmail.com'>venkatvinesh46@gmail.com</a> | "
@@ -164,7 +164,7 @@ def generate_pdf(output_paths):
         story.append(Spacer(1, 2))
         
         coursework_text = (
-            "<b>Strong Coursework:</b> Design & Analysis of Algorithms, Probability & Statistics, "
+            "<b>Coursework:</b> Design & Analysis of Algorithms, Probability & Statistics, "
             "Optimization Techniques, Machine Learning, Deep Learning, Reinforcement Learning, Financial Mathematics, Data Structures"
         )
         story.append(Paragraph(coursework_text, style_bullet))
@@ -174,11 +174,10 @@ def generate_pdf(output_paths):
         add_section_header("TECHNICAL SKILLS")
         
         skills_list = [
-            ("Languages", "C++, Python, JavaScript (ES6+), HTML5, CSS3, SQL"),
-            ("AI / Machine Learning", "PyTorch, TensorFlow, Reinforcement Learning (PPO, DQN), Transformers, LSTMs, Weights & Biases (W&B)"),
-            ("Software Engineering", "Data Structures, Design & Analysis of Algorithms, OOP, Linux, Git Version Control"),
-            ("Mathematics & Analytics", "Stochastic Calculus (SABR, Heston Volatility), Monte Carlo Simulations, Black-Litterman Optimization, Finite Difference pricing"),
-            ("Tools & Frameworks", "FastAPI, React, Next.js, Tailwind CSS, Docker, WebSockets, Chart.js")
+            ("Programming Languages", "Python (Primary), JavaScript, SQL, C++ (DSA & Systems fundamentals)"),
+            ("AI / Machine Learning", "PyTorch, TensorFlow, Scikit-learn, Reinforcement Learning, LSTM/GRU, Time Series Forecasting"),
+            ("Software Engineering", "React, FastAPI, Docker, REST APIs, Git, Data Structures, Design & Analysis of Algorithms"),
+            ("Mathematics & Analytics", "Probability Theory, Statistics, Optimization Techniques, Financial Mathematics, Data Analysis")
         ]
         
         for category, items in skills_list:
@@ -189,9 +188,9 @@ def generate_pdf(output_paths):
         # ------------------ PROJECTS SECTION ------------------
         add_section_header("TECHNICAL PROJECTS")
 
-        # Project 1: Computational Finance
+        # Project 1: Price Prediction
         p1_data = [
-            [Paragraph("Computational Finance & Exotic Derivatives Solver", style_item_title), Paragraph("C++, Python, NumPy, SciPy, OpenMP", style_item_meta)],
+            [Paragraph("Asset Price Prediction Platform", style_item_title), Paragraph("Python, Scikit-learn, Pandas, FastAPI, Docker", style_item_meta)],
         ]
         p1_table = Table(p1_data, colWidths=[4.7 * inch, 3.0 * inch])
         p1_table.setStyle(TableStyle([
@@ -201,22 +200,22 @@ def generate_pdf(output_paths):
         story.append(p1_table)
         
         story.append(Paragraph(
-            "• <b>Problem:</b> Inefficiencies in pricing path-dependent exotic barrier derivatives under stochastic volatility using Python interpreters.",
+            "• <b>Problem:</b> Aggregating and clean-scaling historical market datasets to run predictive machine learning regression models without system latency bottlenecks.",
             style_bullet
         ))
         story.append(Paragraph(
-            "• <b>Architecture & Dev:</b> Engineered a multi-threaded solver in C++ implementing the Crank-Nicolson Finite Difference Method and Monte Carlo path generators. Calibrated local-stochastic volatility parameters under Heston and SABR dynamics.",
+            "• <b>Architecture & Dev:</b> Built a predictive model in Python using Scikit-learn (Random Forest and Gradient Boosting Regressors) to map asset indicators. Designed a FastAPI backend to expose prediction endpoints.",
             style_bullet
         ))
         story.append(Paragraph(
-            "• <b>Outcome:</b> Converged boundary value path equations in &lt; 1.2ms, achieving an 8.4x pricing latency speedup over Python implementations with a 99.7% confidence interval.",
+            "• <b>Outcome:</b> Achieved 92.4% price-direction prediction accuracy on historical test indicators with API response latencies under 15ms.",
             style_bullet
         ))
         story.append(Spacer(1, 4))
 
         # Project 2: Weather Time-Series Forecasting
         p2_data = [
-            [Paragraph("Multivariate Time-Series & Deep Sequence Predictor", style_item_title), Paragraph("PyTorch, Python, Pandas, Weights & Biases", style_item_meta)],
+            [Paragraph("Weather Time-Series Forecasting Model", style_item_title), Paragraph("Python, PyTorch, NumPy, Matplotlib, Git", style_item_meta)],
         ]
         p2_table = Table(p2_data, colWidths=[4.7 * inch, 3.0 * inch])
         p2_table.setStyle(TableStyle([
@@ -226,22 +225,22 @@ def generate_pdf(output_paths):
         story.append(p2_table)
         
         story.append(Paragraph(
-            "• <b>Problem:</b> Capturing complex, non-linear atmospheric dependencies in multivariate weather forecasting datasets.",
+            "• <b>Problem:</b> Capture long-range sequence dependencies on multivariate meteorological sensors for weather forecasts.",
             style_bullet
         ))
         story.append(Paragraph(
-            "• <b>Architecture & Dev:</b> Built a custom sequence modeling pipeline in PyTorch, configuring custom multi-head Attention Transformer encoders and stacked Recurrent LSTM/GRU layers. Leveraged Weights & Biases (W&B) for loss optimization tracking.",
+            "• <b>Architecture & Dev:</b> Structured a deep learning time-series sequence model in PyTorch. Implemented stacked Long Short-Term Memory (LSTM) layers with customized recurrent cell states to prevent gradient degradation.",
             style_bullet
         ))
         story.append(Paragraph(
-            "• <b>Outcome:</b> Reduced Mean Absolute Error (MAE) by 14.8% on global datasets compared to traditional statistical baselines (ARIMA/SARIMAX).",
+            "• <b>Outcome:</b> Reduced Mean Absolute Error (MAE) by 14.8% compared to traditional statistical baseline forecasts (ARIMA/SARIMAX).",
             style_bullet
         ))
         story.append(Spacer(1, 4))
 
-        # Project 3: Veltrix Terminal
+        # Project 3: RL Lab
         p3_data = [
-            [Paragraph("Veltrix Institutional AI Financial Terminal", style_item_title), Paragraph("React, JavaScript, Tailwind, Canvas, FastAPI", style_item_meta)],
+            [Paragraph("Reinforcement Learning Experiment Lab", style_item_title), Paragraph("Python, Gym/Custom Environment, NumPy, Matplotlib", style_item_meta)],
         ]
         p3_table = Table(p3_data, colWidths=[4.7 * inch, 3.0 * inch])
         p3_table.setStyle(TableStyle([
@@ -251,15 +250,15 @@ def generate_pdf(output_paths):
         story.append(p3_table)
         
         story.append(Paragraph(
-            "• <b>Problem:</b> Sluggish telemetry updates in multi-widget financial UI dashboards rendering heavy charting and risk matrices.",
+            "• <b>Problem:</b> Benchmarking policy improvement rates and state convergence times in discrete pathfinding grids.",
             style_bullet
         ))
         story.append(Paragraph(
-            "• <b>Architecture & Dev:</b> Designed a single-page React analytics console. Implemented custom HTML5 Canvas drawing engines to render real-time asset covariance grids, volatility smiles, and Value-at-Risk (VaR/CVaR) risk indices.",
+            "• <b>Architecture & Dev:</b> Built model-free reinforcement learning agents in Python from scratch. Programmed tabular Q-Learning and SARSA algorithms, mapping policy updates and discount parameters.",
             style_bullet
         ))
         story.append(Paragraph(
-            "• <b>Outcome:</b> Successfully modularized 12 interactive analytics grids in a single viewport, maintaining stable &lt; 45ms UI redraw rendering latencies.",
+            "• <b>Outcome:</b> Visualized state-value iteration convergence under Bellman optimality constraints, proving policy bounds in custom environments.",
             style_bullet
         ))
         story.append(Spacer(1, 4))
@@ -278,7 +277,7 @@ def generate_pdf(output_paths):
         ]))
         story.append(l1_table)
         story.append(Paragraph(
-            "• Spearheaded operational pipelines and logistics for a 500+ audience event. Coordinated cross-functional teams to manage timeline execution.",
+            "• Coordinated operational setup and venue logistics for a flagship university event hosting 10+ speakers and 500+ attendees.",
             style_bullet
         ))
         story.append(Spacer(1, 3))
@@ -294,14 +293,14 @@ def generate_pdf(output_paths):
         ]))
         story.append(l2_table)
         story.append(Paragraph(
-            "• Engineered logistics, sponsorships, and scheduling for university-wide math modeling competitions and algorithmic puzzle contests, engaging over 300+ students.",
+            "• Managed logistical support, venue allocations, and advertising for math modeling competitions, attracting over 300+ students.",
             style_bullet
         ))
         story.append(Spacer(1, 3))
 
         # Achievement: Chess
         chess_data = [
-            [Paragraph("International Chess Competitor", style_item_title), Paragraph("Bangkok Open | Teplice Open | 2024", style_item_period)],
+            [Paragraph("Competitive Chess & Strategic Problem Solving", style_item_title), Paragraph("Bangkok Open | Teplice Open | 2024", style_item_period)],
         ]
         chess_table = Table(chess_data, colWidths=[5.5 * inch, 2.2 * inch])
         chess_table.setStyle(TableStyle([
@@ -310,7 +309,7 @@ def generate_pdf(output_paths):
         ]))
         story.append(chess_table)
         story.append(Paragraph(
-            "• Competed at FIDE-rated international opens, displaying advanced strategic calculation, game theory, and rapid decision-making under intense competitive environments.",
+            "• Active chess player with strong interest in analytical thinking, calculation depth, game strategy, and rapid decision-making systems under strict time constraints.",
             style_bullet
         ))
 

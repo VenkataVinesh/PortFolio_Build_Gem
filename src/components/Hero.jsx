@@ -1,27 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, FileText, Terminal, Shield, Award, Cpu, GitCommit } from 'lucide-react';
+import { ArrowRight, FileText, Terminal, Cpu, GitCommit } from 'lucide-react';
 
 const Hero = () => {
   const [telemetry, setTelemetry] = useState({
-    latency: '1.24ms',
-    accuracy: '98.6%',
-    sabrAlpha: '0.412',
-    sabrBeta: '0.500',
+    loss: '0.1420',
+    mae: '0.2854',
+    episode: '100',
+    reward: '24.5',
     device: 'CUDA:0 (RTX 4060 Ti)',
     timestamp: new Date().toLocaleTimeString(),
   });
 
-  // Dynamic simulation effect in the terminal
+  // Dynamic simulation effect in the terminal representing ML epochs and Q-learning updates
   useEffect(() => {
     const interval = setInterval(() => {
-      setTelemetry((prev) => ({
-        ...prev,
-        latency: (1.15 + Math.random() * 0.2).toFixed(2) + 'ms',
-        accuracy: (98.4 + Math.random() * 0.4).toFixed(1) + '%',
-        sabrAlpha: (0.405 + Math.random() * 0.015).toFixed(3),
-        timestamp: new Date().toLocaleTimeString(),
-      }));
+      setTelemetry((prev) => {
+        const nextEpisode = parseInt(prev.episode) + 50;
+        const nextLoss = (0.012 + Math.random() * 0.008).toFixed(4);
+        const nextMAE = (0.078 + Math.random() * 0.005).toFixed(4);
+        const nextReward = (182.4 + Math.random() * 4.8).toFixed(1);
+        return {
+          ...prev,
+          loss: nextLoss,
+          mae: nextMAE,
+          episode: nextEpisode > 1500 ? '100' : nextEpisode.toString(),
+          reward: nextReward,
+          timestamp: new Date().toLocaleTimeString(),
+        };
+      });
     }, 2000);
     return () => clearInterval(interval);
   }, []);
@@ -73,7 +80,7 @@ const Hero = () => {
               <div className="text-xs text-text-sub uppercase tracking-wider">Current CGPA</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-accent-teal">C++ & PyTorch</div>
+              <div className="text-2xl font-bold text-accent-teal">Python & PyTorch</div>
               <div className="text-xs text-text-sub uppercase tracking-wider">Core Arsenal</div>
             </div>
             <div>
@@ -138,7 +145,7 @@ const Hero = () => {
                 <span className="w-3 h-3 rounded-full bg-green-500/80 inline-block" />
               </div>
               <div className="text-[11px] font-mono text-text-sub flex items-center gap-1.5 uppercase tracking-widest">
-                <Terminal size={12} className="text-accent-cyan" /> sys_telemetry.log
+                <Terminal size={12} className="text-accent-cyan" /> train_session.log
               </div>
               <div className="w-12" /> {/* spacer */}
             </div>
@@ -146,25 +153,22 @@ const Hero = () => {
             {/* Terminal Body */}
             <div className="p-5 font-mono text-xs text-text-sub space-y-4 bg-slate-950/40 dark:bg-slate-950/70">
               <div className="space-y-1">
-                <p className="text-accent-cyan"># env_check --verbose</p>
-                <p className="text-emerald-500">✔ CUDA Initialization Complete</p>
-                <p className="text-text-main pl-3">Device: {telemetry.device}</p>
-                <p className="text-text-main pl-3">VRAM: 8.00 GB GDDR6 (RTX 4060 Ti)</p>
+                <p className="text-accent-cyan"># python train.py --model=LSTM --dataset=WeatherSeries</p>
+                <p className="text-emerald-500">✔ CUDA Initialization Complete: {telemetry.device}</p>
+                <p className="text-text-main pl-3">↳ Epoch 45/50 | Loss: <span className="text-yellow-500">{telemetry.loss}</span> | Val MAE: <span className="text-emerald-400">{telemetry.mae}</span></p>
               </div>
 
               <div className="space-y-1">
-                <p className="text-accent-cyan"># quant_engine --run-model=SABR</p>
-                <p className="text-text-sub">Calibrating SABR Volatility parameters...</p>
-                <p className="text-text-main pl-3">↳ Alpha: {telemetry.sabrAlpha} | Beta: {telemetry.sabrBeta}</p>
-                <p className="text-text-main pl-3">↳ Rho: -0.328 | Vol-of-Vol (Nu): 0.684</p>
-                <p className="text-emerald-500 pl-3">✔ Calibration converged in 1.48 ms</p>
+                <p className="text-accent-cyan"># python rl_agent.py --env=GridWorld-v2 --train</p>
+                <p className="text-text-sub">Executing tabular Q-Learning value updates...</p>
+                <p className="text-text-main pl-3">↳ Episode: {telemetry.episode} | Mean Reward: {telemetry.reward}</p>
+                <p className="text-emerald-500 pl-3">✔ Bellman optimality policy bounds converged</p>
               </div>
 
               <div className="space-y-1">
-                <p className="text-accent-cyan"># lob_signals --stream-realtime</p>
-                <p className="text-text-sub">Detecting signals from LOB feed...</p>
-                <p className="text-text-main pl-3">↳ Signal Detection Latency: <span className="text-yellow-500">{telemetry.latency}</span></p>
-                <p className="text-text-main pl-3">↳ Prediction Accuracy (Transformers): <span className="text-emerald-400">{telemetry.accuracy}</span></p>
+                <p className="text-accent-cyan"># python predict.py --model=RandomForest</p>
+                <p className="text-text-sub">Loading asset pricing feature matrices...</p>
+                <p className="text-text-main pl-3">↳ Predicting direction... [UP: 64%, DOWN: 36%]</p>
               </div>
 
               <div className="border-t border-border-custom pt-3 mt-3 flex justify-between items-center text-[10px]">

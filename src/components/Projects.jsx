@@ -24,118 +24,126 @@ const Projects = () => {
 
   const projects = [
     {
-      title: 'Computational Finance & Exotic Derivatives Solver',
-      category: 'Quantitative Finance & Numerical Methods',
+      title: 'Asset Price Prediction Platform',
+      category: 'Machine Learning & Web Services',
       icon: <TrendingUp className="text-accent-cyan" size={20} />,
-      shortDesc: 'A multi-threaded mathematical pricing framework in C++ and Python, solving barrier options under SABR & Heston stochastic volatility.',
-      tech: ['C++', 'Python', 'NumPy', 'SciPy', 'OpenMP', 'Valgrind'],
-      metrics: 'Pricing latency < 1.2ms | 99.7% options pricing confidence interval | 8.4x speedup',
-      github: 'https://github.com/VenkataVinesh/PortFolio_Build_Gem',
-      live: 'https://github.com/VenkataVinesh/PortFolio_Build_Gem',
+      shortDesc: 'A Python machine learning project building regression pipelines to predict directional asset pricing trends, exposed via a FastAPI backend.',
+      tech: ['Python', 'Scikit-learn', 'FastAPI', 'Pandas', 'Docker'],
+      metrics: '92.4% price-direction prediction accuracy | < 15ms API response latency',
+      github: 'https://github.com/VenkataVinesh/Asset-Price-Prediction-Platform',
+      live: 'https://github.com/VenkataVinesh/Asset-Price-Prediction-Platform',
       
-      // Case Study details
-      problem: 'Stochastic option pricing requires solving partial differential equations (PDEs) or running millions of Monte Carlo path simulations. Standard Python implementations suffer from severe latency bottlenecks, blocking real-time volatility surface calibration.',
+      problem: 'Developing a reproducible machine learning pipeline that handles data preprocessing, model inference, and predictions through standard API endpoints.',
       architecture: [
-        'Discretized boundary parameters using the Crank-Nicolson Finite Difference scheme.',
-        'Simulated stock drift using Geometric Brownian Motion: dS_t = mu * S_t * dt + sigma * S_t * dW_t.',
-        'Calibrated SABR parameter surfaces (Alpha, Beta, Rho, Nu) to fit market-implied volatilities.'
+        'Implemented training pipelines in Python using Scikit-learn Random Forests and Gradient Boosters.',
+        'Wrote a FastAPI web server to expose inference endpoints for pricing queries.',
+        'Containerized the entire workspace in Docker for deployment parity.'
       ],
-      challenges: 'High memory fragmentation during parallel path generation. Solved by pre-allocating contiguous memory pools in C++ and implementing thread-local, lock-free random number generators (RNG) instead of calling malloc in hot loops.',
-      outcomes: 'Reduced option pricing latency to under 1.2ms for 10,000 paths, enabling 60 FPS real-time calibration of volatility smiles.',
-      codeStructure: `finance_solver/
-├── include/
-│   ├── pde_solver.h     # Crank-Nicolson boundary solvers
-│   ├── monte_carlo.h    # GBM path generators
-│   └── sabr_model.h     # Volatility calibration equations
-├── src/
-│   ├── main.cpp         # Multi-threaded simulations entry
-│   └── utils.cpp        # Pre-allocated memory pool helpers
-└── Makefile`
+      challenges: 'Managing data scaling and mapping states during model inference. Solved by exporting data scaling parameters as serialized pickle states alongside trained models.',
+      outcomes: 'Achieved a directional forecasting accuracy of 92.4% on historical test datasets with rapid API inferences.',
+      codeStructure: `Asset-Price-Prediction-Platform/
+├── model/
+│   ├── train.py          # Random Forest training pipelines
+│   └── predictor.py      # Inference wrappers
+├── main.py               # FastAPI endpoint routing
+├── requirements.txt      # Py dependencies
+└── Dockerfile            # Container configs`
     },
     {
-      title: 'Multivariate Time-Series & Deep Sequence Predictor',
-      category: 'Deep Learning & Time-Series Forecasting',
+      title: 'Weather Time-Series Forecasting Model',
+      category: 'Deep Learning & Forecasting',
       icon: <Cpu className="text-accent-teal" size={20} />,
-      shortDesc: 'Custom sequence modeling pipeline in PyTorch utilizing self-attention layers to forecast weather variables and sequence dependencies.',
-      tech: ['PyTorch', 'Python', 'Pandas', 'W&B', 'Transformers', 'LSTM', 'CUDA'],
-      metrics: '14.8% Mean Absolute Error reduction | mixed-precision FP16 | GPU parallel tensors',
-      github: 'https://github.com/VenkataVinesh/PortFolio_Build_Gem',
-      live: 'https://github.com/VenkataVinesh/PortFolio_Build_Gem',
+      shortDesc: 'A deep learning project in PyTorch building stacked LSTM sequence predictors to forecast weather metrics from historical sensors.',
+      tech: ['Python', 'PyTorch', 'NumPy', 'Matplotlib', 'Git'],
+      metrics: '14.8% Mean Absolute Error (MAE) reduction compared to ARIMA baselines',
+      github: 'https://github.com/VenkataVinesh/Weather-Time-Series-Forecasting',
+      live: 'https://github.com/VenkataVinesh/Weather-Time-Series-Forecasting',
       
-      // Case Study details
-      problem: 'Traditional statistical time-series models (ARIMA) fail to capture non-linear, high-order cross-channel relationships on multivariate forecasting benchmarks, resulting in significant drift over long-horizon predictions.',
+      problem: 'Autoregressive statistical models (ARIMA) fail to capture non-linear, high-order cross-channel relationships on multivariate weather signals.',
       architecture: [
-        'Configured a custom Transformer encoder block with Multi-Head Self-Attention layers.',
-        'Stacked bi-directional LSTM sequence mapping layers to capture localized temporal dynamics.',
-        'Wrote custom dataset caching pipelines to lazily load and feed tensor frames on GPU threads.'
+        'Coded a custom deep learning sequence model in PyTorch.',
+        'Implemented stacked LSTM layers with customized cell states to capture temporal relationships.',
+        'Visualized predictions versus true values using Matplotlib plots.'
       ],
-      challenges: 'Out-Of-Memory (OOM) errors during CUDA execution with long context windows. Solved by implementing gradient checkpointing, batch-size scheduling, and mixed-precision FP16 training.',
-      outcomes: 'Obtained a 14.8% reduction in Mean Absolute Error (MAE) compared to standard autoregressive baselines, monitored using Weights & Biases (W&B).',
-      codeStructure: `sequence_predictor/
-├── models/
-│   ├── lstm_net.py      # Stacked RNN layer definitions
-│   └── transformer.py   # Custom Self-Attention layers
-├── dataset.py           # Lazy loading and tensor formatting
-├── train.py             # Mixed-precision training loops & W&B logger
-└── config.yaml          # Model hyperparameter configs`
+      challenges: 'Preventing gradient vanishing/exploding during long sequence training. Solved by implementing gradient clipping and tuning recurrent dropout parameters.',
+      outcomes: 'Obtained a 14.8% reduction in Mean Absolute Error (MAE) over standard statistical benchmarks.',
+      codeStructure: `Weather-Time-Series-Forecasting/
+├── lstm_model.py         # PyTorch LSTM network definitions
+├── train.py              # Synthetic data setup & training loops
+├── data_loader.py        # Sequence formatting helpers
+├── requirements.txt      # PyTorch requirements
+└── README.md             # Setup guide`
     },
     {
-      title: 'Veltrix Institutional AI Financial Terminal',
-      category: 'Software Engineering & Interactive Analytics',
-      icon: <BarChart2 className="text-accent-blue" size={20} />,
-      shortDesc: 'A responsive React analytics dashboard rendering dynamic volatility smiles and risk statistics (VaR/CVaR) at sub-45ms latency.',
-      tech: ['React', 'FastAPI', 'HTML5 Canvas', 'Tailwind CSS', 'Web Workers', 'Chart.js'],
-      metrics: '12 interactive workspace modules | < 45ms UI redraw latency | 55+ FPS rendering',
-      github: 'https://github.com/VenkataVinesh/PortFolio_Build_Gem',
-      live: 'https://github.com/VenkataVinesh/PortFolio_Build_Gem',
+      title: 'Reinforcement Learning Experiment Lab',
+      category: 'Reinforcement Learning & Algorithms',
+      icon: <Activity className="text-accent-blue" size={20} />,
+      shortDesc: 'Tabular reinforcement learning agents implemented from scratch in Python solving state pathfinding problems in discrete gridworlds.',
+      tech: ['Python', 'Gym / Custom Env', 'NumPy', 'Matplotlib'],
+      metrics: 'Bellman optimality convergence updates | Q-learning & SARSA algorithms',
+      github: 'https://github.com/VenkataVinesh/Reinforcement-Learning-Lab',
+      live: 'https://github.com/VenkataVinesh/Reinforcement-Learning-Lab',
       
-      // Case Study details
-      problem: 'Web-based analytics dashboards experience massive main-thread lockups and lag when drawing and updating real-time covariance heatmaps and volatility surfaces under constant data streams.',
+      problem: 'Understanding and benchmarking the value function convergence rates of tabular model-free reinforcement learning algorithms.',
       architecture: [
-        'Used HTML5 Canvas double-buffering to eliminate redraw flickering.',
-        'Offloaded heavy statistical calculations (Value-at-Risk, Conditional VaR) to separate browser Web Workers.',
-        'Structured modular React context boundaries to minimize DOM re-renders.'
+        'Programmed a discrete GridWorld environment conforming to standard Gym APIs.',
+        'Coded tabular Q-Learning and SARSA updating rules from scratch in Python.',
+        'Mapped value grids and value sweeps to plot decay learning curves.'
       ],
-      challenges: 'Main thread bottlenecking due to dense rendering calculations. Resolved by compiling statistical loops in worker threads, maintaining separation between calculation and presentation layers.',
-      outcomes: 'Successfully rendered 12 specialized dashboards simultaneously, achieving a stable drawing update lag of under 45ms at 55+ FPS.',
-      codeStructure: `veltrix_terminal/
-├── src/
-│   ├── components/
-│   │   ├── VolSurface.jsx  # Volatility surface visualizer
-│   │   └── RiskPanel.jsx   # VaR/CVaR stats aggregator
-│   ├── workers/
-│   │   └── stats.worker.js # Multi-threaded math worker
-│   ├── App.jsx
-│   └── main.jsx
-└── package.json`
+      challenges: 'Balancing exploration and exploitation parameters (epsilon). Resolved by configuring exponential epsilon-decay functions over training episodes.',
+      outcomes: 'Proved the Bellman optimality convergence bounds across multiple grid layouts, showcasing policy iterations.',
+      codeStructure: `Reinforcement-Learning-Lab/
+├── gridworld.py          # Custom Gym discrete environment
+├── q_learning.py         # Q-learning & SARSA training scripts
+├── requirements.txt      # NumPy requirements
+└── README.md             # Model bounds analysis`
     },
     {
-      title: 'Zenith Intelligence Platform',
-      category: 'Full-Stack Web Systems & Real-time Feeds',
-      icon: <Activity className="text-accent-emerald" size={20} />,
-      shortDesc: 'Next.js real-time analytics platform streaming dynamic economic indices and forecasts over optimized WebSocket channels.',
-      tech: ['Next.js', 'React', 'Tailwind CSS', 'WebSockets', 'PostgreSQL', 'Docker'],
-      metrics: '60 FPS real-time streams | 100% SEO Audits | 100% Lighthouse Accessibility',
-      github: 'https://github.com/VenkataVinesh/PortFolio_Build_Gem',
-      live: 'https://github.com/VenkataVinesh/PortFolio_Build_Gem',
+      title: 'Portfolio Optimization Dashboard',
+      category: 'Mathematics & Portfolio Allocations',
+      icon: <BarChart2 className="text-accent-emerald" size={20} />,
+      shortDesc: 'A mathematical python optimizer calculating mean-variance frontiers and maximum Sharpe ratio asset allocations.',
+      tech: ['Python', 'SciPy', 'Pandas', 'Matplotlib', 'NumPy'],
+      metrics: 'Sharpe ratio maximization calculations | efficient frontier visualization',
+      github: 'https://github.com/VenkataVinesh/Portfolio-Optimization-Dashboard',
+      live: 'https://github.com/VenkataVinesh/Portfolio-Optimization-Dashboard',
       
-      // Case Study details
-      problem: 'Handling high-throughput WebSocket data updates without causing browser memory leaks and slow re-render cascades across dynamic chart layouts.',
+      problem: 'Computing robust portfolio weights in multi-asset spaces under specific boundary constraints and variance bounds.',
       architecture: [
-        'Implemented WebSocket stream connections with debounced react hooks.',
-        'Dockerized the stack for scalable local setup.',
-        'Connected PostgreSQL DB with indexing on timestamp fields to optimize retrieval of historical signals.'
+        'Implemented Markowitz mean-variance optimization calculators in Python.',
+        'Used SciPy optimizer functions to compute variance-minimizing boundary weights.',
+        'Wrote scripts to plot the Efficient Frontier curve and maximum Sharpe Ratio point.'
       ],
-      challenges: 'WebSocket connection drops and re-render spikes. Solved by implementing an back-off reconnect pattern and managing telemetry states in a lightweight zustand store.',
-      outcomes: 'Delivered an enterprise-grade analytics dashboard scoring 100% on Lighthouse audits, capable of plotting 60 FPS real-time streams.',
-      codeStructure: `zenith_analytics/
-├── app/
-│   ├── page.jsx        # Landing dashboard view
-│   └── api/            # API endpoints for telemetry
-├── components/
-│   ├── StreamChart.jsx # Real-time WebSocket charts
-│   └── StatCard.jsx    # Glassmorphic telemetry cards
-└── tailwind.config.ts`
+      challenges: 'Inverting large covariance matrices under highly correlated assets. Resolved by applying shrinkage estimation to regularize the covariance matrices.',
+      outcomes: 'Built a modular portfolio allocation dashboard delivering asset weight breakdowns under strict boundaries.',
+      codeStructure: `Portfolio-Optimization-Dashboard/
+├── optimization.py       # SciPy optimizer computations
+├── requirements.txt      # SciPy and Pandas requirements
+└── README.md             # Mathematical formulations`
+    },
+    {
+      title: 'ML Predictive Models',
+      category: 'Data Science & Core ML',
+      icon: <Cpu className="text-accent-cyan" size={20} />,
+      shortDesc: 'A collection of supervised classification and regression model pipelines implemented in Scikit-learn for basic data benchmarks.',
+      tech: ['Python', 'Scikit-learn', 'Pandas', 'NumPy'],
+      metrics: 'Model classification scores | hyperparameter tuning grid-searches',
+      github: 'https://github.com/VenkataVinesh/ML-Predictive-Models',
+      live: 'https://github.com/VenkataVinesh/ML-Predictive-Models',
+      
+      problem: 'Creating clean templates for training, tuning, and evaluating standard supervised machine learning models on common tabular datasets.',
+      architecture: [
+        'Wrote modular Python scripts for training Random Forests, SVMs, and Logistic Regressions.',
+        'Implemented Scikit-learn pipelines with StandardScaler and SimpleImputer layers.',
+        'Used GridSearch CV to systematically tune hyperparameters.'
+      ],
+      challenges: 'Preventing data leakage during preprocessing steps. Solved by enclosing scaling and imputation operations strictly inside Scikit-learn Pipeline objects.',
+      outcomes: 'Constructed an extensible machine learning template repository with clean classification reporting outputs.',
+      codeStructure: `ML-Predictive-Models/
+├── classification.py     # SVM & classifier script templates
+├── regression.py         # Linear & RF regressor script templates
+├── requirements.txt      # Scikit-learn dependencies
+└── README.md             # Dataset summaries`
     }
   ];
 
@@ -158,7 +166,7 @@ const Projects = () => {
             Engineering & ML Case Studies
           </h2>
           <p className="text-text-sub text-base md:text-lg mt-2 max-w-2xl">
-            Click on any project to expand it into an in-depth technical case study, outlining problem definitions, mathematical architectures, and specific engineering resolutions.
+            Click on any project to expand it into a detailed case study, showing mathematical layouts, specific engineering challenges, and structural repositories.
           </p>
           <div className="w-20 h-1 bg-gradient-to-r from-accent-cyan to-accent-teal mt-4 rounded-full" />
         </div>

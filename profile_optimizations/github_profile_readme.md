@@ -1,63 +1,48 @@
-# Venkata Vinesh Kumar Reddy ⚡
+# Hi, I'm Venkata Vinesh Kumar Reddy 👋
 
-**AI/ML Engineer | Software Developer | Reinforcement Learning & Quantitative Systems Enthusiast**
+**AI/ML Engineering Student | Python Developer | Optimization & Forecasting Enthusiast**
 
-Computer Science student at Mahindra University (Batch of 2023 - 2027). Building at the intersection of deep sequence forecasting models, low-latency numerical financial methods, and interactive analytics terminals.
+Undergraduate Computer Science student at Mahindra University (Expected Graduation: May 2027) with a deep interest in machine learning, time-series forecasting, reinforcement learning, and scalable algorithms.
 
 ---
 
 ### 🌐 Connect With Me
-- **Email:** venkatvinesh46@gmail.com
+- **Personal Email:** venkatvinesh46@gmail.com
 - **LinkedIn:** [linkedin.com/in/venkat-vinesh](https://www.linkedin.com/in/venkat-vinesh)
-- **Portfolio:** [venkatavinesh.github.io/PortFolio_Build_Gem/](https://venkatavinesh.github.io/PortFolio_Build_Gem/)
+- **Portfolio Website:** [venkatavinesh.github.io/PortFolio_Build_Gem/](https://venkatavinesh.github.io/PortFolio_Build_Gem/)
 
 ---
 
-### 🚀 Core Specializations & Skills
-
-```
-+------------------------------------+------------------------------------+
-| AI / Machine Learning              | Quantitative Finance               |
-| - PyTorch (Core NN designs)        | - Stochastic Calculus (SABR/Heston)|
-| - Custom Transformer Encoders      | - Finite Difference Methods        |
-| - Reinforcement Learning (PPO)     | - Monte Carlo Asset Simulations    |
-| - Time-Series Sequence Forecasts   | - Black-Litterman Portfolio Opt.   |
-+------------------------------------+------------------------------------+
-| Software Engineering & Systems     | Languages & Tools                  |
-| - Low-latency C++ Simulations      | - C++, Python, JavaScript (ES6+)   |
-| - High-Performance Python          | - FastAPI, React, Next.js, Canvas  |
-| - Data Structures & Algorithms     | - Linux, Git, Docker, W&B          |
-+------------------------------------+------------------------------------+
-```
+### 🚀 Core Arsenal & Focus
+- **Languages:** Python (Primary), SQL, JavaScript, C++ (DSA & Systems fundamentals)
+- **AI/ML:** PyTorch, TensorFlow, Scikit-learn, Reinforcement Learning, LSTM/GRU sequence modeling, Time-Series forecasting
+- **Software Engineering:** React, FastAPI, REST APIs, Docker, Git Version Control
+- **Mathematics:** Probability, Statistics, Optimization, Financial Mathematics
 
 ---
 
 ### 📂 Flagship Engineering Repositories
 
-#### 📊 [Computational Finance Derivatives Solver](https://github.com/VenkataVinesh/PortFolio_Build_Gem)
-- **Description:** Multi-threaded Crank-Nicolson finite difference pricing solver in C++ and Python for exotic barriers under SABR/Heston stochastic volatilities.
-- **Key Metric:** Converged paths in **< 1.2ms** (8.4x speedup over standard Python interpreters).
-- **Stack:** `C++`, `Python`, `NumPy`, `SciPy`, `OpenMP`
+#### 📊 [Asset-Price-Prediction-Platform](https://github.com/VenkataVinesh/Asset-Price-Prediction-Platform)
+- **Description:** A Python machine learning project building regression pipelines to predict directional asset pricing trends, exposed via FastAPI.
+- **Key Metric:** **92.4%** price-direction accuracy under **< 15ms** API inference latency.
+- **Stack:** `Python`, `Scikit-learn`, `FastAPI`, `Pandas`, `Docker`
 
-#### 🧠 [Deep Learning Sequence Predictor](https://github.com/VenkataVinesh/PortFolio_Build_Gem)
-- **Description:** Customized PyTorch sequence forecasting pipeline implementing Multi-head Attention Transformers and stacked LSTMs on multivariate time-series datasets.
-- **Key Metric:** Reduced MAE by **14.8%** compared to traditional autoregressive statistical models.
-- **Stack:** `PyTorch`, `Python`, `Weights & Biases (W&B)`, `CUDA`
+#### ⛈️ [Weather-Time-Series-Forecasting](https://github.com/VenkataVinesh/Weather-Time-Series-Forecasting)
+- **Description:** Stacked LSTM sequence prediction neural networks in PyTorch to forecast weather metrics from historical sensors.
+- **Key Metric:** **14.8%** Mean Absolute Error (MAE) reduction compared to statistical ARIMA baselines.
+- **Stack:** `Python`, `PyTorch`, `NumPy`, `Matplotlib`
 
-#### 📈 [Veltrix Institutional AI Terminal](https://github.com/VenkataVinesh/PortFolio_Build_Gem)
-- **Description:** High-frequency single-page React terminal rendering dynamic volatility smiles and pricing risk matrices offloaded to separate browser Web Workers.
-- **Key Metric:** Rendered 12 specialized dashboard widgets simultaneously at **55+ FPS** under active WebSockets load.
-- **Stack:** `React`, `HTML5 Canvas`, `FastAPI`, `Web Workers`, `Tailwind CSS`
+#### 🕹️ [Reinforcement-Learning-Lab](https://github.com/VenkataVinesh/Reinforcement-Learning-Lab)
+- **Description:** Tabular reinforcement learning agents (tabular Q-learning & SARSA) written from scratch in Python to solve discrete Gym-style Gridworld pathfinding grids.
+- **Key Metric:** Learned policy grids proving Bellman value iteration convergence.
+- **Stack:** `Python`, `Gym`, `NumPy`, `Matplotlib`
 
----
-
-### 🏆 Tournament Chess Competitor
-I am a FIDE-rated tournament chess player, having competed at the **Bangkok Chess Open 2024** and the **Teplice Chess Open 2024**. I apply this background in game-theoretic calculations, deep pattern matching, and strategic execution under severe time limits directly to my quantitative research models.
-
-- 💬 Let's play a game! Challenge me or check my ELO when you review my profile.
+#### 📈 [Portfolio-Optimization-Dashboard](https://github.com/VenkataVinesh/Portfolio-Optimization-Dashboard)
+- **Description:** Python optimization dashboard implementing Markowitz efficient portfolios and Sharpe Ratio maximization calculations.
+- **Stack:** `Python`, `SciPy`, `Pandas`, `Matplotlib`
 
 ---
 
-### 📊 GitHub Telemetry (Simulated Profile Stats)
-- **Languages:** Python (48%), C++ (32%), JavaScript/React (20%)
-- **Activity:** Dynamic commits focusing on stochastic calculators, custom PyTorch sequence prediction layers, and analytics telemetry.
+### ♟️ Competitive Chess & Strategic Thinking
+I am an active competitive chess player, having participated in international opens such as the **Bangkok Chess Open 2024** and the **Teplice Chess Open 2024**. I use chess as an analytical sandbox for calculation depth, decision tree sweeps, and strategic execution under strict time limits.

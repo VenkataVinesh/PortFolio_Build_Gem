@@ -1,29 +1,29 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Award, Target, Trophy, AwardIcon, Bookmark } from 'lucide-react';
+import { Award, Target, Trophy, Bookmark } from 'lucide-react';
 
 const Achievements = () => {
   const items = [
     {
-      title: 'International Chess Competitor',
-      subtitle: 'Bangkok Chess Open 2024 | Teplice Chess Open 2024',
+      title: 'Competitive Chess & Strategic Problem Solving',
+      subtitle: 'Bangkok Open | Teplice Open | 2024 Participant',
       icon: <Trophy className="text-amber-500" size={24} />,
       category: 'Strategic / Game Theory',
-      description: 'Competed at international FIDE-rated chess tournaments, playing against grandmasters and masters. This background enhances analytical capacity, pattern matching, risk under pressure, and calculation depth—core attributes for high-frequency quantitative research.',
+      description: 'Active chess player with a strong interest in analytical thinking, sequence calculations, and strategic execution under tight time constraints. Highly value game-theoretic modeling and analytical rigor.',
     },
     {
-      title: 'SABR Volatility Simulation Benchmarks',
-      subtitle: 'Mathematical Computing Solver',
+      title: 'Portfolio Optimization Calculators',
+      subtitle: 'Mathematical Computing Scripts',
       icon: <Award className="text-accent-cyan" size={24} />,
-      category: 'Computational Finance',
-      description: 'Engineered a highly optimized SABR volatility calibration engine. Reached converges under 1.2 milliseconds for option pricing surfaces, beating standard Python implementation bottlenecks by 8.4x through multi-threaded C++ and OpenMP.',
+      category: 'Mathematics',
+      description: 'Implemented mean-variance asset optimization scripts in Python using SciPy optimizer libraries. Computed regularized covariance structures and constructed Efficient Frontier weight breakdowns.',
     },
     {
-      title: 'Academic Standing & Leadership',
+      title: 'Academic Performance & Coursework',
       subtitle: 'Mahindra University, CSE',
       icon: <Bookmark className="text-accent-teal" size={24} />,
       category: 'Academics',
-      description: 'B.Tech in Computer Science & Engineering (Batch 2023 - 2027). Consistently achieving excellent performance in core engineering math classes (Linear Algebra, Calculus, Probabilistic Systems). Student ID: SE23UCSE001.',
+      description: 'Computer Science student (Batch 2023 - 2027) maintaining a solid 7.96/10 CGPA. Consistently achieving excellent outcomes in mathematical engineering classes including Probability & Statistics and Design of Algorithms.',
     },
   ];
 
@@ -35,7 +35,7 @@ const Achievements = () => {
         <div className="mb-16">
           <span className="text-xs font-bold uppercase tracking-widest text-accent-cyan">Milestones</span>
           <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-text-main mt-2">
-            Achievements & Benchmarks
+            Achievements & Ambitions
           </h2>
           <div className="w-20 h-1 bg-gradient-to-r from-accent-cyan to-accent-teal mt-4 rounded-full" />
         </div>
@@ -80,7 +80,7 @@ const Achievements = () => {
           ))}
         </div>
 
-        {/* Chess Note Banner */}
+        {/* Chess Challenge */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -89,8 +89,8 @@ const Achievements = () => {
           className="mt-12 p-6 glass rounded-2xl border border-border-custom bg-opacity-30 flex flex-col md:flex-row items-center justify-between gap-6"
         >
           <div className="space-y-1 text-center md:text-left">
-            <h4 className="text-base font-bold text-text-main">Looking for a game of chess?</h4>
-            <p className="text-xs text-text-sub">FIDE-rated tournament level player. Let's connect on Chess.com or play a round during interviews.</p>
+            <h4 className="text-base font-bold text-text-main">Interested in a game of chess?</h4>
+            <p className="text-xs text-text-sub">Active competitive chess player. Let's connect on Chess.com or play a round during interviews.</p>
           </div>
           <a
             href="mailto:venkatvinesh46@gmail.com?subject=Chess%20Challenge%20/%20Portfolio%20Inquiry"

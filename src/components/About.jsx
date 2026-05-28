@@ -1,23 +1,23 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { BookOpen, Target, Brain, Award } from 'lucide-react';
+import { BookOpen, Target, Brain } from 'lucide-react';
 
 const About = () => {
   const cards = [
     {
       icon: <Brain className="text-accent-cyan" size={24} />,
-      title: 'Stochastic Math & DL',
-      description: 'Bridging the gap between time-series deep learning architectures (Transformers, LSTMs) and stochastic models (Heston, SABR, Geometric Brownian Motion).',
+      title: 'Python-First AI/ML',
+      description: 'Implementing algorithms in PyTorch, TensorFlow, and Scikit-learn for time-series forecasting, regression, and model-free reinforcement learning experiments.',
     },
     {
       icon: <Target className="text-accent-teal" size={24} />,
       title: 'Target Focus',
-      description: 'Actively seeking 2026/2027 internships in Quantitative Research, Quant Development, Machine Learning Engineering (MLE), and High-Performance Software Engineering.',
+      description: 'Actively seeking 2026/2027 internship opportunities in AI/ML engineering, software development, data science, and quantitative data analytics.',
     },
     {
       icon: <BookOpen className="text-accent-emerald" size={24} />,
-      title: 'Academic Foundation',
-      description: 'Pursuing B.Tech in Computer Science and Engineering at Mahindra University. Rigorous coursework in algorithms, probability, linear algebra, and data structures.',
+      title: 'Algorithms & Mathematics',
+      description: 'Pursuing a B.Tech in Computer Science and Engineering at Mahindra University. Focused on algorithms, probability, statistics, and linear algebra.',
     },
   ];
 
@@ -46,19 +46,19 @@ const About = () => {
             className="space-y-6 text-base md:text-lg text-text-sub leading-relaxed"
           >
             <p>
-              I specialize in developing high-performance algorithms and neural architectures designed for 
-              complexity and volatility. My approach is rooted in <span className="text-text-main font-semibold">mathematical rigor</span> 
-              and the belief that complex predictive problems in finance and AI require both elegant models and highly optimized code.
+              I am a Python-first AI/ML developer and software engineer who loves turning data into predictions. 
+              My focus is on designing and training neural networks, forecasting complex temporal patterns, and 
+              conducting reinforcement learning experiments in custom simulated environments.
             </p>
             <p>
-              Currently, as a Computer Science undergraduate at <span className="text-text-main font-semibold">Mahindra University</span>, 
-              I split my focus between theoretical research in numerical finance, stochastic calculus, and practical, production-ready 
-              systems in PyTorch and C++. I love building frameworks from scratch, whether it is option pricing simulators 
-              or deep learning sequence models.
+              Currently pursuing my B.Tech in Computer Science and Engineering at <span className="text-text-main font-semibold">Mahindra University</span>, 
+              I split my time between learning mathematical frameworks (linear algebra, probability, and optimization) 
+              and writing clean, scalable software in Python. I also use C++ to build a strong foundation in data structures, 
+              algorithms, and low-level system designs.
             </p>
             <p>
-              Beyond the code, I am an active competitive chess player. This background heavily influences my analytical thinking, 
-              pattern recognition, and risk management—skills I directly apply to market modeling and algorithm design.
+              Outside of classes, I play competitive chess. Chess is a strategic playground for me, shaping how I model decision boundaries, 
+              calculate sequential outcomes, and manage risk—skills that map directly to designing reinforcement learning agents.
             </p>
           </motion.div>
 

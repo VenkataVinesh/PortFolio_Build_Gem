@@ -238,11 +238,11 @@ def generate_pdf(output_paths):
         ))
         story.append(Spacer(1, 4))
 
-        # Project 3: RL Lab
+        # Project 3: Veltrix: AI Trading & Portfolio Optimizer
         p3_data = [
-            [Paragraph("Reinforcement Learning Experiment Lab", style_item_title), Paragraph("Python, Gym/Custom Environment, NumPy, Matplotlib", style_item_meta)],
+            [Paragraph("Veltrix: AI Trading & Portfolio Optimizer", style_item_title), Paragraph("Next.js, TypeScript, Python, FastAPI, Docker, PostgreSQL", style_item_meta)],
         ]
-        p3_table = Table(p3_data, colWidths=[4.7 * inch, 3.0 * inch])
+        p3_table = Table(p3_data, colWidths=[4.4 * inch, 3.3 * inch])
         p3_table.setStyle(TableStyle([
             ('BOTTOMPADDING', (0,0), (-1,-1), 0),
             ('TOPPADDING', (0,0), (-1,-1), 0),
@@ -250,15 +250,15 @@ def generate_pdf(output_paths):
         story.append(p3_table)
         
         story.append(Paragraph(
-            "• <b>Problem:</b> Benchmarking policy improvement rates and state convergence times in discrete pathfinding grids.",
+            "• <b>Problem:</b> Integrating quantitative optimizer backends (Sharpe/Markowitz solvers) with live WebSockets streams and autonomous agent logs in a single-page reactive dashboard.",
             style_bullet
         ))
         story.append(Paragraph(
-            "• <b>Architecture & Dev:</b> Built model-free reinforcement learning agents in Python from scratch. Programmed tabular Q-Learning and SARSA algorithms, mapping policy updates and discount parameters.",
+            "• <b>Architecture & Dev:</b> Programmed a Next.js (TypeScript) client and FastAPI (Python) backend workspace. Integrated mathematical variance frontier solvers. Structured asynchronous execution agent hooks with database schemas.",
             style_bullet
         ))
         story.append(Paragraph(
-            "• <b>Outcome:</b> Visualized state-value iteration convergence under Bellman optimality constraints, proving policy bounds in custom environments.",
+            "• <b>Outcome:</b> Deployed a multi-container trading environment mapping real-time allocations with high-fidelity analytics and visual weight charts.",
             style_bullet
         ))
         story.append(Spacer(1, 4))

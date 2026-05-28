@@ -99,27 +99,31 @@ const Projects = () => {
 └── README.md             # Model bounds analysis`
     },
     {
-      title: 'Portfolio Optimization Dashboard',
-      category: 'Mathematics & Portfolio Allocations',
+      title: 'Veltrix: AI Trading & Portfolio Optimizer',
+      category: 'Full-Stack Systems & Quantitative Analytics',
       icon: <BarChart2 className="text-accent-emerald" size={20} />,
-      shortDesc: 'A mathematical python optimizer calculating mean-variance frontiers and maximum Sharpe ratio asset allocations.',
-      tech: ['Python', 'SciPy', 'Pandas', 'Matplotlib', 'NumPy'],
-      metrics: 'Sharpe ratio maximization calculations | efficient frontier visualization',
-      github: 'https://github.com/VenkataVinesh/Portfolio-Optimization-Dashboard',
-      live: 'https://github.com/VenkataVinesh/Portfolio-Optimization-Dashboard',
+      shortDesc: 'A high-performance institutional trading and portfolio optimization dashboard combining a Next.js (TypeScript) frontend with a FastAPI backend and autonomous trading agents.',
+      tech: ['Next.js', 'TypeScript', 'Python', 'FastAPI', 'Docker', 'PostgreSQL'],
+      metrics: 'Multi-agent trading loops | Sharpe ratio optimizer solver | WebSockets streaming',
+      github: 'https://github.com/VenkataVinesh/Veltrix',
+      live: 'https://github.com/VenkataVinesh/Veltrix',
       
-      problem: 'Computing robust portfolio weights in multi-asset spaces under specific boundary constraints and variance bounds.',
+      problem: 'Trading infrastructure often lacks modular integration of quantitative optimizer backends (like Sharpe/Markowitz solvers) with autonomous execution agents and WebSocket feeds.',
       architecture: [
-        'Implemented Markowitz mean-variance optimization calculators in Python.',
-        'Used SciPy optimizer functions to compute variance-minimizing boundary weights.',
-        'Wrote scripts to plot the Efficient Frontier curve and maximum Sharpe Ratio point.'
+        'Designed a multi-service workspace containing a Next.js + TypeScript dashboard and a Python FastAPI backend.',
+        'Implemented portfolio optimization algorithms (Sharpe ratio and variance frontier bounds) in Python, exposed via endpoints to the frontend.',
+        'Programmed autonomous trading agent loops with hooks for auditing, logging, and database transactions.'
       ],
-      challenges: 'Inverting large covariance matrices under highly correlated assets. Resolved by applying shrinkage estimation to regularize the covariance matrices.',
-      outcomes: 'Built a modular portfolio allocation dashboard delivering asset weight breakdowns under strict boundaries.',
-      codeStructure: `Portfolio-Optimization-Dashboard/
-├── optimization.py       # SciPy optimizer computations
-├── requirements.txt      # SciPy and Pandas requirements
-└── README.md             # Mathematical formulations`
+      challenges: 'Handling asynchronous agent state syncs and WebSockets channels during high-velocity updates. Resolved by implementing structured message schemas and thread-safe data pipelines.',
+      outcomes: 'Successfully integrated local SQLite/PostgreSQL databases with FastAPI, generating visual allocation weight charts for traders.',
+      codeStructure: `Veltrix/
+├── app/                  # Next.js TypeScript frontend pages
+├── backend/              # FastAPI python backend
+│   ├── app/main.py       # API router and endpoints
+│   └── bootstrap.py      # Environment check scripts
+├── tradingagents/        # Autonomous agent loops
+├── docker/               # Multi-container orchestrations
+└── tsconfig.json         # TypeScript compiler configurations`
     },
     {
       title: 'ML Predictive Models',

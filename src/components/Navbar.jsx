@@ -12,6 +12,7 @@ const Navbar = ({ activeSection, theme, toggleTheme }) => {
     { label: 'Projects', href: '#projects' },
     { label: 'Skills', href: '#skills' },
     { label: 'Achievements', href: '#achievements' },
+    { label: 'Blog', href: '#blog' },
     { label: 'Contact', href: '#contact' },
   ];
 

@@ -8,6 +8,7 @@ import Projects from './components/Projects';
 import Skills from './components/Skills';
 import Achievements from './components/Achievements';
 import GithubStats from './components/GithubStats';
+import Blog from './components/Blog';
 import Resume from './components/Resume';
 import Contact from './components/Contact';
 
@@ -40,7 +41,7 @@ function App() {
   // Track active section on scroll
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['home', 'about', 'experience', 'projects', 'skills', 'achievements', 'resume', 'contact'];
+      const sections = ['home', 'about', 'experience', 'projects', 'skills', 'achievements', 'blog', 'resume', 'contact'];
       const scrollPosition = window.scrollY + 200; // Offset for better detection
 
       for (const section of sections) {
@@ -77,6 +78,7 @@ function App() {
         <Skills />
         <Achievements />
         <GithubStats />
+        <Blog />
         <Resume />
         <Contact />
       </main>

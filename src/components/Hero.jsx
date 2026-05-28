@@ -44,29 +44,33 @@ const Hero = () => {
           className="space-y-8"
         >
           <div className="space-y-4">
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-widest bg-accent-cyan bg-opacity-10 text-accent-cyan border border-accent-cyan border-opacity-25">
-              <Cpu size={12} className="animate-pulse" /> AI/ML Engineer & Quant Developer
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] md:text-xs font-semibold uppercase tracking-widest bg-accent-cyan bg-opacity-10 text-accent-cyan border border-accent-cyan border-opacity-25">
+              <Cpu size={12} className="animate-pulse" /> AI/ML Engineer | Software Developer | RL & Optimization Enthusiast
             </span>
             
             <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.05] text-text-main">
-              Building the Future <br />
+              Building Intelligent <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-cyan via-accent-teal to-accent-blue font-extrabold">
-                of Quantitative Systems
+                Systems & Algorithms
               </span>
             </h1>
           </div>
 
-          <p className="max-w-xl text-lg md:text-xl text-text-sub leading-relaxed font-medium">
-            Pursuing Computer Science at <span className="text-text-main font-semibold">Mahindra University</span>. 
-            Developing high-performance architectures at the intersection of <span className="text-text-main font-semibold">deep learning</span>, 
-            <span className="text-text-main font-semibold">stochastic calculus</span>, and <span className="text-text-main font-semibold">quantitative finance</span>.
-          </p>
+          <div className="space-y-4">
+            <p className="max-w-xl text-lg md:text-xl text-text-sub leading-relaxed font-semibold">
+              Building intelligent systems combining machine learning, algorithms, optimization, and scalable software engineering.
+            </p>
+            <p className="max-w-xl text-sm md:text-base text-text-sub leading-relaxed">
+              Pursuing Computer Science at <span className="text-text-main font-semibold">Mahindra University</span> (CGPA: 7.96). 
+              Currently seeking internship opportunities in <span className="text-text-main font-semibold">AI/ML, Software Engineering, Data Science, and Quantitative Analytics</span>.
+            </p>
+          </div>
 
           {/* Quick Stats Banner */}
           <div className="grid grid-cols-3 gap-4 max-w-lg border-y border-border-custom py-4">
             <div>
-              <div className="text-2xl font-bold text-accent-cyan">2027</div>
-              <div className="text-xs text-text-sub uppercase tracking-wider">CS Graduate</div>
+              <div className="text-2xl font-bold text-accent-cyan">7.96</div>
+              <div className="text-xs text-text-sub uppercase tracking-wider">Current CGPA</div>
             </div>
             <div>
               <div className="text-2xl font-bold text-accent-teal">C++ & PyTorch</div>
@@ -79,26 +83,38 @@ const Hero = () => {
           </div>
 
           {/* Call to Actions */}
-          <div className="flex flex-wrap gap-4 items-center">
+          <div className="flex flex-wrap gap-3 items-center">
             <a
-              href="#projects"
-              className="group relative px-6 py-3.5 bg-accent-cyan hover:bg-opacity-90 text-white font-semibold rounded-xl flex items-center gap-2 transition-all active:scale-95 shadow-md shadow-accent-cyan/15 hover:shadow-accent-cyan/25"
+              href="./resume.pdf"
+              download="Venkata_Vinesh_Resume.pdf"
+              className="group px-5 py-3 bg-accent-cyan hover:bg-opacity-90 text-white font-semibold rounded-xl flex items-center gap-2 transition-all active:scale-95 shadow-md shadow-accent-cyan/15 hover:shadow-accent-cyan/25 text-xs md:text-sm"
             >
-              <span>Explore Work</span>
-              <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+              <FileText size={15} />
+              <span>Download CV</span>
             </a>
             <a
-              href="#resume"
-              className="px-6 py-3.5 glass hover:border-accent-cyan text-text-main font-semibold rounded-xl flex items-center gap-2 transition-all active:scale-95"
+              href="https://github.com/VenkataVinesh"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 py-3 glass hover:border-accent-cyan text-text-main font-semibold rounded-xl flex items-center gap-2 transition-all active:scale-95 text-xs"
             >
-              <FileText size={16} />
-              <span>View Resume</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/></svg>
+              <span>GitHub</span>
+            </a>
+            <a
+              href="https://www.linkedin.com/in/venkat-vinesh"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 py-3 glass hover:border-accent-cyan text-text-main font-semibold rounded-xl flex items-center gap-2 transition-all active:scale-95 text-xs"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+              <span>LinkedIn</span>
             </a>
             <a
               href="#contact"
-              className="px-6 py-3.5 text-text-sub hover:text-text-main font-semibold transition-colors"
+              className="px-4 py-3 border border-dashed border-border-custom hover:border-accent-cyan text-text-sub hover:text-text-main font-semibold rounded-xl transition-all active:scale-95 text-xs"
             >
-              Get in Touch
+              Contact Me
             </a>
           </div>
         </motion.div>

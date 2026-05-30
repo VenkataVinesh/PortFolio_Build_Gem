@@ -147,8 +147,7 @@ const Resume = () => {
                   <span className="text-xs font-semibold text-text-sub font-mono">Python Project</span>
                 </div>
                 <p className="text-xs text-text-sub leading-relaxed">
-                  Coded price direction forecasting estimators using Scikit-learn (Random Forests and Gradient Boosting Regressors) on historical pricing metrics. 
-                  Wrapped predictions inside FastAPI endpoints containerized in Docker, delivering &lt; 15ms inference latencies.
+                  Built an interactive forecasting platform to evaluate how sequential deep learning models (LSTMs) compare with classical statistical baselines (ARIMA) on noisy pricing data. Calculated 14-day rolling technical features (SMA, EMA, RSI, Volatility) using Pandas, exposed via a FastAPI backend to a React dashboard.
                 </p>
               </div>
 
@@ -161,8 +160,7 @@ const Resume = () => {
                   <span className="text-xs font-semibold text-text-sub font-mono">Deep Learning Project</span>
                 </div>
                 <p className="text-xs text-text-sub leading-relaxed">
-                  Structured an LSTM sequence forecasting neural network in PyTorch, implementing stacked recurrent cells to model multivariate atmospheric time-series patterns. 
-                  Reduced Mean Absolute Error (MAE) metrics by 14.8% over traditional statistical ARIMA baselines.
+                  Analyzed multi-dimensional meteorological sensors, implementing ARIMA, SARIMA, and PyTorch LSTM networks to forecast temperature and humidity. Conducted time-series decomposition to isolate trend and seasonal patterns, optimizing parameters based on residual stationarity.
                 </p>
               </div>
 
@@ -175,7 +173,7 @@ const Resume = () => {
                   <span className="text-xs font-semibold text-text-sub font-mono">Optimization Project</span>
                 </div>
                 <p className="text-xs text-text-sub leading-relaxed">
-                  Developed an interactive web dashboard for mathematical asset allocation, using SciPy optimization solvers to construct optimal frontiers and compute Sharpe ratios.
+                  Developed an interactive web dashboard for mathematical asset allocation, using SciPy optimization solvers to construct optimal frontiers and compute Sharpe ratios under weight constraints.
                 </p>
               </div>
             </div>

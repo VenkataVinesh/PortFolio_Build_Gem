@@ -52,7 +52,7 @@ const Hero = () => {
         >
           <div className="space-y-4">
             <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] md:text-xs font-semibold uppercase tracking-widest bg-accent-cyan bg-opacity-10 text-accent-cyan border border-accent-cyan border-opacity-25">
-              <Cpu size={12} className="animate-pulse" /> AI/ML Engineering Student | Python Developer | RL & Optimization Enthusiast
+              <Cpu size={12} className="animate-pulse" /> AI/ML Engineering Student | Python-first | RL & Optimization
             </span>
             
             <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.05] text-text-main">
@@ -65,7 +65,7 @@ const Hero = () => {
 
           <div className="space-y-4">
             <p className="max-w-xl text-lg md:text-xl text-text-sub leading-relaxed font-semibold">
-              Building intelligent systems combining machine learning, algorithms, optimization, and scalable software engineering.
+              Interested in building intelligent systems using machine learning, forecasting, optimization, and scalable software engineering.
             </p>
             <p className="max-w-xl text-sm md:text-base text-text-sub leading-relaxed">
               Pursuing Computer Science at <span className="text-text-main font-semibold">Mahindra University</span> (CGPA: 7.96). 
@@ -154,8 +154,8 @@ const Hero = () => {
             <div className="p-5 font-mono text-xs text-text-sub space-y-4 bg-slate-950/40 dark:bg-slate-950/70">
               <div className="space-y-1">
                 <p className="text-accent-cyan"># python train.py --model=LSTM --dataset=WeatherSeries</p>
-                <p className="text-emerald-500">✔ CUDA Initialization Complete: {telemetry.device}</p>
-                <p className="text-text-main pl-3">↳ Epoch 45/50 | Loss: <span className="text-yellow-500">{telemetry.loss}</span> | Val MAE: <span className="text-emerald-400">{telemetry.mae}</span></p>
+                <p className="text-emerald-500">✔ Training epoch completed successfully</p>
+                <p className="text-text-main pl-3">↳ Epoch 45/50 completed | Loss: <span className="text-yellow-500">{telemetry.loss}</span> | Val MAE: <span className="text-emerald-400">{telemetry.mae}</span></p>
               </div>
 
               <div className="space-y-1">
@@ -168,7 +168,8 @@ const Hero = () => {
               <div className="space-y-1">
                 <p className="text-accent-cyan"># python forecast.py --model=ARIMA --steps=12</p>
                 <p className="text-text-sub">Loading historical time-series data...</p>
-                <p className="text-text-main pl-3">↳ Forecast completed. MSE: 0.024 | MAPE: 1.84%</p>
+                <p className="text-text-main pl-3">↳ ARIMA model residuals minimized (AIC: 412.5)</p>
+                <p className="text-emerald-500 pl-3">✔ Forecast visualization rendered</p>
               </div>
 
               <div className="border-t border-border-custom pt-3 mt-3 flex justify-between items-center text-[10px]">

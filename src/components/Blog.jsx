@@ -55,7 +55,11 @@ def update_q_value(q_table, state, action, reward, next_state, alpha, gamma):
 \`\`\`
 
 ### Epsilon-Decay Policies
-During early episodes, the agent explores random paths (high epsilon). Over time, we decay epsilon so the agent exploits its Q-table parameters, converging to the optimal policy bounds.`
+During early episodes, the agent explores random paths (high epsilon). Over time, we decay epsilon so the agent exploits its Q-table parameters, converging to the optimal policy bounds.
+
+### My Personal Takeaway
+
+One thing that initially confused me about Bellman equations was how the future value is discounted recursively ($\\gamma$). It seemed like magic until I coded a simple Q-table sweep. Mapping state values iteratively showed me how the discount parameter controls an agent's "horizon"—higher values make it seek long-term rewards, while lower values make it opportunistic.`
     },
     {
       id: 2,
@@ -115,7 +119,11 @@ def max_sharpe_ratio(mean_returns, cov_matrix, risk_free_rate=0.0):
 
 ### Analyzing the Efficient Frontier
 
-By resolving this minimization for different target returns, we map the boundary curve known as the Markowitz Efficient Frontier, which represents the optimal portfolio layouts for any given risk tolerance.`
+By resolving this minimization for different target returns, we map the boundary curve known as the Markowitz Efficient Frontier, which represents the optimal portfolio layouts for any given risk tolerance.
+
+### My Personal Takeaway
+
+I built this model to see how Markowitz's mean-variance equations hold up under real-world constraints. Initially, I expected optimization solvers to be extremely robust, but I quickly learned that the covariance matrices are highly sensitive to outliers. This taught me the value of statistical cleaning and covariance shrinkage.`
     },
     {
       id: 3,
@@ -172,7 +180,11 @@ class WeatherForecastingLSTM(nn.Module):
 
 ### Data Formatting & Forecasting MAE
 
-Multivariate sequences must be formatted as rolling window frames (e.g. past 24 hours of sensors to forecast next hour). We train the model by minimizing Mean Absolute Error (MAE) loss, checking prediction curves against true values.`
+Multivariate sequences must be formatted as rolling window frames (e.g. past 24 hours of sensors to forecast next hour). We train the model by minimizing Mean Absolute Error (MAE) loss, checking prediction curves against true values.
+
+### My Personal Takeaway
+
+When I first tried using standard Recurrent Neural Networks (RNNs) for temperature series, the gradients vanished within 10 sequence steps, leading to poor predictions. Transitioning to LSTMs was an eye-opener; seeing how the forget and input gates learn which historic anomalies to remember helped me understand why gated topologies dominate sequence modeling.`
     },
     {
       id: 4,
@@ -197,7 +209,11 @@ I noticed that if the exploration rate ($\\epsilon$) decayed too quickly, the ag
 
 $$\\epsilon_t = \\max(\\epsilon_{min}, \\epsilon_0 \\times d^t)$$
 
-Tuning these parameters showed me how delicate RL training is compared to standard supervised learning. Coding this simulation solidified my respect for the mathematical foundations of decision-making agents.`
+Tuning these parameters showed me how delicate RL training is compared to standard supervised learning. Coding this simulation solidified my respect for the mathematical foundations of decision-making agents.
+
+### My Personal Takeaway
+
+During early runs, my Q-learning agent got stuck in infinite loops, pacing back and forth in empty cells. I realized that my epsilon decay factor was too aggressive—the agent stopped exploring before finding the goal. Tuning the exploration parameters taught me that hyperparameters in reinforcement learning behave much more dynamically than in static classification tasks.`
     }
   ];
 

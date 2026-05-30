@@ -46,19 +46,29 @@ const About = () => {
             className="space-y-6 text-base md:text-lg text-text-sub leading-relaxed"
           >
             <p>
-              I am a Python-first AI/ML developer and software engineer who loves turning data into predictions. 
-              My focus is on designing and training neural networks, forecasting complex temporal patterns, and 
-              conducting reinforcement learning experiments in custom simulated environments.
+              I am a Computer Science student at <span className="text-text-main font-semibold">Mahindra University</span> focused on building intelligent systems. I enjoy working on machine learning, forecasting, reinforcement learning, and mathematically driven software systems.
             </p>
             <p>
-              Currently pursuing my B.Tech in Computer Science and Engineering at <span className="text-text-main font-semibold">Mahindra University</span>, 
-              I split my time between learning mathematical frameworks (linear algebra, probability, and optimization) 
-              and writing clean, scalable software in Python. I also use C++ to build a strong foundation in data structures, 
-              algorithms, and low-level system designs.
+              I split my time between learning mathematical frameworks—like probability, statistics, and linear algebra—and writing clean, scalable software in Python. I also use C++ to strengthen my foundations in data structures, algorithms, and software design principles.
             </p>
             <p>
               Beyond coding, I enjoy taking on organizational leadership roles. As the Logistics Head of the Math Club and the On-Ground Operations Lead for TEDx Mahindra University, I apply structured problem-solving to coordinate event logistics, manage operational execution, and collaborate with diverse teams to bring technical and community events to life.
             </p>
+
+            {/* Currently Exploring */}
+            <div className="mt-8 pt-6 border-t border-border-custom">
+              <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-accent-cyan mb-4 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-accent-cyan animate-pulse inline-block" />
+                Currently Exploring
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {['Reinforcement Learning', 'Time-Series Forecasting', 'Deep Learning Systems', 'FastAPI & ML Deployment', 'Forecasting Analytics'].map((item) => (
+                  <span key={item} className="px-3 py-1.5 rounded-lg bg-slate-900/60 border border-border-custom text-xs font-semibold text-text-sub hover:border-accent-cyan/40 hover:text-text-main transition-colors">
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
           </motion.div>
 
           {/* Right Side: Key Pillars / Stats Cards */}

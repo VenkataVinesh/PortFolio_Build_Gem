@@ -238,11 +238,11 @@ def generate_pdf(output_paths):
         ))
         story.append(Spacer(1, 4))
 
-        # Project 3: Veltrix: AI Trading & Portfolio Optimizer
+        # Project 3: Veltrix: Algorithmic Trading Dashboard & Backtester
         p3_data = [
-            [Paragraph("Veltrix: AI Trading & Portfolio Optimizer", style_item_title), Paragraph("Next.js, TypeScript, Python, FastAPI, Docker, PostgreSQL", style_item_meta)],
+            [Paragraph("Veltrix: Algorithmic Trading Dashboard & Backtester", style_item_title), Paragraph("Next.js, TypeScript, Python, FastAPI, Docker, PostgreSQL", style_item_meta)],
         ]
-        p3_table = Table(p3_data, colWidths=[4.4 * inch, 3.3 * inch])
+        p3_table = Table(p3_data, colWidths=[4.7 * inch, 3.0 * inch])
         p3_table.setStyle(TableStyle([
             ('BOTTOMPADDING', (0,0), (-1,-1), 0),
             ('TOPPADDING', (0,0), (-1,-1), 0),
@@ -250,15 +250,15 @@ def generate_pdf(output_paths):
         story.append(p3_table)
         
         story.append(Paragraph(
-            "• <b>Problem:</b> Integrating quantitative optimizer backends (Sharpe/Markowitz solvers) with live WebSockets streams and autonomous agent logs in a single-page reactive dashboard.",
+            "• <b>Problem:</b> Aggregating historical stock price series and computing asset allocations using Markowitz/Sharpe optimization solvers without introducing interface rendering lag.",
             style_bullet
         ))
         story.append(Paragraph(
-            "• <b>Architecture & Dev:</b> Programmed a Next.js (TypeScript) client and FastAPI (Python) backend workspace. Integrated mathematical variance frontier solvers. Structured asynchronous execution agent hooks with database schemas.",
+            "• <b>Architecture & Dev:</b> Programmed a Next.js dashboard using Recharts to plot price history and expected portfolio variance. Integrated a FastAPI (Python) backend using SciPy solvers to compute optimal portfolio weights.",
             style_bullet
         ))
         story.append(Paragraph(
-            "• <b>Outcome:</b> Deployed a multi-container trading environment mapping real-time allocations with high-fidelity analytics and visual weight charts.",
+            "• <b>Outcome:</b> Containerized and deployed the full-stack system using Docker, providing responsive visualization of strategy backtests and mathematical frontiers.",
             style_bullet
         ))
         story.append(Spacer(1, 4))
@@ -320,7 +320,7 @@ def generate_pdf(output_paths):
 if __name__ == "__main__":
     # Save in User Downloads folder and in React public assets folder
     user_home = os.path.expanduser('~')
-    downloads_path = os.path.join(user_home, 'Downloads', 'Venkata_Vinesh_Resume.pdf')
+    downloads_path = os.path.join(user_home, 'Downloads', 'Venkata_Vinesh_Resume_2026.pdf')
     react_public_path = os.path.join(os.getcwd(), 'public', 'resume.pdf')
     
     generate_pdf([downloads_path, react_public_path])

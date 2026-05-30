@@ -24,6 +24,37 @@ const Projects = () => {
 
   const projects = [
     {
+      title: 'Veltrix — Algorithmic Trading Dashboard',
+      category: 'Financial Engineering & System Backtesting',
+      icon: <TrendingUp className="text-accent-cyan" size={20} />,
+      shortDesc: 'An interactive algorithmic trading dashboard for backtesting rule-based strategies on historical OHLCV data, with signal visualization and performance tracking.',
+      tech: ['Python', 'Pandas', 'FastAPI', 'React', 'Recharts', 'NumPy'],
+      metrics: 'Backtested rule-based strategies | Signal visualization | SMA/EMA crossover detection',
+      github: 'https://github.com/VenkataVinesh/Veltrix',
+      live: 'https://github.com/VenkataVinesh/Veltrix',
+      
+      whyIBuiltThis: 'I built Veltrix to explore how algorithmic trading rules (like moving average crossovers) are implemented in code, and to understand how backtesting frameworks evaluate strategies on historical market data without lookahead bias.',
+      visualProof: 'veltrix-chart',
+      problem: 'Building a clean, modular system that ingests historical OHLCV data, computes technical signals (SMA crossovers, RSI), and visualizes trade entries/exits on an interactive chart.',
+      architecture: [
+        'Implemented a Python data ingestion layer that fetches and normalizes historical OHLCV pricing data using Pandas.',
+        'Built rule-based signal generators computing SMA/EMA crossovers and RSI momentum thresholds.',
+        'Exposed strategy outputs via a FastAPI backend with endpoints for backtesting parameters and signal data.',
+        'Designed a React + Recharts dashboard visualizing candlestick price action, trade signals, and portfolio equity curves.'
+      ],
+      challenges: 'Aligning signal timestamps with OHLCV bars accurately to prevent lookahead bias in backtesting. Solved by strict index-aligned data operations using Pandas shift() for forward-only computations.',
+      outcomes: 'Built a working backtesting interface that renders trade signals and portfolio value evolution over historical periods.',
+      codeStructure: `Veltrix/
+├── backend/
+│   ├── data_loader.py      # OHLCV data ingestion & normalization
+│   ├── signals.py          # SMA/EMA crossover & RSI signal generators
+│   └── main.py             # FastAPI routing & backtest endpoints
+├── frontend/
+│   ├── src/components/     # Dashboard, CandlestickChart, SignalOverlay
+│   └── App.jsx             # Main router shell
+└── docker-compose.yml      # Orchestration configs`
+    },
+    {
       title: 'Asset Price Prediction Platform',
       category: 'Machine Learning & Web Services',
       icon: <TrendingUp className="text-accent-cyan" size={20} />,
@@ -171,6 +202,42 @@ const Projects = () => {
 
   const renderVisualProof = (type) => {
     switch (type) {
+      case 'veltrix-chart':
+        return (
+          <div className="p-4 bg-slate-950/80 border border-border-custom rounded-xl flex flex-col gap-2">
+            <span className="text-[10px] font-mono text-text-sub uppercase tracking-wider flex items-center gap-1.5">
+              <TrendingUp size={10} className="text-accent-cyan animate-pulse" /> Visual Proof: Signal Overlay on Price Action
+            </span>
+            <svg viewBox="0 0 300 150" className="w-full h-auto">
+              {/* Grid lines */}
+              {[30, 60, 90, 120].map(y => (
+                <line key={y} x1="0" y1={y} x2="300" y2={y} stroke="#1f2937" strokeWidth="1" />
+              ))}
+              {/* OHLC candlestick bars */}
+              {[[20, 110, 80, 95], [40, 100, 75, 82], [60, 90, 70, 75], [80, 85, 60, 62], [100, 75, 50, 55], [120, 65, 45, 58], [140, 70, 52, 68], [160, 80, 60, 74], [180, 95, 70, 88], [200, 90, 65, 78], [220, 75, 40, 48], [240, 60, 30, 35], [260, 50, 25, 28], [280, 55, 35, 42]].map(([x, high, low, close], i) => {
+                const open = i > 0 ? [[20, 110, 80, 95], [40, 100, 75, 82], [60, 90, 70, 75], [80, 85, 60, 62], [100, 75, 50, 55], [120, 65, 45, 58], [140, 70, 52, 68], [160, 80, 60, 74], [180, 95, 70, 88], [200, 90, 65, 78], [220, 75, 40, 48], [240, 60, 30, 35], [260, 50, 25, 28], [280, 55, 35, 42]][i-1][3] : 100;
+                const candleColor = close < open ? '#10b981' : '#ef4444';
+                return (
+                  <g key={i}>
+                    <line x1={x} y1={low} x2={x} y2={high} stroke="#64748b" strokeWidth="1" />
+                    <rect x={x - 3} y={Math.min(open, close)} width="6" height={Math.max(Math.abs(open - close), 2)} fill={candleColor} />
+                  </g>
+                );
+              })}
+              {/* SMA trend lines */}
+              <path d="M20 95 L60 82 L100 68 L140 60 L180 68 L220 58 L260 40 L280 32" fill="none" stroke="var(--accent-cyan)" strokeWidth="1.5" />
+              <path d="M20 102 L60 92 L100 82 L140 72 L180 70 L220 65 L260 55 L280 48" fill="none" stroke="var(--accent-teal)" strokeWidth="1.5" strokeDasharray="2 2" />
+              {/* Signal Indicators */}
+              {/* Buy signal (up triangle) */}
+              <polygon points="100,62 96,70 104,70" fill="#10b981" />
+              <text x="94" y="80" fill="#10b981" fontSize="6" fontFamily="monospace" fontWeight="bold">BUY</text>
+              {/* Sell signal (down triangle) */}
+              <polygon points="220,32 216,24 224,24" fill="#ef4444" />
+              <text x="214" y="20" fill="#ef4444" fontSize="6" fontFamily="monospace" fontWeight="bold">SELL</text>
+              <text x="10" y="15" fill="#9ca3af" fontSize="8" fontFamily="monospace">SMA crossover: 10-day vs 30-day</text>
+            </svg>
+          </div>
+        );
       case 'lstm-arima-chart':
         return (
           <div className="p-4 bg-slate-950/80 border border-border-custom rounded-xl flex flex-col gap-2">

@@ -99,55 +99,55 @@ const Projects = () => {
 └── README.md             # Model bounds analysis`
     },
     {
-      title: 'Veltrix: AI Trading & Portfolio Optimizer',
-      category: 'Full-Stack Systems & Quantitative Analytics',
+      title: 'Portfolio Optimization Dashboard',
+      category: 'Full-Stack Systems & Mathematical Optimization',
       icon: <BarChart2 className="text-accent-emerald" size={20} />,
-      shortDesc: 'A high-performance institutional trading and portfolio optimization dashboard combining a Next.js (TypeScript) frontend with a FastAPI backend and autonomous trading agents.',
-      tech: ['Next.js', 'TypeScript', 'Python', 'FastAPI', 'Docker', 'PostgreSQL'],
-      metrics: 'Multi-agent trading loops | Sharpe ratio optimizer solver | WebSockets streaming',
-      github: 'https://github.com/VenkataVinesh/Veltrix',
-      live: 'https://github.com/VenkataVinesh/Veltrix',
+      shortDesc: 'An interactive web dashboard for mathematical asset allocation, utilizing SciPy optimization solvers to construct optimal frontiers and compute Sharpe ratios.',
+      tech: ['React', 'FastAPI', 'Python', 'SciPy', 'Docker', 'SQLite'],
+      metrics: 'Sharpe ratio optimizer solver | efficient frontier plotting | SciPy optimization',
+      github: 'https://github.com/VenkataVinesh/Portfolio-Optimization-Dashboard',
+      live: 'https://github.com/VenkataVinesh/Portfolio-Optimization-Dashboard',
       
-      problem: 'Trading infrastructure often lacks modular integration of quantitative optimizer backends (like Sharpe/Markowitz solvers) with autonomous execution agents and WebSocket feeds.',
+      problem: 'Calculating optimal asset weights under linear constraints to maximize risk-adjusted returns (Sharpe ratio) based on historical daily covariance matrices.',
       architecture: [
-        'Designed a multi-service workspace containing a Next.js + TypeScript dashboard and a Python FastAPI backend.',
-        'Implemented portfolio optimization algorithms (Sharpe ratio and variance frontier bounds) in Python, exposed via endpoints to the frontend.',
-        'Programmed autonomous trading agent loops with hooks for auditing, logging, and database transactions.'
+        'Designed a clean multi-service repository containing a React frontend dashboard and a Python FastAPI backend.',
+        'Implemented mean-variance portfolio optimization algorithms (Markowitz Efficient Frontier and Sharpe ratio maximization) in Python using SciPy.',
+        'Integrated interactive charts utilizing Recharts to visualize optimal asset allocations.'
       ],
       challenges: 'Handling asynchronous agent state syncs and WebSockets channels during high-velocity updates. Resolved by implementing structured message schemas and thread-safe data pipelines.',
-      outcomes: 'Successfully integrated local SQLite/PostgreSQL databases with FastAPI, generating visual allocation weight charts for traders.',
-      codeStructure: `Veltrix/
-├── app/                  # Next.js TypeScript frontend pages
-├── backend/              # FastAPI python backend
+      outcomes: 'Successfully integrated local SQLite databases with FastAPI, generating visual allocation weight charts for users.',
+      codeStructure: `Portfolio-Optimization-Dashboard/
+├── app/                  # React frontend dashboard pages
+├── backend/              # FastAPI Python backend
 │   ├── app/main.py       # API router and endpoints
-│   └── bootstrap.py      # Environment check scripts
-├── tradingagents/        # Autonomous agent loops
-├── docker/               # Multi-container orchestrations
-└── tsconfig.json         # TypeScript compiler configurations`
+│   └── optimizer.py      # SciPy portfolio optimization solvers
+├── requirements.txt      # Python dependencies
+└── Dockerfile            # Container configs`
     },
     {
-      title: 'ML Predictive Models',
-      category: 'Data Science & Core ML',
+      title: 'Financial Time Series Analytics',
+      category: 'Quantitative Analytics & Time-Series',
       icon: <Cpu className="text-accent-cyan" size={20} />,
-      shortDesc: 'A collection of supervised classification and regression model pipelines implemented in Scikit-learn for basic data benchmarks.',
-      tech: ['Python', 'Scikit-learn', 'Pandas', 'NumPy'],
-      metrics: 'Model classification scores | hyperparameter tuning grid-searches',
-      github: 'https://github.com/VenkataVinesh/ML-Predictive-Models',
-      live: 'https://github.com/VenkataVinesh/ML-Predictive-Models',
+      shortDesc: 'A Python library for statistical analysis of financial returns, computing rolling volatility metrics, autocorrelation, and value-at-risk (VaR) estimations.',
+      tech: ['Python', 'Pandas', 'NumPy', 'Statsmodels', 'Matplotlib'],
+      metrics: 'Rolling volatility calculation | GARCH/ARCH modeling parameters | VaR estimates',
+      github: 'https://github.com/VenkataVinesh/Financial-Time-Series-Analytics',
+      live: 'https://github.com/VenkataVinesh/Financial-Time-Series-Analytics',
       
-      problem: 'Creating clean templates for training, tuning, and evaluating standard supervised machine learning models on common tabular datasets.',
+      problem: 'Developing a clean, modular library to perform statistical diagnostics and exploratory analysis on financial pricing series before feeding them to deep learning predictors.',
       architecture: [
-        'Wrote modular Python scripts for training Random Forests, SVMs, and Logistic Regressions.',
-        'Implemented Scikit-learn pipelines with StandardScaler and SimpleImputer layers.',
-        'Used GridSearch CV to systematically tune hyperparameters.'
+        'Programmed statistical tests (Augmented Dickey-Fuller) to verify time-series stationarity.',
+        'Built functions to compute daily returns, rolling standard deviations (volatility), and exponential moving averages.',
+        'Implemented parametric and historical Value-at-Risk (VaR) models to measure downside risk.'
       ],
-      challenges: 'Preventing data leakage during preprocessing steps. Solved by enclosing scaling and imputation operations strictly inside Scikit-learn Pipeline objects.',
+      challenges: 'Handling missing pricing data and index alignments for multiple tickers. Solved by implementing forward-fill imputation and outer-joining historical date indices.',
       outcomes: 'Constructed an extensible machine learning template repository with clean classification reporting outputs.',
-      codeStructure: `ML-Predictive-Models/
-├── classification.py     # SVM & classifier script templates
-├── regression.py         # Linear & RF regressor script templates
-├── requirements.txt      # Scikit-learn dependencies
-└── README.md             # Dataset summaries`
+      codeStructure: `Financial-Time-Series-Analytics/
+├── analytics.py          # Core returns & volatility computations
+├── diagnostics.py        # ADF tests and stationarity checks
+├── visualization.py      # Autocorrelation (ACF/PACF) plotting
+├── requirements.txt      # Statsmodels & Pandas requirements
+└── README.md             # Library documentation`
     }
   ];
 

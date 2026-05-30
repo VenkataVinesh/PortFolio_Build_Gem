@@ -13,8 +13,8 @@ const GithubStats = () => {
 
   const languages = [
     { name: 'Python', percentage: 48, color: 'bg-accent-cyan', text: 'Stochastic modeling, Deep Learning, PyTorch, SciPy' },
-    { name: 'C++', percentage: 32, color: 'bg-accent-teal', text: 'Low-latency simulation, SABR/Heston pricing, STL' },
-    { name: 'React / Next.js / JS', percentage: 20, color: 'bg-accent-blue', text: 'Zenith Dashboard, Veltrix Terminal, real-time analytics UI' },
+    { name: 'C++', percentage: 32, color: 'bg-accent-teal', text: 'Data structures, competitive programming, algorithm optimization' },
+    { name: 'React / Next.js / JS', percentage: 20, color: 'bg-accent-blue', text: 'Portfolio optimization dashboard, forecasting analytics web interfaces' },
   ];
 
   // Helper to generate a mockup contribution grid (53 weeks * 7 days)
@@ -169,7 +169,7 @@ const GithubStats = () => {
 
             {/* Verification Alert */}
             <div className="p-4 bg-slate-950 bg-opacity-40 border border-border-custom rounded-xl text-xs text-text-sub leading-relaxed">
-              ⭐ Activity represents combined metrics of high-performance derivatives solvers, custom PyTorch sequence prediction models, and React full-stack dashboards.
+              ⭐ Activity represents combined commits across machine learning projects, statistical forecasting dashboards, and custom reinforcement learning environments.
             </div>
 
           </motion.div>

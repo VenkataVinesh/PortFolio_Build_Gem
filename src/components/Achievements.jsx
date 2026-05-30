@@ -5,11 +5,11 @@ import { Award, Target, Trophy, Bookmark } from 'lucide-react';
 const Achievements = () => {
   const items = [
     {
-      title: 'Competitive Chess & Strategic Problem Solving',
-      subtitle: 'Bangkok Open | Teplice Open | 2024 Participant',
+      title: 'Smart India Hackathon Participation',
+      subtitle: 'National Level Hackathon | 2024',
       icon: <Trophy className="text-amber-500" size={24} />,
-      category: 'Strategic / Game Theory',
-      description: 'Active chess player with a strong interest in analytical thinking, sequence calculations, and strategic execution under tight time constraints. Highly value game-theoretic modeling and analytical rigor.',
+      category: 'Hackathons',
+      description: 'Collaborated in a team of 6 to prototype an intelligent system solution addressing a national-level problem statement. Focused on backend API architectures, data integrations, and team coordination.',
     },
     {
       title: 'Portfolio Optimization Calculators',
@@ -80,7 +80,7 @@ const Achievements = () => {
           ))}
         </div>
 
-        {/* Chess Challenge */}
+        {/* GitHub Collaboration */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -89,14 +89,16 @@ const Achievements = () => {
           className="mt-12 p-6 glass rounded-2xl border border-border-custom bg-opacity-30 flex flex-col md:flex-row items-center justify-between gap-6"
         >
           <div className="space-y-1 text-center md:text-left">
-            <h4 className="text-base font-bold text-text-main">Interested in a game of chess?</h4>
-            <p className="text-xs text-text-sub">Active competitive chess player. Let's connect on Chess.com or play a round during interviews.</p>
+            <h4 className="text-base font-bold text-text-main">Interested in collaborating on intelligent systems?</h4>
+            <p className="text-xs text-text-sub">I am actively building open-source projects in time series forecasting, optimization, and reinforcement learning.</p>
           </div>
           <a
-            href="mailto:venkatvinesh46@gmail.com?subject=Chess%20Challenge%20/%20Portfolio%20Inquiry"
+            href="https://github.com/VenkataVinesh"
+            target="_blank"
+            rel="noopener noreferrer"
             className="px-6 py-2.5 rounded-xl border border-accent-cyan hover:bg-accent-cyan hover:text-white font-semibold text-accent-cyan text-xs tracking-wider uppercase transition-all active:scale-95 whitespace-nowrap"
           >
-            Challenge Me
+            View GitHub Profile
           </a>
         </motion.div>
 

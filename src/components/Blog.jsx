@@ -19,7 +19,7 @@ At its core, the Bellman Equation is a recursive formula that defines how we cal
 
 $$V(s) = \\max_{a} \\sum_{s', r} p(s', r | s, a) \\left[ r + \\gamma V(s') \\right]$$
 
-Instead of calculating entire trajectories, the agent computes state updates step-by-step.
+Instead of calculating entire trajectories, the agent computes state updates step-by-step. Learning this mathematically was one thing, but coding it made it click.
 
 ### Tabular Q-Learning
 
@@ -54,15 +54,15 @@ def update_q_value(q_table, state, action, reward, next_state, alpha, gamma):
     return q_table
 \`\`\`
 
-### Epilson-Decay Policies
+### Epsilon-Decay Policies
 During early episodes, the agent explores random paths (high epsilon). Over time, we decay epsilon so the agent exploits its Q-table parameters, converging to the optimal policy bounds.`
     },
     {
       id: 2,
-      title: 'Building a Simple Portfolio Optimization Model with Python',
+      title: 'Building a Portfolio Optimization Model with Python',
       date: 'April 20, 2026',
       readTime: '8 min read',
-      category: 'Mathematics & Finance',
+      category: 'Mathematics & Optimization',
       summary: 'Using SciPy to optimize asset weights, calculate Sharpe Ratios, and plot Markowitz Efficient Frontiers in Python.',
       content: `### Portfolio Mean & Variance
 
@@ -119,7 +119,7 @@ By resolving this minimization for different target returns, we map the boundary
     },
     {
       id: 3,
-      title: 'Weather Forecasting: Implementing LSTMs for Time-Series Data',
+      title: 'How LSTMs Help in Weather Forecasting',
       date: 'March 05, 2026',
       readTime: '5 min read',
       category: 'Deep Learning',
@@ -173,6 +173,31 @@ class WeatherForecastingLSTM(nn.Module):
 ### Data Formatting & Forecasting MAE
 
 Multivariate sequences must be formatted as rolling window frames (e.g. past 24 hours of sensors to forecast next hour). We train the model by minimizing Mean Absolute Error (MAE) loss, checking prediction curves against true values.`
+    },
+    {
+      id: 4,
+      title: 'What I Learned While Training My First RL Agent',
+      date: 'February 10, 2026',
+      readTime: '5 min read',
+      category: 'Reinforcement Learning',
+      summary: 'My first-hand experience designing a custom GridWorld simulation, struggling with sparse rewards, and watching my agent learn optimal pathways through epsilon decay.',
+      content: `### The GridWorld-v2 Environment
+
+To learn how model-free RL algorithms work in practice, I built a custom GridWorld environment in Python. The agent's goal is to find the shortest path to a goal state while avoiding terminal obstacles. 
+
+When I first started training, I gave the agent a simple reward of +1 for reaching the goal and 0 elsewhere. Because the grid was large, the agent spent thousands of episodes randomly wandering around, never finding the goal. This was my first lesson in the challenge of sparse rewards.
+
+### Reward Shaping
+
+To help the agent learn, I introduced a step penalty ($r = -0.1$ for each movement) to encourage it to find the shortest path. This shaped reward function immediately changed the learning behavior: the agent quickly discovered that lingering in non-goal states carried a cost, pushing it to seek the goal.
+
+### Learning Rate ($\\alpha$) and Epsilon Decay
+
+I noticed that if the exploration rate ($\\epsilon$) decayed too quickly, the agent got stuck in sub-optimal paths. Conversely, if it decayed too slowly, training took too long. I set up an exponential decay:
+
+$$\\epsilon_t = \\max(\\epsilon_{min}, \\epsilon_0 \\times d^t)$$
+
+Tuning these parameters showed me how delicate RL training is compared to standard supervised learning. Coding this simulation solidified my respect for the mathematical foundations of decision-making agents.`
     }
   ];
 

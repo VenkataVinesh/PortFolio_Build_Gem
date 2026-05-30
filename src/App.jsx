@@ -91,7 +91,7 @@ function App() {
               Venkata Vinesh Kumar Reddy
             </div>
             <p className="text-xs text-text-sub font-mono">
-              Student ID: SE23UCSE001 | Mahindra University
+              Mahindra University
             </p>
           </div>
 

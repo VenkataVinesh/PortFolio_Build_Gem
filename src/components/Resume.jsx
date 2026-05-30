@@ -44,9 +44,6 @@ const Resume = () => {
               <p className="text-sm font-semibold text-accent-cyan font-mono tracking-wider uppercase">
                 Computer Science & AI/ML Student
               </p>
-              <div className="text-xs text-text-sub font-mono">
-                Student ID: SE23UCSE001
-              </div>
             </div>
 
             {/* Quick Contact info */}
@@ -159,7 +156,7 @@ const Resume = () => {
               <div className="space-y-1">
                 <div className="flex justify-between items-baseline gap-4 flex-wrap">
                   <h5 className="text-sm font-bold text-text-main">
-                    Weather Time-Series Forecasting Model
+                    Weather Forecasting Analytics
                   </h5>
                   <span className="text-xs font-semibold text-text-sub font-mono">Deep Learning Project</span>
                 </div>
@@ -169,17 +166,16 @@ const Resume = () => {
                 </p>
               </div>
 
-              {/* RL Lab */}
+              {/* Portfolio Optimization */}
               <div className="space-y-1">
                 <div className="flex justify-between items-baseline gap-4 flex-wrap">
                   <h5 className="text-sm font-bold text-text-main">
-                    Reinforcement Learning Experiment Lab
+                    Portfolio Optimization Dashboard
                   </h5>
-                  <span className="text-xs font-semibold text-text-sub font-mono">Algorithms Project</span>
+                  <span className="text-xs font-semibold text-text-sub font-mono">Optimization Project</span>
                 </div>
                 <p className="text-xs text-text-sub leading-relaxed">
-                  Programmed tabular Q-Learning and SARSA models from scratch in Python to simulate pathfinding optimization on custom GridWorlds. 
-                  Demonstrated value iterations and policy convergence curves under Bellman constraints.
+                  Developed an interactive web dashboard for mathematical asset allocation, using SciPy optimization solvers to construct optimal frontiers and compute Sharpe ratios.
                 </p>
               </div>
             </div>
@@ -192,10 +188,9 @@ const Resume = () => {
             </h4>
             <div className="pl-6 border-l border-border-custom space-y-3 text-xs">
               <div>
-                <span className="font-bold text-text-main block">Competitive Chess & Strategic Calculation</span>
+                <span className="font-bold text-text-main block">TEDx & Math Club Leadership</span>
                 <span className="text-text-sub block">
-                  Bangkok Open & Teplice Open 2024 participant. Active competitive chess player, which builds analytical reasoning, 
-                  calculation depth, search boundaries, and strategic execution under tight time limits.
+                  On-Ground Operations Lead for TEDx Mahindra University, managing logistics, scheduling, and AV configurations for 500+ attendees. Logistics Head for Math Club, directing venues and event setup for academic contests.
                 </span>
               </div>
             </div>

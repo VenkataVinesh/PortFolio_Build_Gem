@@ -57,8 +57,7 @@ const About = () => {
               algorithms, and low-level system designs.
             </p>
             <p>
-              Outside of classes, I play competitive chess. Chess is a strategic playground for me, shaping how I model decision boundaries, 
-              calculate sequential outcomes, and manage risk—skills that map directly to designing reinforcement learning agents.
+              Beyond coding, I enjoy taking on organizational leadership roles. As the Logistics Head of the Math Club and the On-Ground Operations Lead for TEDx Mahindra University, I apply structured problem-solving to coordinate event logistics, manage operational execution, and collaborate with diverse teams to bring technical and community events to life.
             </p>
           </motion.div>
 

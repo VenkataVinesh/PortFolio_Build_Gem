@@ -52,7 +52,7 @@ const Hero = () => {
         >
           <div className="space-y-4">
             <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] md:text-xs font-semibold uppercase tracking-widest bg-accent-cyan bg-opacity-10 text-accent-cyan border border-accent-cyan border-opacity-25">
-              <Cpu size={12} className="animate-pulse" /> AI/ML Engineer | Software Developer | RL & Optimization Enthusiast
+              <Cpu size={12} className="animate-pulse" /> AI/ML Engineering Student | Python Developer | RL & Optimization Enthusiast
             </span>
             
             <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.05] text-text-main">
@@ -69,7 +69,7 @@ const Hero = () => {
             </p>
             <p className="max-w-xl text-sm md:text-base text-text-sub leading-relaxed">
               Pursuing Computer Science at <span className="text-text-main font-semibold">Mahindra University</span> (CGPA: 7.96). 
-              Currently seeking internship opportunities in <span className="text-text-main font-semibold">AI/ML, Software Engineering, Data Science, and Quantitative Analytics</span>.
+              Currently seeking internship opportunities in <span className="text-text-main font-semibold">AI/ML engineering, software development, forecasting, and optimization</span>.
             </p>
           </div>
 
@@ -84,8 +84,8 @@ const Hero = () => {
               <div className="text-xs text-text-sub uppercase tracking-wider">Core Arsenal</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-accent-emerald">Chess</div>
-              <div className="text-xs text-text-sub uppercase tracking-wider">Strategic Mind</div>
+              <div className="text-2xl font-bold text-accent-emerald">Operations</div>
+              <div className="text-xs text-text-sub uppercase tracking-wider">TEDx & Math Club</div>
             </div>
           </div>
 
@@ -162,13 +162,13 @@ const Hero = () => {
                 <p className="text-accent-cyan"># python rl_agent.py --env=GridWorld-v2 --train</p>
                 <p className="text-text-sub">Executing tabular Q-Learning value updates...</p>
                 <p className="text-text-main pl-3">↳ Episode: {telemetry.episode} | Mean Reward: {telemetry.reward}</p>
-                <p className="text-emerald-500 pl-3">✔ Bellman optimality policy bounds converged</p>
+                <p className="text-emerald-500 pl-3">✔ Q-learning policy stabilized successfully</p>
               </div>
 
               <div className="space-y-1">
-                <p className="text-accent-cyan"># python predict.py --model=RandomForest</p>
-                <p className="text-text-sub">Loading asset pricing feature matrices...</p>
-                <p className="text-text-main pl-3">↳ Predicting direction... [UP: 64%, DOWN: 36%]</p>
+                <p className="text-accent-cyan"># python forecast.py --model=ARIMA --steps=12</p>
+                <p className="text-text-sub">Loading historical time-series data...</p>
+                <p className="text-text-main pl-3">↳ Forecast completed. MSE: 0.024 | MAPE: 1.84%</p>
               </div>
 
               <div className="border-t border-border-custom pt-3 mt-3 flex justify-between items-center text-[10px]">
@@ -185,7 +185,7 @@ const Hero = () => {
           <div className="absolute -bottom-4 -right-4 glass px-4 py-2 rounded-lg border border-border-custom flex items-center gap-2 shadow-md hover:border-accent-cyan transition-colors">
             <GitCommit size={14} className="text-accent-cyan" />
             <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-text-main">
-              SE23UCSE001
+              ACTIVE SESSION
             </span>
           </div>
         </motion.div>

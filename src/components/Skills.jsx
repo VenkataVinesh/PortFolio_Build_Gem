@@ -23,7 +23,7 @@ const Skills = () => {
         'Reinforcement Learning (Value/Policy Iterations)',
         'LSTM & GRU (Deep Sequence Modeling)',
         'Time Series Forecasting & Auto-Regression',
-        'Model Training Telemetry via Weights & Biases',
+        'Model experiment tracking via Weights & Biases',
       ],
     },
     {
@@ -34,7 +34,7 @@ const Skills = () => {
         'FastAPI & REST APIs (Python Web Services)',
         'Docker (Containerization & Deployment)',
         'Git (Version Control & Collaboration)',
-        'HTML5 Canvas (Sub-50ms Graphic Telemetries)',
+        'HTML5 Canvas (Interactive data visualizations)',
       ],
     },
     {

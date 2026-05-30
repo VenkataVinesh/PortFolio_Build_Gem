@@ -82,9 +82,8 @@ const Contact = () => {
                 Let's Build Something Impactful
               </h3>
               <p className="text-sm md:text-base text-text-sub leading-relaxed">
-                I am actively seeking internship opportunities in quantitative research, asset pricing software, 
-                and machine learning modeling. 
-                Whether you have an opening, a chess challenge, or just want to chat about stochastic equations, 
+                I’m actively looking for internship opportunities in AI/ML engineering, forecasting systems, and software development. 
+                Whether you have an opening, want to discuss machine learning implementation, or want to collaborate on open source projects, 
                 feel free to reach out!
               </p>
 
@@ -204,7 +203,7 @@ const Contact = () => {
                   value={formData.subject}
                   onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                   className="w-full px-4 py-3 bg-slate-950 bg-opacity-50 dark:bg-slate-950 border border-border-custom rounded-xl focus:border-accent-cyan focus:outline-none text-sm text-text-main transition-colors"
-                  placeholder="Quant / Machine Learning Internship Opportunities"
+                  placeholder="AI/ML or Software Engineering Internship Opportunities"
                 />
               </div>
 

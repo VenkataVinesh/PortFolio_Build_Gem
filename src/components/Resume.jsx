@@ -164,16 +164,16 @@ const Resume = () => {
                 </p>
               </div>
 
-              {/* Portfolio Optimization */}
+              {/* Veltrix */}
               <div className="space-y-1">
                 <div className="flex justify-between items-baseline gap-4 flex-wrap">
                   <h5 className="text-sm font-bold text-text-main">
-                    Portfolio Optimization Dashboard
+                    Veltrix — Algorithmic Trading Dashboard
                   </h5>
-                  <span className="text-xs font-semibold text-text-sub font-mono">Optimization Project</span>
+                  <span className="text-xs font-semibold text-text-sub font-mono">Systems & Optimization</span>
                 </div>
                 <p className="text-xs text-text-sub leading-relaxed">
-                  Developed an interactive web dashboard for mathematical asset allocation, using SciPy optimization solvers to construct optimal frontiers and compute Sharpe ratios under weight constraints.
+                  Engineered a full-stack algorithmic trading backtester using FastAPI and Next.js. Integrated mathematical optimization engines utilizing SciPy solvers to find optimal Sharpe allocation weights. Containerized the system using Docker and visualized backtest signals and portfolio variance using Recharts.
                 </p>
               </div>
             </div>

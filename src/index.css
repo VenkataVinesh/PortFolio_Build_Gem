@@ -1,124 +1,16 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Instrument+Serif:ital@1&display=swap');
 @import "tailwindcss";
 
+:root { color-scheme: dark; --section-accent: #7c5cff; }
+* { -webkit-font-smoothing: antialiased; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: #060410; font-family: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif; }
 
-@theme {
-  --font-sans: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-  
-  --color-bg-main: var(--bg-primary);
-  --color-bg-sub: var(--bg-secondary);
-  --color-bg-card: var(--bg-card);
-  --color-text-main: var(--text-primary);
-  --color-text-sub: var(--text-secondary);
-  --color-accent-cyan: var(--accent-cyan);
-  --color-accent-teal: var(--accent-teal);
-  --color-accent-emerald: var(--accent-emerald);
-  --color-accent-blue: var(--accent-blue);
-  --color-border-custom: var(--border-color);
-  --color-glow-custom: var(--glow-color);
-}
+/* Font stacks */
+.font-sans-disp { font-family: 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif; }
+.font-serif-it { font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif; font-style: italic; font-weight: 400; }
+.font-mono { font-family: ui-monospace, 'JetBrains Mono', 'SF Mono', 'Cascadia Code', Menlo, monospace; }
 
-:root {
-  --bg-primary: #020617;
-  --bg-secondary: #070a1e;
-  --bg-card: rgba(15, 23, 42, 0.7);
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --accent-cyan: #06b6d4;
-  --accent-teal: #14b8a6;
-  --accent-emerald: #10b981;
-  --accent-blue: #3b82f6;
-  --border-color: rgba(30, 41, 59, 0.6);
-  --glow-color: rgba(6, 182, 212, 0.15);
-}
-
-:root.light {
-  --bg-primary: #f8fafc;
-  --bg-secondary: #f1f5f9;
-  --bg-card: rgba(255, 255, 255, 0.8);
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --accent-cyan: #0891b2;
-  --accent-teal: #0d9488;
-  --accent-emerald: #059669;
-  --accent-blue: #2563eb;
-  --border-color: rgba(226, 232, 240, 0.8);
-  --glow-color: rgba(8, 145, 178, 0.08);
-}
-
-* {
-  scroll-behavior: smooth;
-}
-
-body {
-  margin: 0;
-  font-family: var(--font-sans);
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  overflow-x: hidden;
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: var(--bg-primary);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--border-color);
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-cyan);
-}
-
-/* Glassmorphism utility */
-.glass {
-  background: var(--bg-card);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--border-color);
-}
-
-/* Grid overlay background */
-.grid-bg {
-  background-size: 50px 50px;
-  background-image: 
-    linear-gradient(to right, rgba(30, 41, 59, 0.25) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(30, 41, 59, 0.25) 1px, transparent 1px);
-}
-
-:root.light .grid-bg {
-  background-image: 
-    linear-gradient(to right, rgba(226, 232, 240, 0.6) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(226, 232, 240, 0.6) 1px, transparent 1px);
-}
-
-/* Cyber grid effect */
-.cyber-grid {
-  position: absolute;
-  inset: 0;
-  background-size: 40px 40px;
-  background-image: linear-gradient(to right, rgba(6, 182, 212, 0.05) 1px, transparent 1px),
-                    linear-gradient(to bottom, rgba(6, 182, 212, 0.05) 1px, transparent 1px);
-  mask-image: radial-gradient(circle at 50% 50%, black, transparent 80%);
-  -webkit-mask-image: radial-gradient(circle at 50% 50%, black, transparent 80%);
-  pointer-events: none;
-}
-
-:root.light .cyber-grid {
-  background-image: linear-gradient(to right, rgba(8, 145, 178, 0.03) 1px, transparent 1px),
-                    linear-gradient(to bottom, rgba(8, 145, 178, 0.03) 1px, transparent 1px);
-}
-
-/* Glowing text effects */
-.glow-text-cyan {
-  text-shadow: 0 0 10px rgba(6, 182, 212, 0.4);
-}
-
-.glow-text-teal {
-  text-shadow: 0 0 10px rgba(20, 184, 166, 0.4);
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
 }

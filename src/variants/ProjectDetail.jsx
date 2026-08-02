@@ -21,7 +21,7 @@ export default function ProjectDetail({ id }) {
   if (!project || !d) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#060410] text-white">
-        <a href="#/aurora" className="font-mono text-sm underline">← project not found — back home</a>
+        <a href="#/" className="font-mono text-sm underline">← project not found — back home</a>
       </div>
     )
   }
@@ -38,7 +38,7 @@ export default function ProjectDetail({ id }) {
       {/* Nav */}
       <header className="fixed top-0 z-50 w-full">
         <nav className="mx-auto flex max-w-5xl items-center justify-between px-6 py-5 mix-blend-difference">
-          <a data-cursor href="#/aurora" className="flex items-center gap-2 font-mono text-sm tracking-tight hover:opacity-70">
+          <a data-cursor href="#/" className="flex items-center gap-2 font-mono text-sm tracking-tight hover:opacity-70">
             <ArrowLeft size={15} /> back
           </a>
           <a data-cursor href={project.repo} target="_blank" rel="noreferrer" className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] hover:opacity-70">
@@ -123,7 +123,7 @@ export default function ProjectDetail({ id }) {
                   View repository <ArrowUpRight size={16} />
                 </a>
               </Magnetic>
-              <a data-cursor href="#/aurora" className="inline-flex items-center gap-2 rounded-full border border-white/25 px-6 py-3 text-sm hover:bg-white/5">
+              <a data-cursor href="#/" className="inline-flex items-center gap-2 rounded-full border border-white/25 px-6 py-3 text-sm hover:bg-white/5">
                 <ArrowLeft size={15} /> All work
               </a>
             </div>

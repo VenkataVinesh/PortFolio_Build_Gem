@@ -333,7 +333,7 @@ export default function Aurora() {
                 <Mail size={16} /> {profile.email}
               </a>
             </Magnetic>
-            <a data-cursor href={profile.resume} className="rounded-full border border-white/25 px-7 py-3.5 text-sm hover:bg-white/5">Résumé ↗</a>
+            <a data-cursor href={profile.resume} target="_blank" rel="noreferrer" className="rounded-full border border-white/25 px-7 py-3.5 text-sm hover:bg-white/5">Résumé ↗</a>
           </Reveal>
           <p className="mt-20 font-mono text-xs text-white/60">© 2026 {profile.name} · WebGL shader · GSAP · Lenis · built from scratch</p>
         </section>

@@ -15,6 +15,11 @@ function useHashRoute() {
 
 export default function App() {
   const route = useHashRoute()
+  // Restore scroll to top when switching page views (home <-> project detail);
+  // in-page anchors (#work, #about, ...) keep native behavior.
+  useEffect(() => {
+    if (route === '' || route.startsWith('p/')) window.scrollTo(0, 0)
+  }, [route])
   if (route.startsWith('p/')) return <ProjectDetail id={route.slice(2)} />
   return <Aurora />
 }

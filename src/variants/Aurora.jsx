@@ -111,8 +111,8 @@ export default function Aurora() {
                     See the work <ArrowUpRight size={16} />
                   </a>
                 </Magnetic>
-                <Magnetic><a data-cursor href={profile.github} target="_blank" rel="noreferrer" className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/30 backdrop-blur-sm"><Github size={17} /></a></Magnetic>
-                <Magnetic><a data-cursor href={profile.linkedin} target="_blank" rel="noreferrer" className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/30 backdrop-blur-sm"><Linkedin size={17} /></a></Magnetic>
+                <Magnetic><a data-cursor aria-label="GitHub profile" href={profile.github} target="_blank" rel="noreferrer" className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/30 backdrop-blur-sm"><Github size={17} /></a></Magnetic>
+                <Magnetic><a data-cursor aria-label="LinkedIn profile" href={profile.linkedin} target="_blank" rel="noreferrer" className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/30 backdrop-blur-sm"><Linkedin size={17} /></a></Magnetic>
               </div>
             </div>
           </div>
@@ -292,7 +292,7 @@ export default function Aurora() {
                 <div className="mt-9 grid grid-cols-2 gap-x-8 gap-y-7 sm:grid-cols-3">
                   {skills.map((s) => (
                     <div key={s.group}>
-                      <h4 className="font-mono text-[11px] uppercase tracking-widest" style={{ color: 'var(--section-accent,#f59e0b)' }}>{s.group}</h4>
+                      <h3 className="font-mono text-[11px] uppercase tracking-widest" style={{ color: 'var(--section-accent,#f59e0b)' }}>{s.group}</h3>
                       <p className="mt-2 text-sm leading-relaxed text-white/90">{s.items.join(' · ')}</p>
                     </div>
                   ))}
@@ -310,7 +310,7 @@ export default function Aurora() {
               <Reveal key={i}>
                 <div className={`grid grid-cols-1 gap-2 px-7 py-6 md:grid-cols-[1fr_2fr] md:items-center md:gap-10 md:px-9 ${i > 0 ? 'border-t border-white/10' : ''}`}>
                   <div>
-                    <h4 className="text-lg font-medium text-white">{e.role}</h4>
+                    <h3 className="text-lg font-medium text-white">{e.role}</h3>
                     <p className="mt-1 font-mono text-xs text-white/60">{e.org} · {e.period}</p>
                   </div>
                   <p className="text-sm leading-relaxed text-white/80">{e.note}</p>

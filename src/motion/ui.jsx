@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -29,9 +29,56 @@ export function Cursor() {
     return () => { cancelAnimationFrame(raf); removeEventListener('pointermove', move); removeEventListener('pointerover', over) }
   }, [])
   return (
-    <div className="pointer-events-none fixed inset-0 z-[1000] hidden md:block">
+    <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[1000] hidden md:block">
       <div ref={ring} className="absolute h-9 w-9 rounded-full border border-white/60 mix-blend-difference transition-[opacity] will-change-transform" style={{ left: 0, top: 0 }} />
       <div ref={dot} className="absolute -ml-[2px] -mt-[2px] h-1 w-1 rounded-full bg-white mix-blend-difference will-change-transform" style={{ left: 0, top: 0 }} />
+    </div>
+  )
+}
+
+/* Mobile nav: hamburger → full-screen overlay. Focus-trapped, Escape closes,
+   closes on link selection, locks body scroll while open. */
+export function MobileMenu({ links = [], footer = null }) {
+  const [open, setOpen] = useState(false)
+  const panel = useRef(null), btn = useRef(null)
+  useEffect(() => {
+    if (!open) return
+    document.body.style.overflow = 'hidden'
+    const el = panel.current, trigger = btn.current
+    const focusables = () => [...el.querySelectorAll('a[href], button:not([disabled])')]
+    focusables()[0]?.focus()
+    const onKey = (e) => {
+      if (e.key === 'Escape') { setOpen(false); return }
+      if (e.key !== 'Tab') return
+      const f = focusables(); if (!f.length) return
+      const first = f[0], last = f[f.length - 1]
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus() }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus() }
+    }
+    document.addEventListener('keydown', onKey)
+    return () => { document.removeEventListener('keydown', onKey); document.body.style.overflow = ''; trigger?.focus() }
+  }, [open])
+  return (
+    <div className="md:hidden">
+      <button ref={btn} type="button" aria-expanded={open} aria-controls="mobile-menu"
+        aria-label={open ? 'Close menu' : 'Open menu'} onClick={() => setOpen(!open)}
+        className="relative z-[1101] flex h-10 w-10 flex-col items-center justify-center gap-[7px] mix-blend-difference">
+        <span aria-hidden="true" className={`h-px w-6 bg-white transition-transform duration-300 ${open ? 'translate-y-[4px] rotate-45' : ''}`} />
+        <span aria-hidden="true" className={`h-px w-6 bg-white transition-transform duration-300 ${open ? '-translate-y-[4px] -rotate-45' : ''}`} />
+      </button>
+      <div id="mobile-menu" ref={panel} role="dialog" aria-modal="true" aria-label="Site navigation"
+        className={`fixed inset-0 z-[1100] flex flex-col justify-between overflow-y-auto bg-[#060410]/95 px-6 pb-10 pt-28 backdrop-blur-xl transition-opacity duration-300 ${open ? 'opacity-100' : 'pointer-events-none opacity-0'}`}>
+        <nav className="flex flex-col">
+          {links.map((l, i) => (
+            <a key={l.href} href={l.href} onClick={() => setOpen(false)}
+              className="flex items-baseline gap-4 border-b border-white/10 py-5 font-mono text-3xl uppercase tracking-tight text-white">
+              <span className="text-xs" style={{ color: 'var(--section-accent, #7c5cff)' }}>0{i + 1}</span>
+              {l.label}
+            </a>
+          ))}
+        </nav>
+        {footer}
+      </div>
     </div>
   )
 }
@@ -55,7 +102,7 @@ export function Magnetic({ children, strength = 0.4, className = '' }) {
 /* Film grain overlay. */
 export function Grain() {
   return (
-    <div className="pointer-events-none fixed inset-0 z-[900] opacity-[0.05] mix-blend-overlay"
+    <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[900] opacity-[0.05] mix-blend-overlay"
       style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")" }} />
   )
 }
@@ -120,12 +167,13 @@ export function Marquee({ items, className = '', speed = 28 }) {
   const row = items.concat(items)
   return (
     <div className={`relative flex overflow-hidden ${className}`}>
-      <div className="flex shrink-0 animate-[marquee_linear_infinite] gap-10 pr-10" style={{ animationDuration: `${speed}s` }}>
+      <div data-marquee className="flex shrink-0 animate-[marquee_linear_infinite] gap-10 pr-10" style={{ animationDuration: `${speed}s` }}>
         {row.map((it, i) => (
-          <span key={i} className="flex items-center gap-10 whitespace-nowrap">{it}<span className="opacity-30">/</span></span>
+          <span key={i} aria-hidden={i >= items.length ? 'true' : undefined} className="flex items-center gap-10 whitespace-nowrap">{it}<span className="opacity-30">/</span></span>
         ))}
       </div>
-      <style>{`@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}`}</style>
+      <style>{`@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion: reduce){[data-marquee]{animation:none !important}}`}</style>
     </div>
   )
 }

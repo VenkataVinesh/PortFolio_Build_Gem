@@ -5,7 +5,7 @@ import { Github, Linkedin } from '../Icons.jsx'
 import ShaderGradient from '../motion/ShaderGradient.jsx'
 import PointCloud3D from '../motion/PointCloud3D.jsx'
 import { useLenis } from '../motion/useMotion.js'
-import { Cursor, Grain, Reveal, Kinetic, Magnetic, Marquee, ClipReveal } from '../motion/ui.jsx'
+import { Cursor, Grain, Reveal, Kinetic, Magnetic, Marquee, ClipReveal, MobileMenu } from '../motion/ui.jsx'
 import { Loader, ScrollProgress, ScrubText, CountUp } from '../motion/extras.jsx'
 
 // Per-section background palettes (RGB 0–1). The shader lerps between them as you scroll.
@@ -43,8 +43,12 @@ export default function Aurora() {
 
   return (
     <div className="font-sans-disp relative min-h-screen text-white selection:bg-white selection:text-black">
+      <a href="#work" className="sr-only z-[2001] rounded-full bg-white px-5 py-2.5 text-sm font-medium text-black focus:not-sr-only focus:fixed focus:left-4 focus:top-4">
+        Skip to content
+      </a>
+
       {/* Global animated aurora background — spans the whole page */}
-      <div className="fixed inset-0 z-0">
+      <div className="fixed inset-0 z-0" aria-hidden="true">
         <ShaderGradient className="h-full w-full" tintRef={tintRef} />
         {/* light legibility veil — keeps the purple vivid across the whole page */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#060410]/10 via-[#0a0620]/28 to-[#060410]/42" />
@@ -57,13 +61,27 @@ export default function Aurora() {
 
       {/* Nav */}
       <header className="fixed top-0 z-50 w-full">
-        <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 mix-blend-difference">
-          <a href="#top" className="font-mono text-sm tracking-tight">VINESH<span className="opacity-50">/ML</span></a>
-          <div className="hidden gap-8 font-mono text-[11px] uppercase tracking-[0.2em] md:flex">
+        <nav aria-label="Main" className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
+          <a href="#top" className="font-mono text-sm tracking-tight mix-blend-difference">VINESH<span className="opacity-50">/ML</span></a>
+          <div className="hidden gap-8 font-mono text-[11px] uppercase tracking-[0.2em] mix-blend-difference md:flex">
             <a data-cursor href="#work" className="hover:opacity-60">Work</a>
             <a data-cursor href="#about" className="hover:opacity-60">About</a>
             <a data-cursor href="#contact" className="hover:opacity-60">Contact</a>
           </div>
+          <MobileMenu
+            links={[
+              { label: 'Work', href: '#work' },
+              { label: 'About', href: '#about' },
+              { label: 'Contact', href: '#contact' },
+            ]}
+            footer={
+              <div className="flex flex-wrap items-center gap-3 font-mono text-xs">
+                <a href={profile.github} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-white/25 px-4 py-2.5 text-white/90"><Github size={14} /> GitHub</a>
+                <a href={profile.linkedin} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-white/25 px-4 py-2.5 text-white/90"><Linkedin size={14} /> LinkedIn</a>
+                <a href={profile.resume} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-white/25 px-4 py-2.5 text-white/90">Résumé ↗</a>
+              </div>
+            }
+          />
         </nav>
       </header>
 
@@ -101,7 +119,7 @@ export default function Aurora() {
         <section id="work" data-theme="work" className="mx-auto max-w-7xl px-6 py-28 md:py-36">
           <Reveal className="mb-12 flex items-end justify-between">
             <h2 className="font-mono text-sm uppercase tracking-[0.25em] text-white/60">Selected Work</h2>
-            <span className="font-mono text-sm text-white/40">/ 0{projects.length}</span>
+            <span className="font-mono text-sm text-white/60">/ 0{projects.length}</span>
           </Reveal>
 
           {/* Featured flagship card */}
@@ -115,7 +133,7 @@ export default function Aurora() {
                 <div>
                   <div className="flex items-center gap-3">
                     <span className="rounded-full px-3 py-1 font-mono text-[10px] uppercase tracking-widest" style={{ color: featured.accent, background: `${featured.accent}1a` }}>Flagship</span>
-                    <span className="font-mono text-[10px] uppercase tracking-widest text-white/45">{featured.kind}</span>
+                    <span className="font-mono text-[10px] uppercase tracking-widest text-white/70">{featured.kind}</span>
                   </div>
                   <h3 className="mt-5 flex items-center gap-3 font-medium tracking-tight" style={{ fontSize: 'clamp(2.2rem,4.5vw,3.6rem)' }}>
                     {featured.name}
@@ -123,7 +141,7 @@ export default function Aurora() {
                   </h3>
                   <p className="mt-4 max-w-md text-[15px] leading-relaxed text-white/75">{featured.summary}</p>
                   <div className="mt-6 flex flex-wrap gap-1.5">
-                    {featured.tech.map((t) => <span key={t} className="rounded-full border border-white/15 px-3 py-1 font-mono text-[10px] text-white/65">{t}</span>)}
+                    {featured.tech.map((t) => <span key={t} className="rounded-full border border-white/15 px-3 py-1 font-mono text-[10px] text-white/75">{t}</span>)}
                   </div>
                 </div>
                 <ul className="flex flex-col justify-center gap-3 border-white/10 md:border-l md:pl-12">
@@ -147,7 +165,7 @@ export default function Aurora() {
                   <span className="absolute inset-x-0 top-0 h-px origin-left scale-x-0 transition-transform duration-700 group-hover:scale-x-100" style={{ background: p.accent }} />
                   <div className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full opacity-0 blur-3xl transition-opacity duration-700 group-hover:opacity-25" style={{ background: p.accent }} />
                   <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs text-white/35">0{i + 2}</span>
+                    <span className="font-mono text-xs text-white/55">0{i + 2}</span>
                     <ArrowUpRight size={20} className="text-white/30 transition-colors group-hover:text-[color:var(--a)]" />
                   </div>
                   <h3 className="mt-5 font-medium tracking-tight" style={{ fontSize: 'clamp(1.5rem,2.4vw,2rem)' }}>{p.name}</h3>
@@ -155,13 +173,13 @@ export default function Aurora() {
                   <p className="mt-4 text-sm leading-relaxed text-white/70">{p.summary}</p>
                   <ul className="mt-5 flex flex-col gap-2">
                     {p.highlights.slice(0, 3).map((h) => (
-                      <li key={h} className="flex items-start gap-2.5 text-[13px] text-white/65">
+                      <li key={h} className="flex items-start gap-2.5 text-[13px] text-white/75">
                         <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full" style={{ background: p.accent }} />{h}
                       </li>
                     ))}
                   </ul>
                   <div className="mt-auto flex flex-wrap gap-1.5 pt-6">
-                    {p.tech.map((t) => <span key={t} className="rounded-full border border-white/15 px-2.5 py-0.5 font-mono text-[10px] text-white/55">{t}</span>)}
+                    {p.tech.map((t) => <span key={t} className="rounded-full border border-white/15 px-2.5 py-0.5 font-mono text-[10px] text-white/70">{t}</span>)}
                   </div>
                 </a>
               </Reveal>
@@ -183,7 +201,7 @@ export default function Aurora() {
             ].map((x) => (
               <div key={x.k}>
                 <CountUp to={x.n} suffix={x.s} className="block text-4xl font-medium tabular-nums md:text-6xl" />
-                <p className="mt-2 font-mono text-[11px] uppercase tracking-widest text-white/50">{x.k}</p>
+                <p className="mt-2 font-mono text-[11px] uppercase tracking-widest text-white/65">{x.k}</p>
               </div>
             ))}
           </div>
@@ -193,7 +211,7 @@ export default function Aurora() {
         <section data-theme="approach" className="mx-auto max-w-7xl px-6 py-24">
           <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-2">
             <Reveal>
-              <p className="font-mono text-sm uppercase tracking-[0.25em] text-white/55">Approach</p>
+              <p className="font-mono text-sm uppercase tracking-[0.25em] text-white/70">Approach</p>
               <h2 className="mt-5 font-medium leading-[1.05] tracking-tight" style={{ fontSize: 'clamp(1.8rem,3.5vw,3rem)' }}>
                 High-dimensional data,<br /><span className="font-serif-it text-white/85">made legible.</span>
               </h2>
@@ -217,7 +235,7 @@ export default function Aurora() {
             <Reveal>
               <div className="relative max-w-sm">
                 <ClipReveal dir="up" className="overflow-hidden rounded-2xl">
-                  <img src={profile.photo} alt={profile.name} className="aspect-[4/5] w-full object-cover grayscale transition duration-700 hover:grayscale-0" />
+                  <img src={profile.photo} alt={`Portrait of ${profile.name}`} loading="lazy" decoding="async" className="aspect-[4/5] w-full object-cover grayscale transition duration-700 hover:grayscale-0" />
                 </ClipReveal>
                 <div className="absolute -bottom-4 -right-4 rounded-xl border border-white/20 bg-[#0a0620]/80 px-4 py-2 font-mono text-xs backdrop-blur">CGPA {profile.cgpa}</div>
               </div>
@@ -277,7 +295,7 @@ export default function Aurora() {
             </Magnetic>
             <a data-cursor href={profile.resume} className="rounded-full border border-white/25 px-7 py-3.5 text-sm hover:bg-white/5">Résumé ↗</a>
           </Reveal>
-          <p className="mt-20 font-mono text-xs text-white/40">© 2026 {profile.name} · WebGL shader · GSAP · Lenis · built from scratch</p>
+          <p className="mt-20 font-mono text-xs text-white/60">© 2026 {profile.name} · WebGL shader · GSAP · Lenis · built from scratch</p>
         </section>
       </div>
     </div>

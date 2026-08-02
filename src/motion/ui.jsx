@@ -67,7 +67,7 @@ export function MobileMenu({ links = [], footer = null }) {
         <span aria-hidden="true" className={`h-px w-6 bg-white transition-transform duration-300 ${open ? '-translate-y-[4px] -rotate-45' : ''}`} />
       </button>
       <div id="mobile-menu" ref={panel} role="dialog" aria-modal="true" aria-label="Site navigation"
-        className={`fixed inset-0 z-[1100] flex flex-col justify-between overflow-y-auto bg-[#060410]/95 px-6 pb-10 pt-28 backdrop-blur-xl transition-opacity duration-300 ${open ? 'opacity-100' : 'pointer-events-none opacity-0'}`}>
+        className={`fixed inset-0 z-[1100] flex flex-col justify-between overflow-y-auto bg-[#060410]/95 px-6 pb-10 pt-28 backdrop-blur-xl transition-[opacity,visibility] duration-300 ${open ? 'visible opacity-100' : 'pointer-events-none invisible opacity-0'}`}>
         <nav className="flex flex-col">
           {links.map((l, i) => (
             <a key={l.href} href={l.href} onClick={() => setOpen(false)}

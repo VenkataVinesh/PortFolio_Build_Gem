@@ -1,5 +1,3 @@
-import React from 'react'
-
 // Clean layered architecture diagram: each layer is a labelled lane (left rail =
 // stage name, right = compact node chips). Data-driven, accent-tinted.
 export default function ArchStack({ layers = [], flow, accent = '#7c5cff' }) {

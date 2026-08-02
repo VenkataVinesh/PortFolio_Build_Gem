@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { ArrowLeft, ArrowUpRight } from 'lucide-react'
 import { profile, projects, projectDetails } from '../data.js'
 import { Github } from '../Icons.jsx'

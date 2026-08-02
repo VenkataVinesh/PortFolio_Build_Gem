@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -7,20 +7,20 @@ gsap.registerPlugin(ScrollTrigger)
 /* Intro loader: name + 0→100 counter, then a curtain wipes up to reveal the page. */
 export function Loader({ name = 'VINESH' }) {
   const root = useRef(null), num = useRef(null)
-  const [n, setN] = useState(0)
+  const reduce = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const [n, setN] = useState(reduce ? 100 : 0)
   useEffect(() => {
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduce) { gsap.set(root.current, { display: 'none' }); ScrollTrigger.refresh(); return }
     document.body.style.overflow = 'hidden'
     const obj = { v: 0 }
     const tl = gsap.timeline({ onComplete: () => { document.body.style.overflow = ''; ScrollTrigger.refresh() } })
-    if (reduce) { setN(100); tl.set(root.current, { display: 'none' }); document.body.style.overflow = ''; return }
     tl.to(obj, { v: 100, duration: 1.5, ease: 'power2.inOut', onUpdate: () => setN(Math.round(obj.v)) })
       .to('[data-loadbar]', { scaleX: 1, duration: 1.5, ease: 'power2.inOut' }, 0)
       .to('[data-loadinner]', { yPercent: -110, duration: 0.7, ease: 'power4.inOut' }, '+=0.15')
       .to(root.current, { yPercent: -100, duration: 0.9, ease: 'power4.inOut' }, '-=0.35')
       .set(root.current, { display: 'none' })
     return () => { document.body.style.overflow = '' }
-  }, [])
+  }, [reduce])
   return (
     <div ref={root} className="fixed inset-0 z-[2000] flex items-end justify-between bg-[#060410] px-6 pb-8 md:px-10 md:pb-10">
       <div data-loadinner className="font-mono text-[12vw] font-medium leading-none tracking-tighter text-white md:text-[8vw]">{name}</div>
@@ -69,6 +69,8 @@ export function CountUp({ to, suffix = '', className = '' }) {
   const ref = useRef(null)
   useEffect(() => {
     const el = ref.current; if (!el) return
+    const final = (Number.isInteger(to) ? to : to.toFixed(2)) + suffix
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { el.textContent = final; return }
     const obj = { v: 0 }
     const a = gsap.to(obj, {
       v: to, duration: 1.6, ease: 'power3.out',

@@ -162,6 +162,23 @@ export function ClipReveal({ children, dir = 'left', className = '' }) {
   return <div ref={ref} className={className} style={{ clipPath: 'inset(0 100% 0 0)' }}>{children}</div>
 }
 
+/* Mount children only when the wrapper nears the viewport (IntersectionObserver).
+   Used to defer heavy WebGL components; shows `fallback` until then. */
+export function LazyMount({ children, fallback = null, rootMargin = '400px', className = '' }) {
+  const ref = useRef(null)
+  // No IntersectionObserver support → just mount immediately.
+  const [show, setShow] = useState(() => typeof IntersectionObserver === 'undefined')
+  useEffect(() => {
+    const el = ref.current; if (!el || typeof IntersectionObserver === 'undefined') return
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) { setShow(true); io.disconnect() }
+    }, { rootMargin })
+    io.observe(el)
+    return () => io.disconnect()
+  }, [rootMargin])
+  return <div ref={ref} className={className}>{show ? children : fallback}</div>
+}
+
 /* Infinite marquee band. */
 export function Marquee({ items, className = '', speed = 28 }) {
   const row = items.concat(items)

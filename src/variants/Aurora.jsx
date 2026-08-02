@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useRef } from 'react'
 import { ArrowUpRight, Mail } from 'lucide-react'
-import { profile, projects, skills, experience } from '../data.js'
+import { profile, projects, skills, experience, currentlyBuilding } from '../data.js'
 import { Github, Linkedin } from '../Icons.jsx'
 import ShaderGradient from '../motion/ShaderGradient.jsx'
 import { useLenis } from '../motion/useMotion.js'
@@ -190,6 +190,34 @@ export default function Aurora() {
                     {p.tech.map((t) => <span key={t} className="rounded-full border border-white/15 px-2.5 py-0.5 font-mono text-[10px] text-white/70">{t}</span>)}
                   </div>
                 </a>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+
+        {/* Currently building — clearly labeled in-progress work, no completion claims */}
+        <section data-theme="architecture" className="mx-auto max-w-7xl px-6 pb-28">
+          <Reveal className="mb-10 flex flex-wrap items-end justify-between gap-3">
+            <h2 className="font-mono text-sm uppercase tracking-[0.25em] text-white/70">Currently building</h2>
+            <span className="font-mono text-[11px] text-white/60">in progress — these ship when the evals pass</span>
+          </Reveal>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            {currentlyBuilding.map((p) => (
+              <Reveal key={p.name} y={40}>
+                <div className="relative flex h-full flex-col overflow-hidden rounded-[1.5rem] border border-dashed border-white/25 bg-[#0b0917]/70 p-7 ring-1 ring-inset ring-white/[0.04] backdrop-blur-2xl">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <span className="inline-flex items-center gap-2 rounded-full px-3 py-1 font-mono text-[10px] uppercase tracking-widest" style={{ color: p.accent, background: `${p.accent}1a` }}>
+                      <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full motion-safe:animate-pulse" style={{ background: p.accent }} />
+                      {p.status}
+                    </span>
+                    <span className="font-mono text-[10px] uppercase tracking-widest text-white/70">{p.kind}</span>
+                  </div>
+                  <h3 className="mt-5 font-medium tracking-tight" style={{ fontSize: 'clamp(1.4rem,2.2vw,1.9rem)' }}>{p.name}</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-white/75">{p.summary}</p>
+                  <div className="mt-auto flex flex-wrap gap-1.5 pt-6">
+                    {p.tech.map((t) => <span key={t} className="rounded-full border border-white/15 px-2.5 py-0.5 font-mono text-[10px] text-white/70">{t}</span>)}
+                  </div>
+                </div>
               </Reveal>
             ))}
           </div>

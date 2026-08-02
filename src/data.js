@@ -6,7 +6,7 @@ export const profile = {
   short: 'Vinesh',
   role: 'Machine Learning Engineer',
   target: 'ML / Deep Learning / LLM Engineering',
-  tagline: 'I build systems that model sequential, noisy real-world data — forecasting it, optimizing decisions on it, and learning policies that act on it.',
+  tagline: 'I build machine-learning systems end-to-end — forecasting noisy real-world data, optimizing decisions on it, learning policies that act on it, and shipping the services around it.',
   blurb: 'Computer Science undergrad at Mahindra University (CGPA 7.96) working across time-series forecasting, mathematical optimization, and reinforcement learning. Python-first, mathematically grounded, project-driven.',
   location: 'Hyderabad, India',
   email: 'venkatvinesh46@gmail.com',
@@ -112,6 +112,26 @@ export const projects = [
     repo: 'https://github.com/VenkataVinesh/Portfolio-Optimization-Dashboard',
     accent: '#34d399',
     motif: 'frontier',
+  },
+]
+
+// In-progress work. Explicitly not shipped — no completion metrics by design.
+export const currentlyBuilding = [
+  {
+    name: 'EU AI Act & GDPR RAG Assistant',
+    status: 'In progress',
+    kind: 'Retrieval-Augmented Generation',
+    summary: 'A retrieval-augmented assistant for EU AI Act and GDPR questions, built around an evaluation harness that measures hallucination rate and retrieval quality — with CI gating releases on those metrics.',
+    tech: ['Python', 'RAG', 'Evaluation harness', 'CI'],
+    accent: '#38bdf8',
+  },
+  {
+    name: 'Industrial Visual Defect Detection',
+    status: 'In progress',
+    kind: 'Production ML Service',
+    summary: 'Visual defect detection for industrial parts, treated as a production service from day one: MLflow experiment tracking, drift monitoring, and CI/CD from training through deployment.',
+    tech: ['PyTorch', 'MLflow', 'Drift monitoring', 'CI/CD'],
+    accent: '#a78bfa',
   },
 ]
 

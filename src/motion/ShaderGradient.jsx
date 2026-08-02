@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 
 // Animated mesh-gradient hero, raw WebGL (no Three.js). Domain-warped fBm value noise.
 // Palette colours (u_a, u_b) are driven from React via `tintRef` and lerp smoothly,

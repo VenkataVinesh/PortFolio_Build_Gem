@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { ArrowUpRight, Mail } from 'lucide-react'
 import { profile, projects, skills, experience } from '../data.js'
 import { Github, Linkedin } from '../Icons.jsx'

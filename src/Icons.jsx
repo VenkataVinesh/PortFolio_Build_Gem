@@ -1,5 +1,3 @@
-import React from 'react'
-
 // Brand glyphs (lucide removed brand icons in v1). Minimal inline SVGs.
 export function Github({ size = 16 }) {
   return (

@@ -19,7 +19,7 @@ export default function ArchStack({ layers = [], flow, accent = '#7c5cff' }) {
                   <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: accent }} />
                   <span className="leading-tight">
                     <span className="block text-sm font-medium text-white">{n.t}</span>
-                    {n.s && <span className="block font-mono text-[10px] text-white/45">{n.s}</span>}
+                    {n.s && <span className="block font-mono text-[10px] text-white/65">{n.s}</span>}
                   </span>
                 </div>
               ))}
@@ -28,7 +28,7 @@ export default function ArchStack({ layers = [], flow, accent = '#7c5cff' }) {
         ))}
       </div>
       {flow && (
-        <p className="mt-5 text-center font-mono text-[11px] leading-relaxed tracking-wide text-white/50">{flow}</p>
+        <p className="mt-5 text-center font-mono text-[11px] leading-relaxed tracking-wide text-white/65">{flow}</p>
       )}
     </div>
   )

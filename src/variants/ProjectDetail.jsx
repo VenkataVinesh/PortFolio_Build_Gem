@@ -28,7 +28,7 @@ export default function ProjectDetail({ id }) {
 
   return (
     <div className="font-sans-disp relative min-h-screen text-white selection:bg-white selection:text-black">
-      <div className="fixed inset-0 z-0">
+      <div className="fixed inset-0 z-0" aria-hidden="true">
         <ShaderGradient className="h-full w-full" tintRef={tintRef} />
         <div className="absolute inset-0 bg-gradient-to-b from-[#060410]/35 via-[#0a0620]/55 to-[#060410]/80" />
       </div>
@@ -130,7 +130,7 @@ export default function ProjectDetail({ id }) {
           </Reveal>
         </Section>
 
-        <footer className="border-t border-white/12 py-10 font-mono text-xs text-white/40">
+        <footer className="border-t border-white/12 py-10 font-mono text-xs text-white/60">
           © 2026 {profile.name} · {project.name}
         </footer>
       </div>

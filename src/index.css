@@ -11,6 +11,18 @@ body { margin: 0; background: #060410; font-family: 'Space Grotesk', ui-sans-ser
 .font-serif-it { font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif; font-style: italic; font-weight: 400; }
 .font-mono { font-family: ui-monospace, 'JetBrains Mono', 'SF Mono', 'Cascadia Code', Menlo, monospace; }
 
+/* Visible keyboard focus — the custom cursor must never be the only affordance. */
+:focus-visible {
+  outline: 2px solid var(--section-accent, #7c5cff);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important; /* stop infinite loops from re-firing */
+    transition-duration: 0.001ms !important;
+  }
+  html { scroll-behavior: auto; }
 }

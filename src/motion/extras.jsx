@@ -51,7 +51,7 @@ export function ScrubText({ text, className = '' }) {
   useEffect(() => {
     const el = ref.current; if (!el) return
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { gsap.set(el.children, { opacity: 1 }); return }
-    const a = gsap.fromTo(el.children, { opacity: 0.16 }, {
+    const a = gsap.fromTo(el.children, { opacity: 0.45 }, {
       opacity: 1, stagger: 0.25, ease: 'none',
       scrollTrigger: { trigger: el, start: 'top 75%', end: 'bottom 55%', scrub: 0.6 },
     })

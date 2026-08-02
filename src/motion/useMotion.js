@@ -24,3 +24,13 @@ export function useLenis() {
 export function splitLines(text) {
   return text.split('\n')
 }
+
+// "Lite" rendering mode: skip live WebGL loops and render a static frame
+// instead — reduced motion, Save-Data, or small touch devices (battery/jank).
+export function liteMotion() {
+  return (
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+    navigator.connection?.saveData === true ||
+    (window.matchMedia('(pointer: coarse)').matches && window.matchMedia('(max-width: 767px)').matches)
+  )
+}

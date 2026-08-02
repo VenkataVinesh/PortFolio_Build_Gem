@@ -1,12 +1,20 @@
-import { useEffect, useRef } from 'react'
+import { lazy, Suspense, useEffect, useRef } from 'react'
 import { ArrowUpRight, Mail } from 'lucide-react'
 import { profile, projects, skills, experience } from '../data.js'
 import { Github, Linkedin } from '../Icons.jsx'
 import ShaderGradient from '../motion/ShaderGradient.jsx'
-import PointCloud3D from '../motion/PointCloud3D.jsx'
 import { useLenis } from '../motion/useMotion.js'
-import { Cursor, Grain, Reveal, Kinetic, Magnetic, Marquee, ClipReveal, MobileMenu } from '../motion/ui.jsx'
+import { Cursor, Grain, Reveal, Kinetic, Magnetic, Marquee, ClipReveal, MobileMenu, LazyMount } from '../motion/ui.jsx'
 import { Loader, ScrollProgress, ScrubText, CountUp } from '../motion/extras.jsx'
+
+// Three.js only loads with this chunk, and only when the section nears the viewport.
+const PointCloud3D = lazy(() => import('../motion/PointCloud3D.jsx'))
+
+// Static stand-in shown before the point cloud mounts (and if it never can).
+const CloudFallback = () => (
+  <div aria-hidden="true" className="h-full w-full"
+    style={{ background: 'radial-gradient(60% 60% at 50% 50%, rgba(124,77,255,0.28) 0%, rgba(34,211,238,0.10) 55%, transparent 75%)' }} />
+)
 
 // Per-section background palettes (RGB 0–1). The shader lerps between them as you scroll.
 const THEMES = {
@@ -223,7 +231,11 @@ export default function Aurora() {
             <ClipReveal dir="right" className="overflow-hidden rounded-3xl border border-white/15 bg-[#08060f]/90 shadow-[0_28px_80px_-28px_rgba(0,0,0,0.9)] ring-1 ring-inset ring-white/[0.06]">
               <div className="relative">
                 <div className="pointer-events-none absolute inset-0 z-10" style={{ background: 'radial-gradient(65% 65% at 50% 50%, transparent 40%, rgba(8,6,15,0.7) 100%)' }} />
-                <PointCloud3D className="h-[340px] w-full md:h-[460px]" />
+                <LazyMount className="h-[340px] w-full md:h-[460px]" fallback={<CloudFallback />}>
+                  <Suspense fallback={<CloudFallback />}>
+                    <PointCloud3D className="h-full w-full" />
+                  </Suspense>
+                </LazyMount>
               </div>
             </ClipReveal>
           </div>

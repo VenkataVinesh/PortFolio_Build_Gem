@@ -1,15 +1,17 @@
 import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
+import { liteMotion } from './useMotion.js'
 
 // Interactive rotating point-cloud sphere (raw Three.js, transparent canvas).
 // Points distributed via a Fibonacci sphere; colour ramps violet→cyan by height.
-// Mouse tilts the cloud; honors prefers-reduced-motion.
+// Mouse tilts the cloud; renders a single static frame in lite mode
+// (reduced motion / Save-Data / small touch devices).
 export default function PointCloud3D({ className = '' }) {
   const mount = useRef(null)
   useEffect(() => {
     const el = mount.current
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const w = () => el.clientWidth, h = () => el.clientHeight
+    const reduce = liteMotion()
+    const w = () => Math.max(el.clientWidth, 1), h = () => Math.max(el.clientHeight, 1)
 
     const scene = new THREE.Scene()
     const camera = new THREE.PerspectiveCamera(50, w() / h(), 0.1, 100)
@@ -58,14 +60,19 @@ export default function PointCloud3D({ className = '' }) {
       renderer.render(scene, camera)
       raf = requestAnimationFrame(render)
     }
+    // Fail gracefully on GPU context loss — the section's fallback gradient shows.
+    const onLost = (e) => { e.preventDefault(); cancelAnimationFrame(raf); renderer.domElement.style.opacity = '0' }
+    renderer.domElement.addEventListener('webglcontextlost', onLost)
+
     if (reduce) { points.rotation.y = 0.6; renderer.render(scene, camera) } else render()
 
     return () => {
       cancelAnimationFrame(raf)
+      renderer.domElement.removeEventListener('webglcontextlost', onLost)
       window.removeEventListener('pointermove', onMove); window.removeEventListener('resize', resize)
       geo.dispose(); mat.dispose(); renderer.dispose()
       if (renderer.domElement.parentNode) renderer.domElement.parentNode.removeChild(renderer.domElement)
     }
   }, [])
-  return <div ref={mount} className={className} />
+  return <div ref={mount} aria-hidden="true" className={className} />
 }

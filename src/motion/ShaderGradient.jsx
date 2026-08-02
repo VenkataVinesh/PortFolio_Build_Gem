@@ -1,11 +1,18 @@
 import { useEffect, useRef } from 'react'
+import { liteMotion } from './useMotion.js'
 
 // Animated mesh-gradient hero, raw WebGL (no Three.js). Domain-warped fBm value noise.
 // Palette colours (u_a, u_b) are driven from React via `tintRef` and lerp smoothly,
 // so the whole background can change colour as the user scrolls section to section.
-// Honors prefers-reduced-motion.
+// In lite mode (reduced motion / Save-Data / small touch devices) it renders a
+// static frame instead of running a live loop; a CSS gradient sits behind the
+// canvas as a fallback for missing WebGL or a lost context.
 
 const DEFAULT = { a: [0.30, 0.17, 0.66], b: [0.10, 0.55, 0.80] }
+
+// Static fallback approximating the hero palette — shown before/without WebGL.
+const CSS_FALLBACK =
+  'radial-gradient(120% 90% at 18% 8%, #2b1a63 0%, #10123a 48%, #060410 100%)'
 
 const VERT = `attribute vec2 p; void main(){ gl_Position = vec4(p, 0.0, 1.0); }`
 
@@ -45,8 +52,8 @@ export default function ShaderGradient({ className = '', tintRef }) {
   useEffect(() => {
     const canvas = ref.current
     const gl = canvas.getContext('webgl', { antialias: true, powerPreference: 'high-performance' })
-    if (!gl) return
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (!gl) { canvas.style.display = 'none'; return }
+    const lite = liteMotion()
     const compile = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return s }
     const prog = gl.createProgram()
     gl.attachShader(prog, compile(gl.VERTEX_SHADER, VERT))
@@ -61,16 +68,17 @@ export default function ShaderGradient({ className = '', tintRef }) {
     const uRes = U('u_res'), uT = U('u_t'), uM = U('u_mouse'), uA = U('u_a'), uB = U('u_b')
     const mouse = { x: 0.5, y: 0.5 }, target = { x: 0.5, y: 0.5 }
     const onMove = (e) => { target.x = e.clientX / innerWidth; target.y = 1 - e.clientY / innerHeight }
-    addEventListener('pointermove', onMove)
+    if (!lite) addEventListener('pointermove', onMove)
     // smoothly lerped palette
     const curA = [...DEFAULT.a], curB = [...DEFAULT.b]
-    let raf, start = performance.now()
+    let raf, staticTimer, lost = false
+    const start = performance.now()
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.75)
+      const dpr = Math.min(window.devicePixelRatio || 1, lite ? 1.25 : 1.75)
       canvas.width = canvas.clientWidth * dpr; canvas.height = canvas.clientHeight * dpr
       gl.viewport(0, 0, canvas.width, canvas.height)
+      if (lite && !lost) drawStatic(true)
     }
-    resize(); addEventListener('resize', resize)
     const lerp = (cur, tgt, k) => { for (let i = 0; i < 3; i++) cur[i] += (tgt[i] - cur[i]) * k }
     const frame = () => {
       const t = (performance.now() - start) / 1000
@@ -85,13 +93,37 @@ export default function ShaderGradient({ className = '', tintRef }) {
       gl.drawArrays(gl.TRIANGLES, 0, 3)
       raf = requestAnimationFrame(frame)
     }
-    if (reduce) {
+    // Lite path: draw one frame, and redraw only when the section palette changes.
+    let lastTint = null
+    const drawStatic = (force = false) => {
       const tint = (tintRef && tintRef.current) || DEFAULT
+      if (!force && tint === lastTint) return
+      lastTint = tint
       gl.uniform2f(uRes, canvas.width, canvas.height); gl.uniform1f(uT, 12.0); gl.uniform2f(uM, 0.5, 0.5)
       gl.uniform3f(uA, ...tint.a); gl.uniform3f(uB, ...tint.b)
       gl.drawArrays(gl.TRIANGLES, 0, 3)
+    }
+    // Fail gracefully if the GPU context goes away — the CSS gradient shows through.
+    const onLost = (e) => {
+      e.preventDefault(); lost = true
+      cancelAnimationFrame(raf); clearInterval(staticTimer)
+      canvas.style.opacity = '0'
+    }
+    canvas.addEventListener('webglcontextlost', onLost)
+    resize(); addEventListener('resize', resize)
+    if (lite) {
+      drawStatic(true)
+      staticTimer = setInterval(() => drawStatic(), 400)
     } else frame()
-    return () => { cancelAnimationFrame(raf); removeEventListener('resize', resize); removeEventListener('pointermove', onMove) }
+    return () => {
+      cancelAnimationFrame(raf); clearInterval(staticTimer)
+      removeEventListener('resize', resize); removeEventListener('pointermove', onMove)
+      canvas.removeEventListener('webglcontextlost', onLost)
+    }
   }, [tintRef])
-  return <canvas ref={ref} className={className} />
+  return (
+    <div className={`relative ${className}`} style={{ background: CSS_FALLBACK }} aria-hidden="true">
+      <canvas ref={ref} className="absolute inset-0 h-full w-full" />
+    </div>
+  )
 }

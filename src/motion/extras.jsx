@@ -19,7 +19,18 @@ export function Loader({ name = 'VINESH' }) {
       .to('[data-loadinner]', { yPercent: -110, duration: 0.7, ease: 'power4.inOut' }, '+=0.15')
       .to(root.current, { yPercent: -100, duration: 0.9, ease: 'power4.inOut' }, '-=0.35')
       .set(root.current, { display: 'none' })
-    return () => { document.body.style.overflow = '' }
+
+    // The timeline is driven by requestAnimationFrame, which browsers suspend
+    // entirely in a backgrounded tab. Without this the curtain would stay up and
+    // scrolling would stay locked for anyone who opens the page in a background
+    // tab and never focuses it. Clears itself if the timeline finished normally.
+    const escape = setTimeout(() => {
+      if (tl.progress() < 1) tl.progress(1)
+      document.body.style.overflow = ''
+      if (root.current) root.current.style.display = 'none'
+    }, 6000)
+
+    return () => { clearTimeout(escape); document.body.style.overflow = '' }
   }, [reduce])
   return (
     <div ref={root} className="fixed inset-0 z-[2000] flex items-end justify-between bg-[#060410] px-6 pb-8 md:px-10 md:pb-10">

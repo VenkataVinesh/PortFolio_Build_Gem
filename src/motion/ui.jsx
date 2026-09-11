@@ -70,7 +70,7 @@ export function MobileMenu({ links = [], footer = null }) {
         className={`fixed inset-0 z-[1100] flex flex-col justify-between overflow-y-auto bg-[#060410]/95 px-6 pb-10 pt-28 backdrop-blur-xl transition-[opacity,visibility] duration-300 ${open ? 'visible opacity-100' : 'pointer-events-none invisible opacity-0'}`}>
         <nav className="flex flex-col">
           {links.map((l, i) => (
-            <a key={l.href} href={l.href} onClick={() => setOpen(false)}
+            <a key={l.label} href={l.href} onClick={(e) => { setOpen(false); l.onClick?.(e) }}
               className="flex items-baseline gap-4 border-b border-white/10 py-5 font-mono text-3xl uppercase tracking-tight text-white">
               <span className="text-xs" style={{ color: 'var(--section-accent, #7c5cff)' }}>0{i + 1}</span>
               {l.label}

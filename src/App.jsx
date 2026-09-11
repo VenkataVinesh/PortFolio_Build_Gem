@@ -1,12 +1,23 @@
 import { useEffect, useState } from 'react'
-import Aurora from './variants/Aurora.jsx'
-import ProjectDetail from './variants/ProjectDetail.jsx'
+import Home from './pages/Home.jsx'
+import Work from './pages/Work.jsx'
+import About from './pages/About.jsx'
+import Resume from './pages/Resume.jsx'
+import ProjectDetail from './pages/ProjectDetail.jsx'
+import NotFound from './pages/NotFound.jsx'
+
+// Only "#/..." is a route. A bare "#work" is an in-page anchor and must fall
+// through to the home page rather than being read as a route name.
+function parseRoute() {
+  const h = window.location.hash || ''
+  if (!h.startsWith('#/')) return ''
+  return h.slice(2).replace(/\/+$/, '')
+}
 
 function useHashRoute() {
-  const get = () => window.location.hash.replace('#/', '')
-  const [route, setRoute] = useState(get())
+  const [route, setRoute] = useState(parseRoute)
   useEffect(() => {
-    const on = () => setRoute(get())
+    const on = () => setRoute(parseRoute())
     window.addEventListener('hashchange', on)
     return () => window.removeEventListener('hashchange', on)
   }, [])
@@ -15,11 +26,26 @@ function useHashRoute() {
 
 export default function App() {
   const route = useHashRoute()
-  // Restore scroll to top when switching page views (home <-> project detail);
-  // in-page anchors (#work, #about, ...) keep native behavior.
+
+  // Land at the top when the view changes. In-page anchors resolve to route ''
+  // and are handled natively, so guard on an actual anchor being present.
   useEffect(() => {
-    if (route === '' || route.startsWith('p/')) window.scrollTo(0, 0)
+    if (!window.location.hash.startsWith('#/') && window.location.hash.length > 1) return
+    window.scrollTo(0, 0)
   }, [route])
+
   if (route.startsWith('p/')) return <ProjectDetail id={route.slice(2)} />
-  return <Aurora />
+
+  switch (route) {
+    case '':
+      return <Home />
+    case 'work':
+      return <Work />
+    case 'about':
+      return <About />
+    case 'resume':
+      return <Resume />
+    default:
+      return <NotFound />
+  }
 }

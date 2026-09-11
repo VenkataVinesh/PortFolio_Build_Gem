@@ -1,17 +1,107 @@
 /* Fonts are loaded via <link> in index.html (preconnect + non-blocking). */
 @import "tailwindcss";
 
-:root { color-scheme: dark; --section-accent: #7c5cff; }
+/* ---------------------------------------------------------------------------
+   Design tokens.
+   Before this existed there was exactly one custom property and several hundred
+   hardcoded hex values inline. Everything visual now resolves through here.
+   --------------------------------------------------------------------------- */
+@theme {
+  /* Surfaces, darkest to lightest */
+  --color-ink: #060410;
+  --color-ink-2: #0a0620;
+  --color-panel: #0b0917;
+  --color-panel-2: #08060f;
+  --color-chip: #13111f;
+
+  /* Accents. Section accents drive the WebGL palette; project accents the cards. */
+  --color-accent: #7c5cff;
+  --color-accent-cyan: #22d3ee;
+  --color-accent-magenta: #d946ef;
+  --color-accent-sky: #38bdf8;
+  --color-accent-amber: #f59e0b;
+  --color-accent-emerald: #34d399;
+  --color-accent-rose: #fb7185;
+
+  /* Radii */
+  --radius-card: 1.5rem;
+  --radius-card-lg: 1.75rem;
+
+  /* Elevation */
+  --shadow-panel: 0 24px 70px -28px rgb(0 0 0 / 0.85);
+  --shadow-panel-lg: 0 28px 80px -28px rgb(0 0 0 / 0.9);
+
+  /* Type */
+  --font-disp: 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-serif-it: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  --font-mono: ui-monospace, 'JetBrains Mono', 'SF Mono', 'Cascadia Code', Menlo, monospace;
+
+  /* Fluid display sizes, previously inline clamp() on every heading */
+  --text-hero: clamp(2.8rem, 11vw, 11rem);
+  --text-display: clamp(2.4rem, 8vw, 7rem);
+  --text-title: clamp(2.2rem, 4.5vw, 3.6rem);
+  --text-subtitle: clamp(1.5rem, 2.4vw, 2rem);
+  --text-section: clamp(1.8rem, 3.5vw, 3rem);
+}
+
+:root {
+  color-scheme: dark;
+  /* Swapped per section by the IntersectionObserver in useSectionTheme. */
+  --section-accent: #7c5cff;
+}
+
 * { -webkit-font-smoothing: antialiased; }
 html { scroll-behavior: smooth; }
-body { margin: 0; background: #060410; font-family: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif; }
+body {
+  margin: 0;
+  background: var(--color-ink);
+  font-family: var(--font-disp);
+}
 
-/* Font stacks */
-.font-sans-disp { font-family: 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif; }
-.font-serif-it { font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif; font-style: italic; font-weight: 400; }
-.font-mono { font-family: ui-monospace, 'JetBrains Mono', 'SF Mono', 'Cascadia Code', Menlo, monospace; }
+/* Font stacks kept as classes because the serif needs the italic axis. */
+.font-sans-disp { font-family: var(--font-disp); }
+.font-serif-it { font-family: var(--font-serif-it); font-style: italic; font-weight: 400; }
+.font-mono { font-family: var(--font-mono); }
 
-/* Visible keyboard focus — the custom cursor must never be the only affordance. */
+/* ---------------------------------------------------------------------------
+   Component recipes. These four patterns were repeated inline across every
+   page; extracting them is what keeps the redesign consistent.
+   --------------------------------------------------------------------------- */
+@utility panel {
+  border-radius: var(--radius-card);
+  border: 1px solid rgb(255 255 255 / 0.15);
+  background: color-mix(in srgb, var(--color-panel) 85%, transparent);
+  box-shadow: var(--shadow-panel);
+  backdrop-filter: blur(40px);
+}
+
+@utility chip {
+  display: inline-block;
+  border-radius: 9999px;
+  border: 1px solid rgb(255 255 255 / 0.15);
+  padding: 0.125rem 0.625rem;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 1.6;
+  color: rgb(255 255 255 / 0.75);
+}
+
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+@utility section-label {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: rgb(255 255 255 / 0.6);
+}
+
+/* Visible keyboard focus. The custom cursor must never be the only affordance. */
 :focus-visible {
   outline: 2px solid var(--section-accent, #7c5cff);
   outline-offset: 3px;
@@ -21,7 +111,7 @@ body { margin: 0; background: #060410; font-family: 'Space Grotesk', ui-sans-ser
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important; /* stop infinite loops from re-firing */
+    animation-iteration-count: 1 !important; /* stop infinite loops re-firing */
     transition-duration: 0.001ms !important;
   }
   html { scroll-behavior: auto; }

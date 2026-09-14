@@ -211,12 +211,6 @@ export const experience = [
     period: 'Sep 2024 – Oct 2024',
     note: 'Worked in a team of six to prototype an intelligent system, contributing to ideation and backend API development.',
   },
-  {
-    role: 'Competitive Chess',
-    org: 'Bangkok Chess Open, Teplice Open',
-    period: '2024',
-    note: 'Competed in international rated open tournaments.',
-  },
 ]
 
 // Per-project case-study content. Architecture is grounded in each repo's real

@@ -99,9 +99,9 @@ export const projects = [
     // Every figure below comes from docs/FORECAST-EVALUATION.md in the repo.
     metrics: [
       { v: '50.2%', k: 'measured directional hit-rate', sub: '753 of 1,500 walk-forward calls, z = 0.16' },
-      { v: '94.75%', k: 'interval coverage vs 95% nominal', sub: 'GARCH(1,1), up from 91.7% under EWMA' },
+      { v: '94.75%', k: 'interval coverage vs 95% nominal', sub: 'GARCH(1,1), up from 91.67% under EWMA' },
     ],
-    tech: ['TypeScript', 'Next.js', 'Supabase', 'Python', 'lightweight-charts'],
+    tech: ['TypeScript', 'Next.js', 'Supabase', 'lightweight-charts'],
     repo: 'https://github.com/VenkataVinesh/Veltrix',
     demo: 'https://veltrix-terminal-frontend.vercel.app',
     accent: '#06b6d4',
@@ -223,7 +223,7 @@ export const projectDetails = {
     build: [
       'Built a signal engine that scores RSI, MACD, Bollinger bands, EMA/SMA trend and volume, sums the weighted votes, normalises the result to the range -1 to +1 and thresholds at 0.3. The full vote breakdown is shown in the interface, so a recommendation can be argued with.',
       'Validated forecasts walk-forward rather than on a single split. Pooled across 1,500 out-of-sample calls the directional hit-rate is 50.2 per cent with z = 0.16, which is a coin flip. The terminal reports that rather than a tuned backtest figure, and an earlier n=40 run that showed a far more exciting spread was traced to small-sample noise and discarded.',
-      'Replaced an EWMA volatility estimate with GARCH(1,1) after measuring that the EWMA intervals were delivering only 91.7 per cent coverage against a 95 per cent nominal band. The GARCH model brought measured coverage to 94.75 per cent. The band is the part of the forecast worth using.',
+      'Replaced an EWMA volatility estimate with GARCH(1,1) after measuring that the EWMA intervals were delivering only 91.67 per cent coverage against a 95 per cent nominal band. The GARCH model brought measured coverage to 94.75 per cent. The band is the part of the forecast worth using.',
       'Built and benchmarked ridge regression and gradient-boosted trees as alternatives, then removed both after they failed to beat the baseline while costing 123 to 443 times more per forecast.',
       'Migrated off an earlier FastAPI, PostgreSQL and Redis backend. Responsibilities now live in Next.js route handlers and Supabase, with row-level security on the Postgres tables and a seeded paper portfolio per account.',
     ],

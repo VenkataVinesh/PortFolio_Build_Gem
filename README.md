@@ -58,9 +58,11 @@ repository links until there is a repository to link.
 
 ### Résumé
 
-The résumé is published in English and French and is switchable at `#/resume`. Both PDFs are
-built from LaTeX sources (Jake's Resume format) kept outside this repo in `career-update/`. To
-update, rebuild the PDFs and copy them over `public/resume-en.pdf` and `public/resume-fr.pdf`.
+The résumé is published in English and French and is switchable at `#/resume`.
+
+`public/resume-en.pdf` and `public/resume-fr.pdf` are build artefacts, copied by hand from the private
+`career-update` repository (LaTeX, MiKTeX pdfTeX). The deploy workflow does not build them: to change
+the résumé, rebuild it in `career-update` and re-copy both PDFs here.
 
 ## Accessibility and performance
 

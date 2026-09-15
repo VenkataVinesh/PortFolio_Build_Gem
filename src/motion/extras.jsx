@@ -82,13 +82,17 @@ export function CountUp({ to, suffix = '', className = '' }) {
     const el = ref.current; if (!el) return
     const final = (Number.isInteger(to) ? to : to.toFixed(2)) + suffix
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { el.textContent = final; return }
+    // The markup carries the final value, so prerendered HTML and no-JS readers
+    // see real numbers. The count starts from 0 only when the trigger fires.
     const obj = { v: 0 }
     const a = gsap.to(obj, {
       v: to, duration: 1.6, ease: 'power3.out',
+      onStart: () => { obj.v = 0 },
       onUpdate: () => { el.textContent = (Number.isInteger(to) ? Math.round(obj.v) : obj.v.toFixed(2)) + suffix },
       scrollTrigger: { trigger: el, start: 'top 90%', once: true },
     })
     return () => { a.scrollTrigger?.kill(); a.kill() }
   }, [to, suffix])
-  return <span ref={ref} className={className}>0{suffix}</span>
+  const final = (Number.isInteger(to) ? to : to.toFixed(2)) + suffix
+  return <span ref={ref} className={className}>{final}</span>
 }

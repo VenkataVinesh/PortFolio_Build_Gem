@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { profile } from '../data.js'
 import { Github, Linkedin } from '../Icons.jsx'
 import { MobileMenu } from '../motion/ui.jsx'
@@ -29,10 +30,35 @@ function onContactClick(e) {
   requestAnimationFrame(() => requestAnimationFrame(scrollToContact))
 }
 
+// True once the page has scrolled past the top. Read-only: it never scrolls or
+// touches Lenis/ScrollTrigger, and Lenis still moves window.scrollY.
+function useScrolled(threshold = 8) {
+  const [scrolled, setScrolled] = useState(false)
+  useEffect(() => {
+    let frame = 0
+    const read = () => { frame = 0; setScrolled(window.scrollY > threshold) }
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(read) }
+    read()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => { window.removeEventListener('scroll', onScroll); if (frame) cancelAnimationFrame(frame) }
+  }, [threshold])
+  return scrolled
+}
+
 export default function Nav({ current }) {
+  const scrolled = useScrolled()
   return (
     <header className="fixed top-0 z-50 w-full">
-      <nav aria-label="Main" className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
+      {/* Backdrop on its own layer, not on <header>: backdrop-filter on the header
+          would become the containing block for the fixed full-screen mobile menu. */}
+      <div
+        aria-hidden="true"
+        data-nav-backdrop
+        className={`pointer-events-none absolute inset-0 border-b border-white/10 bg-[#060410]/90 backdrop-blur-md transition-opacity duration-300 ${
+          scrolled ? 'opacity-100' : 'opacity-0'
+        }`}
+      />
+      <nav aria-label="Main" className="relative mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
         <a
           href="#/"
           className="font-mono text-sm tracking-tight mix-blend-difference"

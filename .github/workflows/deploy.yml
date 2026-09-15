@@ -32,7 +32,22 @@ jobs:
         
       - name: Build project
         run: npm run build
-        
+
+      # Pinned action commit (v2.2.0) and exact Chrome version, so a CI break is loud, not silent.
+      - name: Setup Chrome
+        id: chrome
+        uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4
+        with:
+          chrome-version: "148.0.7778.97"
+          install-dependencies: true
+
+      # Renders the home page into dist/index.html. Exits non-zero on any failed
+      # check, which stops this job, so the deploy job never runs.
+      - name: Prerender home page
+        run: npm run prerender
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

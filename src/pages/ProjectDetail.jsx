@@ -58,18 +58,22 @@ export default function ProjectDetail({ id }) {
               {project.tech.map((t) => <span key={t} className="chip">{t}</span>)}
             </div>
 
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Magnetic>
-                <a data-cursor href={project.repo} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-medium text-black">
-                  <Github size={15} /> View repository
-                </a>
-              </Magnetic>
-              {project.demo && (
-                <a data-cursor href={project.demo} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-white/25 px-6 py-3 text-sm hover:bg-white/5">
-                  Live demo <ArrowUpRight size={15} />
-                </a>
-              )}
-            </div>
+            {(project.repo || project.demo) && (
+              <div className="mt-8 flex flex-wrap gap-3">
+                {project.repo && (
+                  <Magnetic>
+                    <a data-cursor href={project.repo} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-medium text-black">
+                      <Github size={15} /> View repository
+                    </a>
+                  </Magnetic>
+                )}
+                {project.demo && (
+                  <a data-cursor href={project.demo} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-white/25 px-6 py-3 text-sm hover:bg-white/5">
+                    Live demo <ArrowUpRight size={15} />
+                  </a>
+                )}
+              </div>
+            )}
           </Reveal>
         </section>
 

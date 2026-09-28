@@ -26,9 +26,9 @@ export const profile = {
   cgpa: '7.96 / 10',
   // What I am actually looking for. Kept explicit so recruiters do not guess.
   seeking: {
-    what: 'six-month ML / Deep Learning internship',
-    when: 'February 2027',
-    where: 'Lyon, Paris, or remote in France',
+    headline: 'Seeking a compulsory 6-month ML / Deep Learning internship, March to August 2027.',
+    where: 'Open to Switzerland, Germany, the Netherlands, Sweden and France.',
+    note: 'University internship agreement provided.',
   },
 }
 
@@ -45,7 +45,7 @@ export const education = [
     award: 'Diplôme d’établissement',
     programme: 'Lyon Centrale Digital Lab 2026–2027',
     period: 'Sep 2026 – Aug 2027',
-    note: 'Full-time team projects of three to five students building prototypes for partner companies, coached by Centrale Lyon faculty and by professionals from those companies. Concludes with a six-month industrial internship from February 2027.',
+    note: 'Full-time team projects of three to five students building prototypes for partner companies, coached by Centrale Lyon faculty and by professionals from those companies. Concludes with a compulsory 6-month industrial internship, March to August 2027.',
     current: true,
   },
   {
@@ -76,7 +76,8 @@ export const languages = [
 
 export const skills = [
   { group: 'Languages', items: ['Python', 'C++', 'SQL', 'TypeScript', 'MATLAB'] },
-  { group: 'ML / DL', items: ['PyTorch', 'TensorFlow', 'Keras', 'Scikit-Learn', 'LSTM / GRU', 'Statsmodels'] },
+  { group: 'ML / DL', items: ['PyTorch', 'Scikit-Learn', 'LSTM / GRU', 'Statsmodels'] },
+  { group: 'Familiar with', items: ['TensorFlow', 'Keras'] },
   { group: 'Data', items: ['NumPy', 'Pandas', 'Matplotlib', 'Time-series'] },
   { group: 'Systems', items: ['FastAPI', 'Next.js', 'React', 'Supabase', 'PostgreSQL', 'Docker', 'Git'] },
   { group: 'Mathematics', items: ['Probability', 'Statistics', 'Optimisation', 'Stochastic calculus', 'Reinforcement learning'] },
@@ -98,13 +99,29 @@ export const projects = [
     ],
     // Every figure below comes from docs/FORECAST-EVALUATION.md in the repo.
     metrics: [
-      { v: '50.2%', k: 'measured directional hit-rate', sub: '753 of 1,500 walk-forward calls, z = 0.16' },
       { v: '94.75%', k: 'interval coverage vs 95% nominal', sub: 'GARCH(1,1), up from 91.67% under EWMA' },
+      { v: '50.2%', k: 'directional hit-rate, reported honestly as no edge', sub: '753 of 1,500 walk-forward calls, z = 0.16' },
     ],
     tech: ['TypeScript', 'Next.js', 'Supabase', 'lightweight-charts'],
     repo: 'https://github.com/VenkataVinesh/Veltrix',
     demo: 'https://veltrix-terminal-frontend.vercel.app',
     accent: '#06b6d4',
+  },
+  {
+    id: 'triagemate',
+    name: 'TriageMate',
+    kind: 'Hackathon project, Swiss {ai} Weeks Zurich 2026',
+    period: 'Sep 2026',
+    summary:
+      'A triage co-pilot for operational service desks, built for the Swiss Life challenge at the Swiss {ai} Weeks Zurich Hackathon. It screens an incoming ticket or email for PII and prompt injection, classifies and routes it, assigns a priority with a written reason, retrieves similar past cases, and drafts a response an analyst can approve, edit or reject.',
+    highlights: [
+      '20,000-ticket dataset was only 173 unique descriptions, with effectively random priority labels',
+      'A trained classifier did no better than always guessing the majority class',
+      'Priority computed with an explicit ITIL urgency x impact matrix instead of a trained model',
+      'Tickets used as a retrieval library rather than training data, with the LLM used only where judgment was needed',
+    ],
+    tech: ['Python', 'FastAPI', 'React', 'TypeScript', 'Azure AI Foundry', 'SQLite', 'Docker', 'Azure Container Apps'],
+    accent: '#f59e0b',
   },
   {
     id: 'asset',
@@ -122,23 +139,6 @@ export const projects = [
     tech: ['Python', 'PyTorch', 'Statsmodels', 'FastAPI', 'React'],
     repo: 'https://github.com/VenkataVinesh/Asset-Price-Prediction-Platform',
     accent: '#22d3ee',
-  },
-  {
-    id: 'weather',
-    name: 'Weather Time-Series Forecasting',
-    kind: 'Deep Learning, Sequence Models',
-    period: 'Jun 2025 – Jul 2025',
-    summary:
-      'Stacked LSTM predictors benchmarked against ARIMA and SARIMA on a seasonal series, with trend and seasonality decomposition. Runs on a reproducible synthetic series, so anyone can rerun it without a dataset download.',
-    highlights: [
-      'Stacked two-layer LSTM, 64 units, dropout 0.2',
-      'Trend, seasonality and residual decomposition',
-      'ARIMA and SARIMA statistical baselines',
-      'Reproducible, no external dataset required',
-    ],
-    tech: ['Python', 'PyTorch', 'Statsmodels', 'Matplotlib'],
-    repo: 'https://github.com/VenkataVinesh/Weather-Time-Series-Forecasting',
-    accent: '#14b8a6',
   },
   {
     id: 'rl',
@@ -172,6 +172,23 @@ export const projects = [
     tech: ['Python', 'SciPy', 'NumPy', 'Matplotlib'],
     repo: 'https://github.com/VenkataVinesh/Portfolio-Optimization-Dashboard',
     accent: '#34d399',
+  },
+  {
+    id: 'weather',
+    name: 'Weather Time-Series Forecasting',
+    kind: 'Deep Learning, Sequence Models',
+    period: 'Jun 2025 – Jul 2025',
+    summary:
+      'Stacked LSTM predictors benchmarked against ARIMA and SARIMA on a seasonal series, with trend and seasonality decomposition. Runs on a reproducible synthetic series, so anyone can rerun it without a dataset download.',
+    highlights: [
+      'Stacked two-layer LSTM, 64 units, dropout 0.2',
+      'Trend, seasonality and residual decomposition',
+      'ARIMA and SARIMA statistical baselines',
+      'Reproducible, no external dataset required',
+    ],
+    tech: ['Python', 'PyTorch', 'Statsmodels', 'Matplotlib'],
+    repo: 'https://github.com/VenkataVinesh/Weather-Time-Series-Forecasting',
+    accent: '#14b8a6',
   },
 ]
 
@@ -216,6 +233,34 @@ export const experience = [
 // Per-project case-study content. Architecture is grounded in each repo's real
 // structure and README. No invented metrics.
 export const projectDetails = {
+  triagemate: {
+    tint: { a: [0.30, 0.20, 0.04], b: [0.56, 0.36, 0.08] },
+    problem:
+      'Operational service desks need a triage step that gets the ticket to the right team with the right priority, fast, without either a black-box model or a human reading every line. Built at the Swiss {ai} Weeks Zurich Hackathon for the Swiss Life challenge, over 24 to 25 September 2026, as a team project.',
+    build: [
+      'Screened incoming tickets and emails for PII and prompt injection before anything else touched them.',
+      'Found that the 20,000-ticket training set was only 173 unique descriptions, with priority labels effectively random: the same description appeared across all five priority levels, and a trained classifier did no better than always guessing the majority class.',
+      'Computed priority instead with an explicit ITIL urgency x impact matrix, so the routing logic is auditable rather than a black box.',
+      'Used the tickets as a retrieval library for similar past cases rather than as training data, and used the LLM only where judgment was genuinely needed: classification, routing and drafting.',
+      'Drafted a response for each ticket that an analyst can approve, edit or reject rather than sending automatically.',
+    ],
+    arch: {
+      layers: [
+        { name: 'Intake', nodes: [{ t: 'PII screen' }, { t: 'Prompt-injection check' }] },
+        { name: 'Triage', nodes: [{ t: 'ITIL urgency x impact matrix' }, { t: 'Classification and routing' }] },
+        { name: 'Retrieval', nodes: [{ t: 'Similar past cases', s: '173 unique descriptions' }] },
+        { name: 'Response', nodes: [{ t: 'LLM draft' }, { t: 'Analyst approve / edit / reject' }] },
+      ],
+      flow: 'Ticket or email -> intake checks -> priority matrix + classification -> retrieval of similar cases -> drafted response -> analyst review',
+    },
+    outcome:
+      'A triage co-pilot that keeps the parts needing judgment testable: priority comes from an explicit matrix rather than a model trained on effectively random labels, and every drafted response goes through an analyst before it reaches anyone.',
+    limits: [
+      'Built in a 24 to 25 September 2026 hackathon timeframe, as a team project for the Swiss Life challenge.',
+      'The training data\'s priority labels were unusable, so priority is rule-based rather than learned.',
+    ],
+  },
+
   veltrix: {
     tint: { a: [0.05, 0.40, 0.52], b: [0.10, 0.62, 0.72] },
     problem:

@@ -122,6 +122,11 @@ export const projects = [
     ],
     tech: ['Python', 'FastAPI', 'React', 'TypeScript', 'Azure AI Foundry', 'SQLite', 'Docker', 'Azure Container Apps'],
     accent: '#f59e0b',
+    screenshots: [
+      { src: './projects/triagemate/intake.jpg', alt: 'TriageMate intake screen: describe the problem, sample tickets to try' },
+      { src: './projects/triagemate/priority.jpg', alt: 'TriageMate priority result: ITIL urgency x impact matrix with written reasons and confidence' },
+      { src: './projects/triagemate/draft-reply.jpg', alt: 'TriageMate draft reply with knowledge-base citations, ready for analyst approval' },
+    ],
   },
   {
     id: 'asset',

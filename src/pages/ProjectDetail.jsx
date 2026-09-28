@@ -12,6 +12,7 @@ import NotFound from './NotFound.jsx'
 const SECTIONS = [
   { id: 'overview', label: 'Overview' },
   { id: 'build', label: 'What I built' },
+  { id: 'screenshots', label: 'Screenshots' },
   { id: 'architecture', label: 'Architecture' },
   { id: 'features', label: 'Key features' },
   { id: 'outcome', label: 'Outcome' },
@@ -95,7 +96,7 @@ export default function ProjectDetail({ id }) {
         {/* In-page contents */}
         <Reveal>
           <nav aria-label="On this page" className="mt-14 flex flex-wrap gap-2 border-y border-white/10 py-4">
-            {SECTIONS.map((s) => (
+            {SECTIONS.filter((s) => s.id !== 'screenshots' || project.screenshots?.length).map((s) => (
               <a key={s.id} data-cursor href={`#${s.id}`} className="rounded-full border border-white/15 px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-widest text-white/65 hover:border-white/35 hover:text-white">
                 {s.label}
               </a>
@@ -119,6 +120,20 @@ export default function ProjectDetail({ id }) {
             ))}
           </ol>
         </Section>
+
+        {project.screenshots?.length > 0 && (
+          <Section id="screenshots" label="Screenshots">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+              {project.screenshots.map((s) => (
+                <Reveal key={s.src}>
+                  <div className="overflow-hidden rounded-2xl border border-white/12 ring-1 ring-inset ring-white/[0.06]">
+                    <img src={s.src} alt={s.alt} loading="lazy" decoding="async" className="w-full" />
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </Section>
+        )}
 
         <Section id="architecture" label="System architecture">
           <Reveal>

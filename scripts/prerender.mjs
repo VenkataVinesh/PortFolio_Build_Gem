@@ -44,9 +44,11 @@ const decodeText = (html) =>
 
 function noscriptProjects() {
   const items = projects.map((p) => {
-    const links = [`<a href="${escapeHtml(p.repo)}">Code</a>`]
+    const links = []
+    if (p.repo) links.push(`<a href="${escapeHtml(p.repo)}">Code</a>`)
     if (p.demo) links.push(`<a href="${escapeHtml(p.demo)}">Live demo</a>`)
-    return `<li><h3>${escapeHtml(p.name)}</h3><p>${escapeHtml(p.kind)}. ${escapeHtml(p.summary)}</p><p>${links.join(' · ')}</p></li>`
+    const linksHtml = links.length ? `<p>${links.join(' · ')}</p>` : ''
+    return `<li><h3>${escapeHtml(p.name)}</h3><p>${escapeHtml(p.kind)}. ${escapeHtml(p.summary)}</p>${linksHtml}</li>`
   })
   return `<noscript><section aria-label="Projects"><h2>Projects</h2><ul>${items.join('')}</ul></section></noscript>`
 }
@@ -95,7 +97,7 @@ const rootText = decodeText(rootHtml)
 const required = [
   profile.name,
   profile.tagline.slice(0, 43),
-  profile.seeking.what,
+  profile.seeking.headline,
   profile.seeking.where,
   profile.email,
   ...projects.slice(0, 3).map((p) => p.name),
@@ -108,9 +110,8 @@ for (const url of [profile.github, profile.linkedin]) {
 }
 const noscript = body.slice(body.indexOf('<noscript>'), body.indexOf('</noscript>'))
 for (const p of projects) {
-  if (!noscript.includes(escapeHtml(p.name)) || !noscript.includes(`href="${p.repo}"`)) {
-    fail(`<noscript> list is missing project or link: ${p.name}`)
-  }
+  if (!noscript.includes(escapeHtml(p.name))) fail(`<noscript> list is missing project: ${p.name}`)
+  if (p.repo && !noscript.includes(`href="${p.repo}"`)) fail(`<noscript> list is missing repo link: ${p.name}`)
 }
 
 await writeFile(DIST, output)

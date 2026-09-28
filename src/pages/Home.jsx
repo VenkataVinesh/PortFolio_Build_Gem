@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { ArrowUpRight, Mail } from 'lucide-react'
-import { profile, projects, planned } from '../data.js'
+import { profile, projects } from '../data.js'
 import { Github, Linkedin } from '../Icons.jsx'
 import { useLenis } from '../motion/useMotion.js'
 import { Reveal, Kinetic, Magnetic, Marquee, ClipReveal, LazyMount } from '../motion/ui.jsx'
@@ -57,7 +57,7 @@ export default function Home() {
         <div className="mx-auto flex max-w-7xl flex-col gap-2 px-6 py-5 md:flex-row md:items-center md:justify-between">
           <p className="text-sm text-white/85">
             <span className="mr-2 inline-block h-2 w-2 rounded-full bg-emerald-400 align-middle motion-safe:animate-pulse" aria-hidden="true" />
-            Looking for a {profile.seeking.what} starting {profile.seeking.when}
+            {profile.seeking.headline}
           </p>
           <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-white/60">{profile.seeking.where}</p>
         </div>
@@ -90,27 +90,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Planned. Explicitly not started — see data.js. */}
-      <section data-theme="architecture" className="mx-auto max-w-7xl px-6 pb-28">
-        <Reveal className="mb-10 flex flex-wrap items-end justify-between gap-3">
-          <h2 className="section-label text-white/70">Next up</h2>
-          <span className="font-mono text-[11px] text-white/60">planned, not started</span>
-        </Reveal>
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          {planned.map((p) => (
-            <Reveal key={p.name} y={40}>
-              <div className="relative flex h-full flex-col overflow-hidden rounded-card border border-dashed border-white/25 bg-panel/70 p-7 ring-1 ring-inset ring-white/[0.04] backdrop-blur-2xl">
-                <span className="font-mono text-[10px] uppercase tracking-widest text-white/60">{p.kind}</span>
-                <h3 className="mt-4 text-xl font-medium tracking-tight md:text-2xl">{p.name}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-white/70">{p.summary}</p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-        <p className="mt-6 font-mono text-[11px] text-white/50">
-          No repository links here yet, because there is no code yet. They appear when there is.
-        </p>
-      </section>
+      {/* Next up / planned section returns once Project B (the RAG assistant) has evaluation results. */}
 
       {/* Statement */}
       <section className="mx-auto max-w-6xl px-6 py-28 md:py-40">
@@ -119,10 +99,10 @@ export default function Home() {
           className="text-3xl font-medium leading-snug tracking-tight md:text-[3.6rem] md:leading-[1.1]" />
         <div className="mt-20 grid grid-cols-2 gap-8 border-t border-white/15 pt-10 md:grid-cols-4">
           {[
-            { n: projects.length, s: '', k: 'Shipped projects' },
+            { n: 1, s: '', k: 'Live product' },
             { n: 1500, s: '', k: 'Walk-forward calls validated' },
-            { n: 500, s: '+', k: 'TEDx attendees led' },
-            { n: 7.96, s: '', k: 'CGPA / 10' },
+            { n: 94.75, s: '%', k: 'Interval coverage vs 95% nominal' },
+            { n: projects.length, s: '', k: 'Projects' },
           ].map((x) => (
             <div key={x.k}>
               <CountUp to={x.n} suffix={x.s} className="block text-4xl font-medium tabular-nums md:text-6xl" />

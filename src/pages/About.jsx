@@ -54,8 +54,7 @@ export default function About() {
               repository it describes.
             </p>
             <p className="mt-6 leading-relaxed text-white/75">
-              I am looking for a {profile.seeking.what} starting {profile.seeking.when}, in{' '}
-              {profile.seeking.where}.
+              {profile.seeking.headline} {profile.seeking.where} {profile.seeking.note}
             </p>
 
             <div className="mt-10 panel p-7 md:p-9">

@@ -11,7 +11,7 @@ import NotFound from './NotFound.jsx'
 
 const SECTIONS = [
   { id: 'overview', label: 'Overview' },
-  { id: 'build', label: 'What I built' },
+  { id: 'build', label: null },
   { id: 'screenshots', label: 'Screenshots' },
   { id: 'architecture', label: 'Architecture' },
   { id: 'features', label: 'Key features' },
@@ -98,7 +98,7 @@ export default function ProjectDetail({ id }) {
           <nav aria-label="On this page" className="mt-14 flex flex-wrap gap-2 border-y border-white/10 py-4">
             {SECTIONS.filter((s) => s.id !== 'screenshots' || project.screenshots?.length).map((s) => (
               <a key={s.id} data-cursor href={`#${s.id}`} className="rounded-full border border-white/15 px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-widest text-white/65 hover:border-white/35 hover:text-white">
-                {s.label}
+                {s.id === 'build' ? (d.buildLabel || 'What I built') : s.label}
               </a>
             ))}
           </nav>
@@ -108,7 +108,12 @@ export default function ProjectDetail({ id }) {
           <p className="max-w-3xl text-xl leading-relaxed text-white/85 md:text-2xl">{d.problem}</p>
         </Section>
 
-        <Section id="build" label="What I built">
+        <Section id="build" label={d.buildLabel || 'What I built'}>
+          {d.teamNote && (
+            <Reveal>
+              <p className="-mt-4 mb-6 max-w-3xl text-sm leading-relaxed text-white/60">{d.teamNote}</p>
+            </Reveal>
+          )}
           <ol className="space-y-6">
             {d.build.map((b, n) => (
               <Reveal key={n}>

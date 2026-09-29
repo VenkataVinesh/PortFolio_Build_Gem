@@ -122,6 +122,7 @@ export const projects = [
     ],
     tech: ['Python', 'FastAPI', 'React', 'TypeScript', 'Azure AI Foundry', 'SQLite', 'Docker', 'Azure Container Apps'],
     accent: '#f59e0b',
+    repo: 'https://github.com/DaPres/SwissAiWeeks_Team_8',
     screenshots: [
       { src: './projects/triagemate/intake.jpg', alt: 'TriageMate intake screen: describe the problem, sample tickets to try' },
       { src: './projects/triagemate/priority.jpg', alt: 'TriageMate priority result: ITIL urgency x impact matrix with written reasons and confidence' },
@@ -242,6 +243,8 @@ export const projectDetails = {
     tint: { a: [0.30, 0.20, 0.04], b: [0.56, 0.36, 0.08] },
     problem:
       'Operational service desks need a triage step that gets the ticket to the right team with the right priority, fast, without either a black-box model or a human reading every line. Built at the Swiss {ai} Weeks Zurich Hackathon for the Swiss Life challenge, over 24 to 25 September 2026, as a team project.',
+    buildLabel: 'What we built',
+    teamNote: 'Team project. My part: classification and retrieval logic, and the LLM prompting pipeline.',
     build: [
       'Screened incoming tickets and emails for PII and prompt injection before anything else touched them.',
       'Found that the 20,000-ticket training set was only 173 unique descriptions, with priority labels effectively random: the same description appeared across all five priority levels, and a trained classifier did no better than always guessing the majority class.',

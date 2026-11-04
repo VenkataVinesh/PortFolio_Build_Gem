@@ -108,7 +108,9 @@ for (const phrase of required) {
 for (const url of [profile.github, profile.linkedin]) {
   if (!body.includes(`href="${url}`)) fail(`prerendered body is missing link: ${url}`)
 }
-const noscript = body.slice(body.indexOf('<noscript>'), body.indexOf('</noscript>'))
+// The first <noscript> in <body> hides the preloader; the project list is the one holding a <section>.
+const nsStart = body.indexOf('<noscript><section')
+const noscript = nsStart < 0 ? '' : body.slice(nsStart, body.indexOf('</noscript>', nsStart))
 for (const p of projects) {
   if (!noscript.includes(escapeHtml(p.name))) fail(`<noscript> list is missing project: ${p.name}`)
   if (p.repo && !noscript.includes(`href="${p.repo}"`)) fail(`<noscript> list is missing repo link: ${p.name}`)

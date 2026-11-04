@@ -3,9 +3,12 @@
 Personal site for **Venkata Vinesh Kumar Reddy Atluri**, live at
 [venkatavinesh.github.io/PortFolio_Build_Gem](https://venkatavinesh.github.io/PortFolio_Build_Gem/).
 
-Machine learning work: time-series forecasting, mathematical optimisation and reinforcement
-learning. Each project has its own case study covering the problem, what was built, the
-architecture and the outcome.
+ML / AI engineering work: LLM applications, signal processing, time-series forecasting and the
+maths underneath. Each project has a case study with the problem, what was built, results set as
+large type (real and simulated figures labelled separately), the outcome and the limits.
+
+The visual concept, **Spectral** (signal resolving out of noise), and the research behind it are in
+[docs/design-research.md](docs/design-research.md).
 
 ## Stack
 
@@ -14,11 +17,11 @@ architecture and the outcome.
 | Framework | React 19, no TypeScript |
 | Build | Vite 8 (Rolldown), base path `/PortFolio_Build_Gem/` |
 | Styling | Tailwind CSS v4 via `@tailwindcss/vite`, tokens in `src/index.css` |
-| Routing | Hand-rolled hash router, ~30 lines in `src/App.jsx` |
-| Motion | GSAP + ScrollTrigger, Lenis smooth scroll |
-| Background | Raw WebGL fragment shader (domain-warped fBm), no library |
-| 3D | Three.js point cloud, lazy-loaded behind an IntersectionObserver |
-| Deploy | GitHub Actions to GitHub Pages on push to `main` |
+| Fonts | Inter Tight, Instrument Serif, JetBrains Mono, self-hosted via Fontsource (no third-party font request) |
+| Routing | Hand-rolled hash router in `src/App.jsx`, with a curtain transition between routes |
+| Motion | GSAP + ScrollTrigger, Lenis smooth scroll driven from the GSAP ticker |
+| Atmosphere | One raw-WebGL fragment shader (`src/motion/Field.jsx`), no Three.js |
+| Deploy | GitHub Actions to GitHub Pages on push to `main`, with a headless-Chrome prerender of the home page |
 
 ## Running it
 
@@ -27,22 +30,33 @@ npm install
 npm run dev      # http://localhost:5173/PortFolio_Build_Gem/
 npm run build    # -> dist/
 npm run lint
+CHROME_PATH=/path/to/chrome npm run prerender   # what CI runs after the build
 ```
 
 ## Layout
 
 ```
+index.html             static preloader markup (paints before JS), SEO and JSON-LD
 src/
-  App.jsx              hash router: #/ #/work #/about #/resume #/p/<id>
+  App.jsx              hash router (#/ #/work #/about #/resume #/p/<id>), route curtain, lazy routes
   data.js              ALL site content. Single source of truth.
-  theme.js             per-section palettes + the IntersectionObserver that swaps them
-  index.css            Tailwind v4 @theme tokens and component recipes
-  components/          Shell (page chrome), Nav, Footer, ProjectCard
+  index.css            design tokens, link effects, preloader, atmosphere and grain
+  components/          Nav, Footer, Tiles (home project tiles), nav-actions
   pages/               Home, Work, About, Resume, ProjectDetail, NotFound
-  motion/              shader, point cloud, reveal/kinetic/cursor primitives
+  motion/
+    core.js            Lenis + GSAP setup, reduced-motion/lite detection, page-enter bus
+    Field.jsx          the "Spectral" WebGL field (lens cursor, scroll depth, adaptive quality)
+    Cursor.jsx         context cursor (link / view / drag / open / next)
+    transitions.js     preloader and route curtain
+    ui.jsx             masked line reveals, magnetic, marquee, scrub words, decoding numbers,
+                       parallax, image reveal, CSS atmosphere
+scripts/prerender.mjs  post-build prerender of the home page (fails the deploy on any problem)
 public/
   resume-en.pdf        built from career-update/resume_en.tex
   resume-fr.pdf        built from career-update/resume_fr.tex
+docs/
+  design-research.md   research on 31 portfolio sites and the design brief
+  screenshots/         before / after captures
 ```
 
 ### Content
@@ -52,9 +66,12 @@ and there is no CMS, so editing that one file changes the whole site.
 
 **The rule for this repo: every claim must trace to code, a README, or a document.** The
 metrics on the Veltrix case study come from `docs/FORECAST-EVALUATION.md` in the
-[Veltrix repo](https://github.com/VenkataVinesh/Veltrix). Work that has not started is listed
-under "Next up" and explicitly labelled *planned, not started*, with no tech-stack claims and no
-repository links until there is a repository to link.
+[Veltrix repo](https://github.com/VenkataVinesh/Veltrix). PRECITEC is private lab work: the site
+claims only my parts, labels every simulated-benchmark figure "Simulated" next to the number, and
+never links the lab repository. Work in progress (Maintenance Copilot) carries an "In progress"
+badge, no metrics and no link.
+
+There are deliberately no diagrams or charts on the site; results are set as type.
 
 ### Résumé
 
@@ -68,18 +85,20 @@ the résumé, rebuild it in `career-update` and re-copy both PDFs here.
 
 Deliberate choices worth preserving if you edit this:
 
-- Every animation respects `prefers-reduced-motion`, including the shader, which falls back to a
-  single static frame instead of a render loop.
-- The custom cursor is never the only affordance. `:focus-visible` is styled globally and there
-  is a skip link.
-- Three.js loads only when its section approaches the viewport, keeping it out of the initial
-  bundle.
-- The mobile menu is a focus-trapped dialog closed by Escape.
-- Decorative layers (shader, grain, cursor, marquee duplicate) are `aria-hidden`.
-
-See [CHANGES.md](CHANGES.md) for the refinement pass that established these.
+- `prefers-reduced-motion`: no preloader, no curtain, no Lenis, a single static frame of the
+  shader, content shown in place, numbers shown final.
+- The WebGL field starts after first paint, pauses off-screen and in background tabs, lowers its
+  resolution when frames run slow, and on phones without a GPU renders tiny and slow.
+- Display numbers decode by mutating their own text node only; the markup always carries the
+  final value, so prerendered HTML and screen readers get the real number.
+- GSAP pins an inner element inside a React-owned wrapper, so the pin-spacer never breaks React's
+  DOM on route changes.
+- The custom cursor is never the only affordance. `:focus-visible` is styled globally, there is a
+  skip link, and keyboard focus inside the pinned horizontal track scrolls the track to the card.
+- The mobile menu is a focus-trapped dialog closed by Escape, and inert when closed.
+- Secondary routes are code-split and prefetched when idle; the route curtain waits for the chunk,
+  so there is never a loading flash.
 
 ## Credits
 
-Fonts are Space Grotesk and Instrument Serif (SIL OFL 1.1). Library licences are listed in the
-sibling `variants/CREDITS.md`.
+Fonts are Inter Tight, Instrument Serif and JetBrains Mono (SIL OFL 1.1), via Fontsource.

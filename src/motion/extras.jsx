@@ -33,7 +33,7 @@ export function Loader({ name = 'VINESH' }) {
     return () => { clearTimeout(escape); document.body.style.overflow = '' }
   }, [reduce])
   return (
-    <div ref={root} className="fixed inset-0 z-[2000] flex items-end justify-between bg-[#060410] px-6 pb-8 md:px-10 md:pb-10">
+    <div ref={root} className="fixed inset-0 z-[2000] flex items-end justify-between bg-[#0f0f12] px-6 pb-8 md:px-10 md:pb-10">
       <div data-loadinner className="font-mono text-[12vw] font-medium leading-none tracking-tighter text-white md:text-[8vw]">{name}</div>
       <div ref={num} className="font-mono text-2xl tabular-nums text-white/60">{String(n).padStart(3, '0')}</div>
       <div className="absolute bottom-0 left-0 h-[2px] w-full origin-left scale-x-0 bg-white/40" data-loadbar />

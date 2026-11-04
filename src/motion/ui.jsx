@@ -62,17 +62,17 @@ export function MobileMenu({ links = [], footer = null }) {
     <div className="md:hidden">
       <button ref={btn} type="button" aria-expanded={open} aria-controls="mobile-menu"
         aria-label={open ? 'Close menu' : 'Open menu'} onClick={() => setOpen(!open)}
-        className="relative z-[1101] flex h-10 w-10 flex-col items-center justify-center gap-[7px] mix-blend-difference">
-        <span aria-hidden="true" className={`h-px w-6 bg-white transition-transform duration-300 ${open ? 'translate-y-[4px] rotate-45' : ''}`} />
-        <span aria-hidden="true" className={`h-px w-6 bg-white transition-transform duration-300 ${open ? '-translate-y-[4px] -rotate-45' : ''}`} />
+        className="relative z-[1101] flex h-10 w-10 flex-col items-center justify-center gap-[7px]">
+        <span aria-hidden="true" className={`h-px w-6 bg-ink transition-transform duration-300 ${open ? 'translate-y-[4px] rotate-45' : ''}`} />
+        <span aria-hidden="true" className={`h-px w-6 bg-ink transition-transform duration-300 ${open ? '-translate-y-[4px] -rotate-45' : ''}`} />
       </button>
       <div id="mobile-menu" ref={panel} role="dialog" aria-modal="true" aria-label="Site navigation"
-        className={`fixed inset-0 z-[1100] flex flex-col justify-between overflow-y-auto bg-[#060410]/95 px-6 pb-10 pt-28 backdrop-blur-xl transition-[opacity,visibility] duration-300 ${open ? 'visible opacity-100' : 'pointer-events-none invisible opacity-0'}`}>
+        className={`fixed inset-0 z-[1100] flex flex-col justify-between overflow-y-auto bg-paper/97 px-6 pb-10 pt-28 backdrop-blur-xl transition-[opacity,visibility] duration-300 ${open ? 'visible opacity-100' : 'pointer-events-none invisible opacity-0'}`}>
         <nav className="flex flex-col">
           {links.map((l, i) => (
             <a key={l.label} href={l.href} onClick={(e) => { setOpen(false); l.onClick?.(e) }}
-              className="flex items-baseline gap-4 border-b border-white/10 py-5 font-mono text-3xl uppercase tracking-tight text-white">
-              <span className="text-xs" style={{ color: 'var(--section-accent, #7c5cff)' }}>0{i + 1}</span>
+              className="flex items-baseline gap-4 border-b border-line py-5 font-mono text-3xl uppercase tracking-tight text-ink">
+              <span className="text-xs text-mute">0{i + 1}</span>
               {l.label}
             </a>
           ))}

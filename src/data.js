@@ -11,11 +11,11 @@ export const profile = {
   name: 'Venkata Vinesh Kumar Reddy Atluri',
   short: 'Venkat',
   role: 'ML / Deep Learning Engineering',
-  target: 'ML / Deep Learning / LLM Engineering',
+  target: 'ML / AI Engineering (LLM applications, ML engineering, applied deep learning)',
   tagline:
-    'I build machine learning systems end to end: forecasting noisy real-world data, optimising decisions on it, learning policies that act on it, and shipping the service around it.',
+    'I build machine learning systems end to end: finding signal in noisy real-world data, forecasting it, building LLM pipelines around it, and shipping the service around it.',
   blurb:
-    'Computer Science undergraduate at Mahindra University, spending my final year at École Centrale de Lyon on the Lyon Centrale Digital Lab programme. I work across time-series forecasting, mathematical optimisation and reinforcement learning.',
+    'Computer Science undergraduate at Mahindra University, spending my final year at École Centrale de Lyon on the Lyon Centrale Digital Lab programme. I work across signal processing, time-series forecasting and LLM applications.',
   location: 'Écully, Lyon, France',
   email: 'venkata-vinesh-kumar-reddy.atluri@etu.ec-lyon.fr',
   emailAlt: 'venkatvinesh46@gmail.com',
@@ -26,8 +26,8 @@ export const profile = {
   cgpa: '7.96 / 10',
   // What I am actually looking for. Kept explicit so recruiters do not guess.
   seeking: {
-    headline: 'Seeking a compulsory 6-month ML / Deep Learning internship, March to August 2027.',
-    where: 'Open to Switzerland, Germany, the Netherlands, Sweden and France.',
+    headline: 'Seeking a 6-month ML / AI engineering internship from March 2027.',
+    where: 'Open to France, Switzerland and Germany.',
     note: 'University internship agreement provided.',
   },
 }
@@ -74,39 +74,15 @@ export const languages = [
   { name: 'French', level: 'A1, in progress' },
 ]
 
+// Only skills that a project on the résumé actually shows. Same four groups as the résumé.
 export const skills = [
-  { group: 'Languages', items: ['Python', 'C++', 'SQL', 'TypeScript', 'MATLAB'] },
-  { group: 'ML / DL', items: ['PyTorch', 'Scikit-Learn', 'LSTM / GRU', 'Statsmodels'] },
-  { group: 'Familiar with', items: ['TensorFlow', 'Keras'] },
-  { group: 'Data', items: ['NumPy', 'Pandas', 'Matplotlib', 'Time-series'] },
-  { group: 'Systems', items: ['FastAPI', 'Next.js', 'React', 'Supabase', 'PostgreSQL', 'Docker', 'Git'] },
-  { group: 'Mathematics', items: ['Probability', 'Statistics', 'Optimisation', 'Stochastic calculus', 'Reinforcement learning'] },
+  { group: 'Languages', items: ['Python', 'TypeScript'] },
+  { group: 'ML / DL', items: ['PyTorch (LSTM, 1-D U-Net)', 'Statsmodels (ARIMA, GARCH)', 'Time-series forecasting', 'Signal processing', 'Model selection (BIC)'] },
+  { group: 'LLM and data', items: ['LLM prompting pipelines', 'Retrieval over documents', 'NumPy / SciPy (least squares)', 'Pandas'] },
+  { group: 'Engineering', items: ['FastAPI', 'React', 'Docker', 'Qt', 'multiprocessing', 'pytest', 'Git'] },
 ]
 
 export const projects = [
-  {
-    id: 'veltrix',
-    name: 'Veltrix',
-    kind: 'Market Analytics and Forecasting Terminal',
-    period: 'Dec 2025 – Present',
-    summary:
-      'An analytics terminal for market data, built so every recommendation can be audited. The signal engine shows the vote and weight of each indicator behind a call, and forecasts are walk-forward validated so the reported confidence is measured rather than tuned.',
-    highlights: [
-      'Auditable signal engine: each indicator vote shown with its weight',
-      'Walk-forward validation over 1,500 out-of-sample calls',
-      'GARCH(1,1) volatility, calibrated 95% prediction intervals',
-      'Next.js route handlers, Supabase Postgres with row-level security',
-    ],
-    // Every figure below comes from docs/FORECAST-EVALUATION.md in the repo.
-    metrics: [
-      { v: '94.75%', k: 'interval coverage vs 95% nominal', sub: 'GARCH(1,1), up from 91.67% under EWMA' },
-      { v: '50.2%', k: 'directional hit-rate, reported honestly as no edge', sub: '753 of 1,500 walk-forward calls, z = 0.16' },
-    ],
-    tech: ['TypeScript', 'Next.js', 'Supabase', 'lightweight-charts'],
-    repo: 'https://github.com/VenkataVinesh/Veltrix',
-    demo: 'https://veltrix-terminal-frontend.vercel.app',
-    accent: '#06b6d4',
-  },
   {
     id: 'triagemate',
     name: 'TriageMate',
@@ -130,10 +106,49 @@ export const projects = [
     ],
   },
   {
+    id: 'precitec',
+    name: 'PRECITEC Sensor: Peak Detection',
+    kind: 'LTDS lab, École Centrale de Lyon · team of 4',
+    period: 'Oct 2026',
+    summary:
+      'Live surface-height measurement from a PRECITEC CHRocodile CLS 2 confocal line sensor, using the lab\'s own Python software instead of the vendor\'s app. When two surfaces are very close their peaks overlap and the vendor software reports one wrong height. My part was to find every surface from the raw spectra, even close ones.',
+    highlights: [
+      'Exactly 2 surfaces found on 120/120 real glass-slide channels; the old Gaussian method found 4',
+      'Closest pair resolved on a live frame: 0.77 peak widths (4.7 px), real sensor',
+      'Simulated benchmark: 93% of close pairs found at 0.75 peak widths',
+      'Integrated live into the team\'s app without changing acquisition',
+    ],
+    // Real-sensor results only. Simulated-benchmark figures are on the case page, labelled as simulated.
+    metrics: [
+      { v: '120/120', k: 'real glass-slide channels with exactly 2 surfaces found', sub: 'the old Gaussian method found 4' },
+      { v: '0.77 FWHM', k: 'closest pair resolved on a live frame', sub: '4.7 px, real sensor' },
+    ],
+    tech: ['Python', 'NumPy / SciPy', 'PyTorch', 'Qt', 'pytest'],
+    codePrivate: true,
+    accent: '#fb7185',
+  },
+  {
+    id: 'maintenance-copilot',
+    name: 'Maintenance Copilot',
+    kind: 'Agent over Sensor Telemetry and Manuals',
+    period: 'Nov 2026 – in progress',
+    inProgress: true,
+    summary:
+      'Being built: an agent for industrial compressor maintenance. It flags anomalies in real compressor telemetry, retrieves cited troubleshooting pages from public equipment manuals in English, French and German, and writes a diagnosis and a structured work order, or abstains when the evidence does not support one. No results yet; none are claimed here.',
+    highlights: [
+      'Anomaly detection on real compressor telemetry (MetroPT-3), scored on a strict time split',
+      'Retrieval over public equipment manuals in English, French and German',
+      'Cited diagnoses and structured work orders, with abstention when evidence is thin',
+      'Synthetic fault scenarios always labelled synthetic',
+    ],
+    tech: ['Python', 'PyTorch', 'FastAPI', 'Docker'],
+    accent: '#a78bfa',
+  },
+  {
     id: 'asset',
     name: 'Asset Price Prediction Platform',
     kind: 'Sequence Models vs Classical Baselines',
-    period: 'Jan 2026 – Present',
+    period: 'Jan 2026 – Jun 2026',
     summary:
       'Puts a stacked LSTM and an ARIMA baseline on the same series so the trade-off between them is measured rather than assumed, with the leakage controls that make such a comparison mean anything.',
     highlights: [
@@ -145,6 +160,29 @@ export const projects = [
     tech: ['Python', 'PyTorch', 'Statsmodels', 'FastAPI', 'React'],
     repo: 'https://github.com/VenkataVinesh/Asset-Price-Prediction-Platform',
     accent: '#22d3ee',
+  },
+  {
+    id: 'veltrix',
+    name: 'Veltrix',
+    kind: 'Market Analytics and Forecasting Terminal',
+    period: 'Dec 2025 – Present',
+    summary:
+      'An analytics terminal for market data, built so every recommendation can be audited. The signal engine shows the vote and weight of each indicator behind a call, and forecasts are walk-forward validated so the reported confidence is measured rather than tuned.',
+    highlights: [
+      'Auditable signal engine: each indicator vote shown with its weight',
+      'Walk-forward validation over 1,500 out-of-sample calls',
+      'GARCH(1,1) volatility, calibrated 95% prediction intervals',
+      'Next.js route handlers, Supabase Postgres with row-level security',
+    ],
+    // Every figure below comes from docs/FORECAST-EVALUATION.md in the repo.
+    metrics: [
+      { v: '94.75%', k: 'interval coverage vs 95% nominal', sub: 'GARCH(1,1), up from 91.67% under EWMA' },
+      { v: '50.2%', k: 'directional hit-rate, reported honestly as no edge', sub: '753 of 1,500 walk-forward calls, z = 0.16' },
+    ],
+    tech: ['TypeScript', 'Next.js', 'Supabase', 'lightweight-charts'],
+    repo: 'https://github.com/VenkataVinesh/Veltrix',
+    demo: 'https://veltrix-terminal-frontend.vercel.app',
+    accent: '#06b6d4',
   },
   {
     id: 'rl',
@@ -198,29 +236,12 @@ export const projects = [
   },
 ]
 
-// Direction of travel, not work in progress. There is no code for these yet and
-// this section says so. A repo link appears here only once there is a repo.
-export const planned = [
-  {
-    name: 'EU AI Act and GDPR RAG Assistant',
-    kind: 'Retrieval over Regulatory Text',
-    summary:
-      'Retrieval over EU AI Act and GDPR text, built around an evaluation harness that measures hallucination rate and retrieval quality before anything else gets added.',
-  },
-  {
-    name: 'Industrial Visual Defect Detection',
-    kind: 'Anomaly Detection as a Service',
-    summary:
-      'Visual defect detection for industrial parts, treated as a production service from the start, with experiment tracking and drift monitoring rather than a notebook.',
-  },
-]
-
 export const experience = [
   {
     role: 'Head, Mathematics Club',
     org: 'Mahindra University',
     period: 'Aug 2024 – May 2026',
-    note: 'Logistics Head (Aug 2024 to Apr 2025), then Head (Aug 2025 to May 2026). Coordinated logistics and resource allocation for university mathematics modelling competitions and academic events.',
+    note: 'Logistics Head (Aug 2024 to Apr 2025), then Head (Jul 2025 to May 2026). Coordinated logistics and resource allocation for university mathematics modelling competitions and academic events.',
   },
   {
     role: 'On-Ground Operations Lead',
@@ -239,6 +260,62 @@ export const experience = [
 // Per-project case-study content. Architecture is grounded in each repo's real
 // structure and README. No invented metrics.
 export const projectDetails = {
+  precitec: {
+    tint: { a: [0.45, 0.10, 0.18], b: [0.72, 0.20, 0.30] },
+    problem:
+      'The LTDS lab wanted live surface-height measurement from a PRECITEC CHRocodile CLS 2 confocal line sensor using its own Python software. The sensor measures 1,200 points along a line at once; each point gives a 200-pixel colour spectrum, and each reflecting surface makes one peak (a glass slide gives two). When two surfaces are very close their peaks overlap, and the vendor software reports one wrong height. Delivered on 22 October 2026 by a team of four: two teammates built acquisition, the viewer, the top view and the sensor API; a fourth teammate and I built the peak detection.',
+    buildLabel: 'My approach',
+    teamNote:
+      'Team of 4. My part: planning, the peak detector, the simulator and benchmark, lab testing, the neural-network retraining and the integration into the app. Acquisition and the viewer were built by teammates.',
+    build: [
+      'Planned the project, including the four-week plan, and built the peak-detection package: a noise model, simple methods, multipeak Gaussian fitting with BIC model selection, a 1-D U-Net and a benchmark.',
+      'Ran lab tests on the real sensor. They showed the first detectors failed on real data, finding 4 to 11 surfaces where there were 2, because real peaks are not Gaussian.',
+      'Designed the robust detector that runs live. It fits a measured peak template (calibrated on real frames) with per-peak width and skew, decides how many peaks there are with a quasi-BIC rule that includes an "honest noise" term for model error, uses neighbouring channels as extra evidence, and warm-starts for speed.',
+      'Built a realistic simulator and a fixed benchmark (seed 2026, from a different calibration than the detector uses), so the simulated numbers are not tuned to the detector.',
+      'Derived the theoretical limit with a resolvability calculation and the Cramér-Rao bound.',
+      'Retrained the neural network on the realistic simulator, and integrated the detector into the team\'s app as a --peaks panel through a viewer hook, without changing acquisition.',
+    ],
+    results: {
+      chart: [
+        { label: 'Glass-slide channels with exactly 2 surfaces (120 of 120)', value: '100%', pct: 100, kind: 'real' },
+        { label: 'Close pairs found at 0.75 FWHM', value: '93%', pct: 93, kind: 'sim' },
+        { label: 'Close pairs found at 0.5 FWHM', value: '47%', pct: 47, kind: 'sim' },
+        { label: 'Single surfaces counted correctly', value: '97%', pct: 97, kind: 'sim' },
+        { label: 'Triples counted correctly', value: '100%', pct: 100, kind: 'sim' },
+      ],
+      real: [
+        { v: '120/120', k: 'glass-slide channels with exactly 2 surfaces found', sub: 'the old Gaussian method found 4' },
+        { v: '0.77 FWHM', k: 'closest pair resolved on the live frame', sub: '4.7 px' },
+      ],
+      simulated: [
+        { v: '93%', k: 'close pairs found at 0.75 FWHM (about 3.5 px)' },
+        { v: '47%', k: 'close pairs found at 0.5 FWHM' },
+        { v: '97% / 100%', k: 'single surfaces / triples counted correctly' },
+        { v: '±0.07 px', k: 'precision for a single surface', sub: 'about 0.3 px for pairs 1 FWHM apart' },
+        { v: '0.57 → 0.927', k: 'neural-network F1 after retraining on the simulator', sub: '0.85 s per line' },
+      ],
+      runtime: 'Runtime of the robust detector: about 2 s per 1,200-channel line live with warm start, and 22 to 37 s for the first image.',
+    },
+    arch: {
+      layers: [
+        { name: 'Sensor and acquisition', nodes: [{ t: 'CHRocodile CLS 2', s: '1,200 channels' }, { t: 'Acquisition and viewer', s: 'teammates' }] },
+        { name: 'Robust detector (live)', nodes: [{ t: 'Measured peak template', s: 'width and skew per peak' }, { t: 'Quasi-BIC peak count' }, { t: 'Neighbour-channel evidence' }] },
+        { name: 'Models and evaluation', nodes: [{ t: 'Realistic simulator', s: 'seed 2026 benchmark' }, { t: '1-D U-Net', s: 'about 2.06 M weights' }] },
+        { name: 'Application', nodes: [{ t: 'Qt app, --peaks panel', s: 'via viewer hook' }] },
+      ],
+      flow: 'Spectra per channel -> template fit and quasi-BIC peak count -> surface heights -> --peaks panel in the lab app · simulator and benchmark score the detector and the network offline',
+    },
+    outcome:
+      'A detector that runs live inside the lab\'s Python app and, on a real glass slide, finds exactly the two surfaces that are there where the Gaussian baseline found four. It reaches the limit set by the current 5.6% knowledge of the peak shape, so better calibration is the next step. The neural network finds more very close pairs but invents surfaces on single peaks, so the robust detector makes the final decision.',
+    limitsLabel: 'Limits and what is unfinished',
+    limits: [
+      'Only two results are on real data: 2 surfaces on 120/120 glass-slide channels, and the 0.77 FWHM pair. The close-pair detection rates come from a simulated benchmark.',
+      'Still in progress: calibration at several sensor heights, and a combined robust-plus-network approach.',
+      'The neural network invents surfaces on single peaks, so it does not make the final decision.',
+      'Code is private (lab project); details on request.',
+    ],
+  },
+
   triagemate: {
     tint: { a: [0.30, 0.20, 0.04], b: [0.56, 0.36, 0.08] },
     problem:

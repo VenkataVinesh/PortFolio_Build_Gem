@@ -1,134 +1,121 @@
 import { ArrowUpRight } from 'lucide-react'
 import { profile, skills, education, experience, certification, languages } from '../data.js'
-import { useLenis } from '../motion/useMotion.js'
-import { Reveal, Kinetic } from '../motion/ui.jsx'
-import Shell from '../components/Shell.jsx'
+import { Lines, Reveal, RevealImage, ScrubWords, Roll, Magnetic } from '../motion/ui.jsx'
+
+function Block({ label, children }) {
+  return (
+    <section className="mx-auto max-w-[1600px] px-5 md:px-10">
+      <div className="grid grid-cols-1 gap-8 border-t border-line pt-10 md:grid-cols-12 md:pt-14">
+        <h2 className="eyebrow text-mute md:col-span-3">{label}</h2>
+        <div className="md:col-span-9">{children}</div>
+      </div>
+    </section>
+  )
+}
 
 export default function About() {
-  useLenis()
-
   return (
-    <Shell current="about">
-      <section className="mx-auto max-w-7xl px-6 pb-16 pt-36 md:pt-44">
-        <Reveal><p className="section-label">About</p></Reveal>
-        <h1 className="mt-5 text-display font-medium leading-[0.95] tracking-tight">
-          <Kinetic lines={['I build the math myself', <span key="b" className="font-serif-it">before reaching for a library.</span>]} start="top 95%" />
+    <div className="flex flex-col gap-24 pb-32 md:gap-36">
+      <section className="mx-auto w-full max-w-[1600px] px-5 pt-36 md:px-10 md:pt-48">
+        <p className="eyebrow mb-6 text-mute">About</p>
+        <h1 className="text-display font-medium leading-[0.9] tracking-[-0.05em]">
+          <Lines trigger="enter" lines={['I build the math myself', <span key="b" className="font-serif-it tracking-[-0.02em]">before reaching for a library.</span>]} />
         </h1>
-      </section>
 
-      <section className="mx-auto max-w-7xl px-6 pb-24">
-        <div className="grid grid-cols-1 gap-14 md:grid-cols-[1fr_1.5fr]">
-          <Reveal>
-            <div className="relative max-w-sm">
-              <img src={profile.photo} alt={`Portrait of ${profile.name}`} loading="lazy" decoding="async"
-                className="aspect-[4/5] w-full rounded-[2rem] object-cover ring-1 ring-black/10 grayscale transition duration-700 hover:grayscale-0" />
-              <div className="absolute -bottom-4 -right-4 rounded-full border border-line bg-paper px-4 py-2 font-mono text-xs">
-                {profile.location}
-              </div>
+        <div className="mt-16 grid grid-cols-1 gap-12 md:mt-24 md:grid-cols-12">
+          <div className="md:col-span-5 lg:col-span-4">
+            <div className="group relative">
+              <RevealImage src={profile.photo} alt={`Portrait of ${profile.name}`} width={1600} height={1538}
+                className="aspect-[4/5] w-full" imgClassName="grayscale transition-[filter] duration-1000 group-hover:grayscale-0" />
+              <span className="chip absolute bottom-4 left-4 bg-ink/70 backdrop-blur">{profile.location}</span>
             </div>
-
-            <div className="card mt-12 p-6">
-              <h2 className="section-label">Languages</h2>
-              <ul className="mt-4 flex flex-col gap-2.5">
-                {languages.map((l) => (
-                  <li key={l.name} className="flex items-baseline justify-between gap-4 text-sm">
-                    <span>{l.name}</span>
-                    <span className="text-right font-mono text-[11px] text-mute">{l.level}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.1}>
-            <p className="text-xl leading-relaxed md:text-2xl">{profile.blurb}</p>
-            <p className="mt-6 leading-relaxed text-ink/75">
+          </div>
+          <div className="md:col-span-7 lg:col-span-7 lg:col-start-6">
+            <Reveal as="p" className="text-[clamp(1.4rem,2.4vw,2.2rem)] font-medium leading-[1.2] tracking-[-0.025em]">{profile.blurb}</Reveal>
+            <Reveal as="p" className="mt-8 max-w-2xl text-lg leading-relaxed text-bone/70">
               My work clusters around one theme: modelling noisy, real-world data. Detecting peaks in a confocal sensor
-              signal, forecasting time series, and building LLM tools that triage and explain. I would rather report
-              that a method has no edge, or that a number is simulated, than dress up a result.
-            </p>
-            <p className="mt-6 leading-relaxed text-ink/75">
-              {profile.seeking.headline} {profile.seeking.where} {profile.seeking.note}
-            </p>
-
-            <div className="card mt-10 p-7 md:p-9">
-              <h2 className="section-label">Technical skills</h2>
-              <div className="mt-6 grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
-                {skills.map((s) => (
-                  <div key={s.group}>
-                    <h3 className="font-mono text-[11px] uppercase tracking-widest text-mute">{s.group}</h3>
-                    <p className="mt-2 text-sm leading-relaxed">{s.items.join(' · ')}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-6 pb-24">
-        <Reveal className="mb-8"><h2 className="section-label">Education</h2></Reveal>
-        <div className="card overflow-hidden">
-          {education.map((e, i) => (
-            <Reveal key={e.school}>
-              <div className={`px-7 py-7 md:px-9 ${i > 0 ? 'border-t border-line' : ''}`}>
-                <div className="flex flex-col gap-1 md:flex-row md:items-baseline md:justify-between md:gap-6">
-                  <h3 className="flex flex-wrap items-center gap-3 text-lg font-medium">
-                    {e.school}
-                    {e.current && (
-                      <span className="rounded-full border border-emerald-600/40 bg-emerald-500/10 px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-widest text-emerald-800">
-                        Current
-                      </span>
-                    )}
-                  </h3>
-                  <p className="shrink-0 font-mono text-xs text-mute">{e.period}</p>
-                </div>
-                <p className="mt-2 text-sm">{e.award}</p>
-                <p className="mt-0.5 font-mono text-xs text-mute">{e.programme} · {e.place}</p>
-                {e.note && <p className="mt-4 max-w-3xl text-sm leading-relaxed text-ink/70">{e.note}</p>}
-              </div>
+              signal, forecasting time series, and building LLM tools that triage and explain.
             </Reveal>
-          ))}
-        </div>
-
-        <Reveal>
-          <div className="card mt-6 flex flex-col gap-2 p-7 md:flex-row md:items-center md:justify-between">
-            <div>
-              <h3 className="text-base font-medium">{certification.name}</h3>
-              <p className="mt-1 font-mono text-xs text-mute">
-                {certification.issuer} · {certification.instructor} · {certification.date}
+            <Reveal className="mt-10 rounded-[18px] border border-line p-6">
+              <p className="flex items-center gap-2.5 text-bone">
+                <span aria-hidden="true" className="h-2 w-2 rounded-full bg-emerald-400" />{profile.seeking.headline}
               </p>
-            </div>
-            <p className="font-mono text-[11px] text-mute">Credential ID {certification.credentialId}</p>
+              <p className="mt-1 text-bone/70">{profile.seeking.where} {profile.seeking.note}</p>
+            </Reveal>
           </div>
-        </Reveal>
+        </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 pb-28">
-        <Reveal className="mb-8"><h2 className="section-label">Leadership</h2></Reveal>
-        <div className="card overflow-hidden">
-          {experience.map((e, i) => (
-            <Reveal key={e.role}>
-              <div className={`grid grid-cols-1 gap-2 px-7 py-6 md:grid-cols-[1fr_2fr] md:items-center md:gap-10 md:px-9 ${i > 0 ? 'border-t border-line' : ''}`}>
-                <div>
-                  <h3 className="text-lg font-medium">{e.role}</h3>
-                  <p className="mt-1 font-mono text-xs text-mute">{e.org} · {e.period}</p>
-                </div>
-                <p className="text-sm leading-relaxed text-ink/75">{e.note}</p>
-              </div>
+      <section className="mx-auto w-full max-w-[1600px] px-5 md:px-10">
+        <ScrubWords className="max-w-5xl text-[clamp(1.8rem,4vw,4rem)] font-medium leading-[1.06] tracking-[-0.035em]"
+          text="I would rather report that a method has no edge, or that a number is simulated, than dress up a result." />
+      </section>
+
+      <Block label="Technical skills">
+        <ul>
+          {skills.map((s) => (
+            <Reveal as="li" key={s.group} className="grid grid-cols-1 gap-2 border-t border-line py-6 first:border-t-0 first:pt-0 md:grid-cols-[14rem_1fr] md:gap-8">
+              <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-mute">{s.group}</span>
+              <span className="text-xl leading-snug tracking-[-0.01em] md:text-2xl">{s.items.join(' · ')}</span>
             </Reveal>
           ))}
-        </div>
+        </ul>
+      </Block>
 
-        <Reveal>
-          <div className="mt-10 flex flex-wrap gap-3">
-            <a data-cursor href="#/resume" className="inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-medium text-paper">
-              Read the résumé <ArrowUpRight size={15} />
-            </a>
-            <a data-cursor href="#/work" className="btn-fill rounded-full border border-ink/40 px-6 py-3 text-sm">See the work</a>
+      <Block label="Education">
+        <ul>
+          {education.map((e) => (
+            <Reveal as="li" key={e.school} className="border-t border-line py-8 first:border-t-0 first:pt-0">
+              <div className="flex flex-col gap-2 md:flex-row md:items-baseline md:justify-between md:gap-6">
+                <h3 className="flex flex-wrap items-center gap-3 text-[clamp(1.6rem,3vw,2.6rem)] font-medium tracking-[-0.035em]">
+                  {e.school}
+                  {e.current && <span className="chip border-emerald-400/40 text-emerald-300">Current</span>}
+                </h3>
+                <p className="shrink-0 font-mono text-xs text-mute">{e.period}</p>
+              </div>
+              <p className="mt-2 text-bone/85">{e.award}</p>
+              <p className="mt-1 font-mono text-xs text-mute">{e.programme} · {e.place}</p>
+              {e.note && <p className="mt-4 max-w-3xl leading-relaxed text-bone/65">{e.note}</p>}
+            </Reveal>
+          ))}
+        </ul>
+        <Reveal className="mt-4 flex flex-col gap-2 rounded-[18px] border border-line p-6 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h3 className="font-medium">{certification.name}</h3>
+            <p className="mt-1 font-mono text-xs text-mute">{certification.issuer} · {certification.instructor} · {certification.date}</p>
           </div>
+          <p className="font-mono text-[11px] text-mute">Credential ID {certification.credentialId}</p>
         </Reveal>
-      </section>
-    </Shell>
+      </Block>
+
+      <Block label="Languages">
+        <ul className="grid grid-cols-2 gap-6 md:grid-cols-4">
+          {languages.map((l) => (
+            <Reveal as="li" key={l.name}>
+              <p className="text-2xl font-medium tracking-[-0.03em] md:text-3xl">{l.name}</p>
+              <p className="mt-1 font-mono text-[11px] text-mute">{l.level}</p>
+            </Reveal>
+          ))}
+        </ul>
+      </Block>
+
+      <Block label="Leadership">
+        <ul>
+          {experience.map((e) => (
+            <Reveal as="li" key={e.role} className="grid grid-cols-1 gap-3 border-t border-line py-7 first:border-t-0 first:pt-0 md:grid-cols-[1fr_1.4fr] md:gap-10">
+              <div>
+                <h3 className="text-xl font-medium tracking-[-0.02em]">{e.role}</h3>
+                <p className="mt-1 font-mono text-xs text-mute">{e.org} · {e.period}</p>
+              </div>
+              <p className="leading-relaxed text-bone/70">{e.note}</p>
+            </Reveal>
+          ))}
+        </ul>
+        <div className="mt-12 flex flex-wrap gap-3">
+          <Magnetic><a href="#/resume" className="btn-pill inline-flex items-center gap-2 rounded-full border border-bone/40 px-6 py-3.5 text-sm"><Roll>Read the résumé</Roll><ArrowUpRight size={15} className="arrow-nudge" /></a></Magnetic>
+          <Magnetic><a href="#/work" className="btn-pill inline-flex items-center gap-2 rounded-full border border-bone/40 px-6 py-3.5 text-sm"><Roll>See the work</Roll></a></Magnetic>
+        </div>
+      </Block>
+    </div>
   )
 }

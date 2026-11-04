@@ -1,196 +1,210 @@
-import { useEffect, useRef, useState } from 'react'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useEffect, useRef } from 'react'
+import { gsap, ScrollTrigger, reducedMotion, coarsePointer, onEnter } from './core.js'
 
-gsap.registerPlugin(ScrollTrigger)
-
-/* Custom magnetic cursor: a lerped ring + dot that grows over [data-cursor] targets. */
-export function Cursor() {
-  const ring = useRef(null), dot = useRef(null)
-  useEffect(() => {
-    if (window.matchMedia('(pointer: coarse)').matches) return
-    const pos = { x: innerWidth / 2, y: innerHeight / 2 }, ringPos = { ...pos }
-    let hovering = false
-    const move = (e) => { pos.x = e.clientX; pos.y = e.clientY }
-    const over = (e) => { hovering = !!e.target.closest('[data-cursor]') }
-    addEventListener('pointermove', move); addEventListener('pointerover', over)
-    let raf
-    const loop = () => {
-      ringPos.x += (pos.x - ringPos.x) * 0.18; ringPos.y += (pos.y - ringPos.y) * 0.18
-      if (dot.current) dot.current.style.transform = `translate(${pos.x}px,${pos.y}px)`
-      if (ring.current) {
-        const s = hovering ? 2.4 : 1
-        ring.current.style.transform = `translate(${ringPos.x}px,${ringPos.y}px) translate(-50%,-50%) scale(${s})`
-        ring.current.style.opacity = hovering ? '0.5' : '1'
-      }
-      raf = requestAnimationFrame(loop)
-    }
-    loop()
-    return () => { cancelAnimationFrame(raf); removeEventListener('pointermove', move); removeEventListener('pointerover', over) }
-  }, [])
-  return (
-    <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[1000] hidden md:block">
-      <div ref={ring} className="absolute h-9 w-9 rounded-full border border-white/60 mix-blend-difference transition-[opacity] will-change-transform" style={{ left: 0, top: 0 }} />
-      <div ref={dot} className="absolute -ml-[2px] -mt-[2px] h-1 w-1 rounded-full bg-white mix-blend-difference will-change-transform" style={{ left: 0, top: 0 }} />
-    </div>
-  )
-}
-
-/* Mobile nav: hamburger → full-screen overlay. Focus-trapped, Escape closes,
-   closes on link selection, locks body scroll while open. */
-export function MobileMenu({ links = [], footer = null }) {
-  const [open, setOpen] = useState(false)
-  const panel = useRef(null), btn = useRef(null)
-  useEffect(() => {
-    if (!open) return
-    document.body.style.overflow = 'hidden'
-    const el = panel.current, trigger = btn.current
-    const focusables = () => [...el.querySelectorAll('a[href], button:not([disabled])')]
-    focusables()[0]?.focus()
-    const onKey = (e) => {
-      if (e.key === 'Escape') { setOpen(false); return }
-      if (e.key !== 'Tab') return
-      const f = focusables(); if (!f.length) return
-      const first = f[0], last = f[f.length - 1]
-      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus() }
-      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus() }
-    }
-    document.addEventListener('keydown', onKey)
-    return () => { document.removeEventListener('keydown', onKey); document.body.style.overflow = ''; trigger?.focus() }
-  }, [open])
-  return (
-    <div className="md:hidden">
-      <button ref={btn} type="button" aria-expanded={open} aria-controls="mobile-menu"
-        aria-label={open ? 'Close menu' : 'Open menu'} onClick={() => setOpen(!open)}
-        className="relative z-[1101] flex h-10 w-10 flex-col items-center justify-center gap-[7px]">
-        <span aria-hidden="true" className={`h-px w-6 bg-ink transition-transform duration-300 ${open ? 'translate-y-[4px] rotate-45' : ''}`} />
-        <span aria-hidden="true" className={`h-px w-6 bg-ink transition-transform duration-300 ${open ? '-translate-y-[4px] -rotate-45' : ''}`} />
-      </button>
-      <div id="mobile-menu" ref={panel} role="dialog" aria-modal="true" aria-label="Site navigation"
-        className={`fixed inset-0 z-[1100] flex flex-col justify-between overflow-y-auto bg-paper/97 px-6 pb-10 pt-28 backdrop-blur-xl transition-[opacity,visibility] duration-300 ${open ? 'visible opacity-100' : 'pointer-events-none invisible opacity-0'}`}>
-        <nav className="flex flex-col">
-          {links.map((l, i) => (
-            <a key={l.label} href={l.href} onClick={(e) => { setOpen(false); l.onClick?.(e) }}
-              className="flex items-baseline gap-4 border-b border-line py-5 font-mono text-3xl uppercase tracking-tight text-ink">
-              <span className="text-xs text-mute">0{i + 1}</span>
-              {l.label}
-            </a>
-          ))}
-        </nav>
-        {footer}
-      </div>
-    </div>
-  )
-}
-
-/* Magnetic wrapper — element drifts toward the cursor while hovered. */
-export function Magnetic({ children, strength = 0.4, className = '' }) {
-  const ref = useRef(null)
-  useEffect(() => {
-    const el = ref.current; if (!el) return
-    const move = (e) => {
-      const r = el.getBoundingClientRect()
-      gsap.to(el, { x: (e.clientX - (r.left + r.width / 2)) * strength, y: (e.clientY - (r.top + r.height / 2)) * strength, duration: 0.6, ease: 'power3.out' })
-    }
-    const leave = () => gsap.to(el, { x: 0, y: 0, duration: 0.6, ease: 'elastic.out(1,0.4)' })
-    el.addEventListener('pointermove', move); el.addEventListener('pointerleave', leave)
-    return () => { el.removeEventListener('pointermove', move); el.removeEventListener('pointerleave', leave) }
-  }, [strength])
-  return <span ref={ref} className={`inline-block ${className}`}>{children}</span>
-}
-
-/* Film grain overlay. */
-export function Grain() {
-  return (
-    <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[900] opacity-[0.05] mix-blend-overlay"
-      style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")" }} />
-  )
-}
-
-/* Scroll-reveal: children rise + fade as they enter the viewport. */
-export function Reveal({ children, y = 40, delay = 0, className = '' }) {
-  const ref = useRef(null)
-  useEffect(() => {
-    const el = ref.current; if (!el) return
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const anim = gsap.fromTo(el, { y, opacity: 0 }, {
-      y: 0, opacity: 1, duration: 1, delay, ease: 'power3.out',
-      scrollTrigger: { trigger: el, start: 'top 85%' },
-    })
-    return () => { anim.scrollTrigger?.kill(); anim.kill() }
-  }, [y, delay])
-  return <div ref={ref} className={className}>{children}</div>
-}
-
-/* Kinetic heading: each line sits in an overflow-clip and slides up on entry. */
-export function Kinetic({ lines, className = '', start = 'top 90%' }) {
+/* Masked display lines. `trigger="enter"` plays when the page enters (hero),
+   otherwise when scrolled into view. Each line: overflow mask + slide + de-blur. */
+export function Lines({ lines, as: Tag = 'span', className = '', trigger = 'scroll', delay = 0, stagger = 0.1 }) {
   const ref = useRef(null)
   useEffect(() => {
     const el = ref.current; if (!el) return
     const inner = el.querySelectorAll('[data-line]')
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { gsap.set(inner, { y: 0 }); return }
-    const anim = gsap.fromTo(inner, { yPercent: 115 }, {
-      yPercent: 0, duration: 1.1, ease: 'power4.out', stagger: 0.12,
-      scrollTrigger: { trigger: el, start },
-    })
-    return () => { anim.scrollTrigger?.kill(); anim.kill() }
-  }, [start])
+    if (reducedMotion()) return
+    gsap.set(inner, { yPercent: 115, filter: 'blur(6px)' })
+    const play = () => gsap.to(inner, { yPercent: 0, filter: 'blur(0px)', duration: 1.25, ease: 'expo.out', stagger, delay, overwrite: true })
+    let cancel = () => {}, st
+    if (trigger === 'enter') cancel = onEnter(play)
+    else st = ScrollTrigger.create({ trigger: el, start: 'top 88%', once: true, onEnter: play })
+    return () => { cancel(); st?.kill(); gsap.killTweensOf(inner) }
+  }, [trigger, delay, stagger])
   return (
-    <span ref={ref} className={className}>
+    <Tag ref={ref} className={className}>
       {lines.map((l, i) => (
-        <span key={i} className="block overflow-hidden pb-[0.08em]">
-          <span data-line className="block will-change-transform">{l}</span>
-        </span>
+        <span key={i} className="line-mask"><span data-line>{l}</span></span>
       ))}
+    </Tag>
+  )
+}
+
+/* Generic reveal: rise + fade + de-blur on scroll (or on page enter). */
+export function Reveal({ children, as: Tag = 'div', className = '', y = 36, delay = 0, trigger = 'scroll', stagger = 0, ...rest }) {
+  const ref = useRef(null)
+  useEffect(() => {
+    const el = ref.current; if (!el || reducedMotion()) return
+    const targets = stagger ? el.children : el
+    gsap.set(targets, { y, opacity: 0, filter: 'blur(8px)' })
+    const play = () => gsap.to(targets, { y: 0, opacity: 1, filter: 'blur(0px)', duration: 1.1, delay, stagger, ease: 'expo.out', overwrite: true, clearProps: 'filter' })
+    let cancel = () => {}, st
+    if (trigger === 'enter') cancel = onEnter(play)
+    else st = ScrollTrigger.create({ trigger: el, start: 'top 90%', once: true, onEnter: play })
+    return () => { cancel(); st?.kill(); gsap.killTweensOf(targets) }
+  }, [y, delay, trigger, stagger])
+  return <Tag ref={ref} className={className} {...rest}>{children}</Tag>
+}
+
+/* Magnetic: the element leans toward the pointer and springs back. */
+export function Magnetic({ children, strength = 0.35, className = '' }) {
+  const ref = useRef(null)
+  useEffect(() => {
+    const el = ref.current; if (!el || coarsePointer() || reducedMotion()) return
+    const xTo = gsap.quickTo(el, 'x', { duration: 0.7, ease: 'power3.out' })
+    const yTo = gsap.quickTo(el, 'y', { duration: 0.7, ease: 'power3.out' })
+    const move = (e) => {
+      const r = el.getBoundingClientRect()
+      xTo((e.clientX - (r.left + r.width / 2)) * strength)
+      yTo((e.clientY - (r.top + r.height / 2)) * strength)
+    }
+    const leave = () => { gsap.to(el, { x: 0, y: 0, duration: 0.9, ease: 'elastic.out(1, 0.35)' }) }
+    el.addEventListener('pointermove', move); el.addEventListener('pointerleave', leave)
+    return () => { el.removeEventListener('pointermove', move); el.removeEventListener('pointerleave', leave) }
+  }, [strength])
+  return <span ref={ref} className={`inline-block will-change-transform ${className}`}>{children}</span>
+}
+
+/* Text roll label (link effect). Visible text once; the roll copy is a text-shadow. */
+export function Roll({ children, className = '' }) {
+  return <span className={`roll ${className}`}><span>{children}</span></span>
+}
+
+/* Marquee whose speed and direction follow scroll velocity, then settle. */
+export function Marquee({ children, className = '', duration = 40 }) {
+  const ref = useRef(null)
+  useEffect(() => {
+    const track = ref.current?.querySelector('[data-track]'); if (!track || reducedMotion()) return
+    const tween = gsap.to(track, { xPercent: -50, duration, ease: 'none', repeat: -1 })
+    let dir = 1
+    const st = ScrollTrigger.create({
+      onUpdate: (self) => {
+        const v = self.getVelocity()
+        if (v !== 0) dir = v > 0 ? 1 : -1
+        const boost = Math.min(Math.abs(v) / 250, 7)
+        gsap.to(tween, { timeScale: dir * (1 + boost), duration: 0.25, overwrite: true })
+        gsap.to(tween, { timeScale: dir, duration: 1.2, delay: 0.25, ease: 'power2.out' })
+      },
+    })
+    return () => { st.kill(); tween.kill() }
+  }, [duration])
+  return (
+    <div ref={ref} className={`flex overflow-hidden ${className}`}>
+      <div data-track className="flex shrink-0 will-change-transform">
+        <div className="flex shrink-0 items-center">{children}</div>
+        <div className="flex shrink-0 items-center" aria-hidden="true">{children}</div>
+      </div>
+    </div>
+  )
+}
+
+/* Words brighten one by one as the block scrolls through the viewport. */
+export function ScrubWords({ text, className = '', as: Tag = 'p' }) {
+  const ref = useRef(null)
+  const words = text.split(' ')
+  useEffect(() => {
+    const el = ref.current; if (!el || reducedMotion()) return
+    const ws = el.querySelectorAll('[data-w]')
+    // Colour, not opacity: the dim state is the AA-contrast mute tone, so text stays readable.
+    const a = gsap.fromTo(ws, { color: '#8f8c99' }, {
+      color: '#ece8df', stagger: 0.1, ease: 'none',
+      scrollTrigger: { trigger: el, start: 'top 80%', end: 'bottom 45%', scrub: 0.5 },
+    })
+    return () => { a.scrollTrigger?.kill(); a.kill() }
+  }, [text])
+  return (
+    <Tag ref={ref} className={className}>
+      {words.map((w, i) => <span key={i} data-w>{w}{i < words.length - 1 ? ' ' : ''}</span>)}
+    </Tag>
+  )
+}
+
+/* Decoding number: digits scramble, then settle left to right on the true value.
+   The markup always carries the final value (prerender, no-JS, screen readers). */
+const DIGITS = '0123456789'
+export function Decode({ value, className = '', duration = 1.3 }) {
+  const ref = useRef(null)
+  useEffect(() => {
+    // Mutate the existing text node only, so React's own DOM stays intact.
+    const el = ref.current?.firstChild; if (!el || reducedMotion()) return
+    const chars = [...value]
+    const st = ScrollTrigger.create({
+      trigger: ref.current, start: 'top 92%', once: true,
+      onEnter: () => {
+        const o = { p: 0 }
+        gsap.to(o, {
+          p: 1, duration, ease: 'power2.out',
+          onUpdate: () => {
+            const settled = Math.floor(o.p * (chars.length + 2)) - 1
+            el.nodeValue = chars.map((c, i) => (/\d/.test(c) && i > settled ? DIGITS[(Math.random() * 10) | 0] : c)).join('')
+          },
+          onComplete: () => { el.nodeValue = value },
+        })
+      },
+    })
+    return () => st.kill()
+  }, [value, duration])
+  return (
+    <span className={className} aria-label={value} role="text">
+      <span ref={ref} aria-hidden="true" className="tabular">{value}</span>
     </span>
   )
 }
 
-/* Clip-path wipe reveal — content unmasks on scroll entry. */
-export function ClipReveal({ children, dir = 'left', className = '' }) {
+/* Scroll parallax on a single element. */
+export function Parallax({ children, speed = 0.15, className = '' }) {
   const ref = useRef(null)
   useEffect(() => {
-    const el = ref.current; if (!el) return
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { gsap.set(el, { clipPath: 'inset(0 0 0 0)' }); return }
-    const from = dir === 'up' ? 'inset(100% 0 0 0)' : dir === 'right' ? 'inset(0 0 0 100%)' : 'inset(0 100% 0 0)'
-    const a = gsap.fromTo(el, { clipPath: from }, {
-      clipPath: 'inset(0 0 0 0)', duration: 1.15, ease: 'power4.inOut',
-      scrollTrigger: { trigger: el, start: 'top 80%' },
+    const el = ref.current; if (!el || reducedMotion()) return
+    const a = gsap.fromTo(el, { yPercent: speed * 100 }, {
+      yPercent: -speed * 100, ease: 'none',
+      scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom top', scrub: true },
     })
     return () => { a.scrollTrigger?.kill(); a.kill() }
-  }, [dir])
-  return <div ref={ref} className={className} style={{ clipPath: 'inset(0 100% 0 0)' }}>{children}</div>
+  }, [speed])
+  return <div ref={ref} className={`will-change-transform ${className}`}>{children}</div>
 }
 
-/* Mount children only when the wrapper nears the viewport (IntersectionObserver).
-   Used to defer heavy WebGL components; shows `fallback` until then. */
-export function LazyMount({ children, fallback = null, rootMargin = '400px', className = '' }) {
+/* Image that unmasks on scroll and drifts inside its frame. */
+export function RevealImage({ src, alt, className = '', imgClassName = '', width, height, eager = false }) {
   const ref = useRef(null)
-  // No IntersectionObserver support → just mount immediately.
-  const [show, setShow] = useState(() => typeof IntersectionObserver === 'undefined')
   useEffect(() => {
-    const el = ref.current; if (!el || typeof IntersectionObserver === 'undefined') return
-    const io = new IntersectionObserver((entries) => {
-      if (entries.some((e) => e.isIntersecting)) { setShow(true); io.disconnect() }
-    }, { rootMargin })
-    io.observe(el)
-    return () => io.disconnect()
-  }, [rootMargin])
-  return <div ref={ref} className={className}>{show ? children : fallback}</div>
+    const el = ref.current; if (!el || reducedMotion()) return
+    const img = el.querySelector('img')
+    const ctx = gsap.context(() => {
+      gsap.fromTo(el, { clipPath: 'inset(18% 8% 18% 8% round 28px)' }, {
+        clipPath: 'inset(0% 0% 0% 0% round 20px)', duration: 1.4, ease: 'expo.out',
+        scrollTrigger: { trigger: el, start: 'top 85%', once: true },
+      })
+      gsap.fromTo(img, { scale: 1.18, yPercent: -4 }, {
+        scale: 1.04, yPercent: 4, ease: 'none',
+        scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom top', scrub: true },
+      })
+    }, el)
+    return () => ctx.revert()
+  }, [])
+  return (
+    <div ref={ref} className={`overflow-hidden rounded-[20px] ${className}`}>
+      <img src={src} alt={alt} width={width} height={height} loading={eager ? 'eager' : 'lazy'} decoding="async"
+        className={`h-full w-full object-cover will-change-transform ${imgClassName}`} />
+    </div>
+  )
 }
 
-/* Infinite marquee band. */
-export function Marquee({ items, className = '', speed = 28 }) {
-  const row = items.concat(items)
+/* Atmosphere: CSS light for tiles, coloured by the project accent. No WebGL. */
+const SECONDARY = ['#7c5cff', '#f5b84a', '#22d3ee', '#fb7185']
+export function Atmosphere({ accent = '#7c5cff', className = '', intensity = 1, variant = 0 }) {
+  const a = SECONDARY[variant % 4], b = SECONDARY[(variant + 1) % 4]
+  const layouts = [
+    [['-25%', '-35%'], ['45%', '30%'], ['5%', '55%']],
+    [['30%', '-40%'], ['-30%', '25%'], ['50%', '55%']],
+    [['-20%', '20%'], ['40%', '-30%'], ['20%', '60%']],
+  ][variant % 3]
+  const blobs = [
+    { c: accent, s: '110%', l: layouts[0][0], t: layouts[0][1], d: '0s' },
+    { c: a, s: '80%', l: layouts[1][0], t: layouts[1][1], d: '-6s' },
+    { c: b, s: '70%', l: layouts[2][0], t: layouts[2][1], d: '-11s' },
+  ]
   return (
-    <div className={`relative flex overflow-hidden ${className}`}>
-      <div data-marquee className="flex shrink-0 animate-[marquee_linear_infinite] gap-10 pr-10" style={{ animationDuration: `${speed}s` }}>
-        {row.map((it, i) => (
-          <span key={i} aria-hidden={i >= items.length ? 'true' : undefined} className="flex items-center gap-10 whitespace-nowrap">{it}<span className="opacity-30">/</span></span>
-        ))}
-      </div>
-      <style>{`@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-@media (prefers-reduced-motion: reduce){[data-marquee]{animation:none !important}}`}</style>
+    <div aria-hidden="true" className={`atmo ${className}`}>
+      {blobs.map((b, i) => (
+        <i key={i} style={{ background: `radial-gradient(closest-side, ${b.c}, transparent)`, width: b.s, height: b.s, left: b.l, top: b.t, animationDelay: b.d, opacity: (i === 0 ? 0.6 : i === 1 ? 0.28 : 0.18) * intensity }} />
+      ))}
     </div>
   )
 }

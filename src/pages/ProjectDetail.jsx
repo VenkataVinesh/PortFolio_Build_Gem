@@ -1,263 +1,235 @@
-import { useEffect } from 'react'
-import { ArrowLeft, ArrowRight, ArrowUpRight } from 'lucide-react'
+import { useEffect, useRef } from 'react'
+import { ArrowLeft, ArrowUpRight, Lock } from 'lucide-react'
 import { projects, projectDetails } from '../data.js'
-import { Github } from '../Icons.jsx'
-import ArchStack from '../motion/ArchStack.jsx'
-import { useLenis } from '../motion/useMotion.js'
-import { Reveal, Kinetic, Magnetic } from '../motion/ui.jsx'
-import Shell from '../components/Shell.jsx'
-import Cover, { PeaksArt } from '../components/Cover.jsx'
+import Field from '../motion/Field.jsx'
+import { Lines, Reveal, Magnetic, ScrubWords, Decode, Roll, RevealImage, Atmosphere } from '../motion/ui.jsx'
+import { gsap, reducedMotion, onEnter } from '../motion/core.js'
 import NotFound from './NotFound.jsx'
 
-function Section({ id, label, children }) {
+const pad = (n) => String(n).padStart(2, '0')
+
+function titleLines(name) {
+  const [a, b] = name.split(':')
+  if (b) return [a + ':', <span key="b" className="font-serif-it tracking-[-0.02em]">{b.trim()}</span>]
+  return [name]
+}
+
+function Section({ n, label, children, className = '', accent }) {
   return (
-    <section id={id} className="scroll-mt-28 border-t border-line py-14 md:py-20">
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-[220px_1fr] md:gap-12">
-        <Reveal><h2 className="section-label md:sticky md:top-28">{label}</h2></Reveal>
-        <div className="min-w-0">{children}</div>
+    <section className={`relative mx-auto max-w-[1600px] px-5 md:px-10 ${className}`}>
+      {accent && <div aria-hidden="true" className="pointer-events-none absolute -left-[10%] -top-24 h-[420px] w-[60%] opacity-60" style={{ background: `radial-gradient(closest-side, ${accent}1f, transparent)` }} />}
+      <div className="relative grid grid-cols-1 gap-8 border-t border-line pt-10 md:grid-cols-12 md:gap-10 md:pt-14">
+        <div className="md:col-span-3">
+          <div className="md:sticky md:top-28">
+            <p className="font-mono text-[11px] text-mute">({pad(n)})</p>
+            <h2 className="mt-2 text-2xl font-medium tracking-[-0.03em] md:text-3xl">{label}</h2>
+          </div>
+        </div>
+        <div className="relative md:col-span-9">{children}</div>
       </div>
     </section>
   )
 }
 
-/* Bars for rates. Solid = measured on the real sensor; hatched = simulated benchmark. */
-function RateChart({ rows, accent }) {
+/* A single result as large decoding type, with its provenance tag beside the number. */
+function Figure({ v, k, sub, tag, tone = 'real', small = false }) {
+  const tagCls = tone === 'sim' ? 'border-amber/50 text-amber' : 'border-emerald-400/40 text-emerald-300'
   return (
-    <div className="space-y-5">
-      {rows.map((r) => (
-        <div key={r.label}>
-          <div className="flex items-baseline justify-between gap-4">
-            <p className="text-sm">{r.label}</p>
-            <p className="font-mono text-sm tabular-nums">{r.value}</p>
-          </div>
-          <div className="mt-2 h-3.5 overflow-hidden rounded-full bg-ink/8" style={{ background: 'rgb(15 15 18 / 0.07)' }}>
-            <div
-              className="h-full rounded-full"
-              style={{
-                width: `${r.pct}%`,
-                background: r.kind === 'real'
-                  ? accent
-                  : `repeating-linear-gradient(45deg, ${accent} 0 6px, transparent 6px 10px)`,
-                boxShadow: r.kind === 'real' ? 'none' : `inset 0 0 0 1.5px ${accent}`,
-              }}
-            />
-          </div>
-          <p className="mt-1.5 font-mono text-[10.5px] uppercase tracking-widest text-mute">{r.kind === 'real' ? 'Real sensor' : 'Simulated benchmark'}</p>
+    <div className="border-t border-line py-8">
+      <dt className="sr-only">{k}</dt>
+      <dd>
+        <span className="flex flex-wrap items-baseline gap-x-4 gap-y-2">
+          <Decode value={v} className={`whitespace-nowrap font-medium leading-[0.9] tracking-[-0.055em] ${small ? 'text-[clamp(2.4rem,4.6vw,4.6rem)]' : 'text-[clamp(3rem,7.5vw,7.5rem)]'}`} />
+          <span className={`chip ${tagCls}`}>{tag}</span>
+        </span>
+        <span className="mt-3 block max-w-xl text-base text-bone/80">{k}</span>
+        {sub && <span className="mt-1 block text-sm text-mute">{sub}</span>}
+      </dd>
+    </div>
+  )
+}
+
+function Hero({ p, idx }) {
+  const root = useRef(null)
+  useEffect(() => {
+    if (reducedMotion()) return
+    const ctx = gsap.context(() => {
+      gsap.set('[data-fade]', { opacity: 0, y: 20 })
+      const cancel = onEnter(() => gsap.to('[data-fade]', { opacity: 1, y: 0, duration: 1.1, stagger: 0.07, ease: 'expo.out', delay: 0.35 }))
+      gsap.to('[data-hero-field]', { opacity: 0.2, ease: 'none', scrollTrigger: { trigger: root.current, start: 'top top', end: 'bottom top', scrub: true } })
+      gsap.to('[data-hero-type]', { yPercent: -20, ease: 'none', scrollTrigger: { trigger: root.current, start: 'top top', end: 'bottom top', scrub: true } })
+      return cancel
+    }, root.current)
+    return () => ctx.revert()
+  }, [])
+
+  return (
+    <section ref={root} className="relative flex min-h-[100svh] flex-col overflow-hidden">
+      <div data-hero-field className="absolute inset-0"><Field className="absolute inset-0" tint={p.accent} tintMix={0.6} gain={0.9} /></div>
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,#060609_5%,rgba(6,6,9,0.55)_45%,rgba(6,6,9,0.2)_100%)]" />
+      <div className="relative z-10 mx-auto flex w-full max-w-[1600px] flex-1 flex-col justify-between px-5 pb-10 pt-28 md:px-10 md:pb-14 md:pt-36">
+        <div data-fade className="flex items-center justify-between">
+          <a href="#/work" className="group eyebrow inline-flex items-center gap-2 text-bone/75 hover:text-bone">
+            <ArrowLeft size={14} className="transition-transform duration-500 group-hover:-translate-x-1" /><Roll>All work</Roll>
+          </a>
+          <span className="font-mono text-[11px] text-bone/60">{pad(idx + 1)} / {pad(projects.length)}</span>
         </div>
-      ))}
+        <div data-hero-type>
+          <p data-fade className="eyebrow mb-6 flex flex-wrap items-center gap-3 text-bone/75">
+            {p.inProgress && <span className="chip border-violet/60 bg-violet/15 text-bone">In progress</span>}
+            {p.kind}
+          </p>
+          <h1 className="text-hero font-medium leading-[0.88] tracking-[-0.055em]">
+            <Lines trigger="enter" lines={titleLines(p.name)} />
+          </h1>
+          <dl data-fade className="mt-10 grid grid-cols-2 gap-6 border-t border-bone/15 pt-6 md:grid-cols-4">
+            <div><dt className="eyebrow text-mute">Period</dt><dd className="mt-2 text-sm">{p.period}</dd></div>
+            <div className="col-span-1 md:col-span-3"><dt className="eyebrow text-mute">Stack</dt>
+              <dd className="mt-2 flex flex-wrap gap-1.5">{p.tech.map((t) => <span key={t} className="chip">{t}</span>)}</dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function Links({ p }) {
+  if (p.codePrivate) {
+    return (
+      <p className="inline-flex items-center gap-3 rounded-full border border-line px-5 py-3 text-sm text-bone/85">
+        <Lock size={15} className="text-mute" /> Code private (lab project); details on request
+      </p>
+    )
+  }
+  if (p.inProgress) return <p className="text-sm text-mute">In progress. No public link yet.</p>
+  return (
+    <div className="flex flex-wrap gap-3">
+      {p.repo && <Magnetic><a href={p.repo} target="_blank" rel="noreferrer" data-cursor="open" className="btn-pill inline-flex items-center gap-2 rounded-full border border-bone/40 px-6 py-3.5 text-sm"><Roll>Source code</Roll><ArrowUpRight size={15} className="arrow-nudge" /></a></Magnetic>}
+      {p.demo && <Magnetic><a href={p.demo} target="_blank" rel="noreferrer" data-cursor="open" className="btn-pill inline-flex items-center gap-2 rounded-full border border-bone/40 px-6 py-3.5 text-sm"><Roll>Live demo</Roll><ArrowUpRight size={15} className="arrow-nudge" /></a></Magnetic>}
     </div>
   )
 }
 
 export default function ProjectDetail({ id }) {
-  useLenis()
-  const project = projects.find((p) => p.id === id)
-  const d = projectDetails[id]
-
-  useEffect(() => { window.scrollTo(0, 0) }, [project])
-
-  if (!project || !d) return <NotFound />
-
-  const pages = projects.filter((p) => !p.inProgress)
-  const i = pages.findIndex((p) => p.id === id)
-  const prev = pages[(i - 1 + pages.length) % pages.length]
-  const next = pages[(i + 1) % pages.length]
-  const buildLabel = d.buildLabel || 'What I built'
+  const idx = projects.findIndex((x) => x.id === id)
+  if (idx < 0) return <NotFound />
+  const p = projects[idx]
+  const d = projectDetails[id] || {}
+  const next = projects[(idx + 1) % projects.length]
+  let n = 0
 
   return (
-    <Shell>
-      <div className="mx-auto max-w-7xl px-6">
-        {/* Hero */}
-        <section className="pb-10 pt-36 md:pt-44">
-          <Reveal>
-            <a data-cursor href="#/work" className="mb-8 inline-flex items-center gap-2 font-mono text-xs text-mute hover:text-ink">
-              <ArrowLeft size={14} /> All work
-            </a>
-          </Reveal>
-          <h1 className="text-display font-medium leading-[0.95] tracking-tight">
-            <Kinetic lines={[project.name]} start="top 95%" />
-          </h1>
-          <Reveal delay={0.1}>
-            <p className="mt-6 max-w-3xl text-xl leading-relaxed text-ink/80 md:text-2xl">{project.summary}</p>
+    <article>
+      <Hero p={p} idx={idx} />
 
-            <dl className="mt-10 grid grid-cols-2 gap-x-8 gap-y-6 border-t border-line pt-6 md:grid-cols-4">
-              <div><dt className="section-label">Period</dt><dd className="mt-2 text-sm">{project.period}</dd></div>
-              <div><dt className="section-label">Context</dt><dd className="mt-2 text-sm">{project.kind}</dd></div>
-              <div className="col-span-2"><dt className="section-label">Stack</dt>
-                <dd className="mt-2 flex flex-wrap gap-1.5">{project.tech.map((t) => <span key={t} className="chip">{t}</span>)}</dd></div>
-            </dl>
-
-            <div className="mt-8 flex flex-wrap gap-3">
-              {project.codePrivate && (
-                <p className="inline-flex items-center rounded-full border border-ink/30 px-5 py-2.5 font-mono text-xs">
-                  Code private (lab project); details on request
-                </p>
-              )}
-              {project.repo && (
-                <Magnetic>
-                  <a data-cursor href={project.repo} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-medium text-paper">
-                    <Github size={15} /> View repository
-                  </a>
-                </Magnetic>
-              )}
-              {project.demo && (
-                <a data-cursor href={project.demo} target="_blank" rel="noreferrer" className="btn-fill inline-flex items-center gap-2 rounded-full border border-ink/40 px-6 py-3 text-sm">
-                  Live demo <ArrowUpRight size={15} />
-                </a>
-              )}
-            </div>
+      {/* Summary */}
+      <section className="mx-auto max-w-[1600px] px-5 py-24 md:px-10 md:py-36">
+        <ScrubWords text={p.summary} className="max-w-[22ch] text-[clamp(1.7rem,3.6vw,3.6rem)] font-medium leading-[1.08] tracking-[-0.035em] md:max-w-[30ch]" />
+        {d.teamNote && (
+          <Reveal className="mt-12 max-w-2xl border-l-2 pl-5" style={{ borderColor: p.accent }}>
+            <p className="eyebrow mb-2 text-mute">My part</p>
+            <p className="leading-relaxed text-bone/85">{d.teamNote}</p>
           </Reveal>
+        )}
+      </section>
+
+      {/* Real imagery where it exists */}
+      {p.screenshots && (
+        <section aria-label="Screenshots" className="mx-auto max-w-[1600px] px-5 pb-24 md:px-10 md:pb-36">
+          <figure>
+            <RevealImage src={p.screenshots[0].src} alt={p.screenshots[0].alt} width={800} height={450} className="aspect-[16/9] w-full md:mx-auto md:w-[82%]" />
+            <figcaption className="mt-4 text-center font-mono text-[11px] text-mute">{p.screenshots[0].alt}</figcaption>
+          </figure>
+          <div className="mt-6 grid grid-cols-1 gap-6 md:mt-10 md:grid-cols-2">
+            {p.screenshots.slice(1).map((s, i) => (
+              <figure key={s.src} className={i === 1 ? 'md:mt-24' : ''}>
+                <RevealImage src={s.src} alt={s.alt} width={800} height={450} className="aspect-[16/9] w-full" />
+                <figcaption className="mt-4 font-mono text-[11px] text-mute">{s.alt}</figcaption>
+              </figure>
+            ))}
+          </div>
         </section>
+      )}
 
-        {/* Cover */}
-        <Reveal>
-          <div className="aspect-[16/10] overflow-hidden rounded-[2rem] bg-dark ring-1 ring-black/10 md:aspect-[16/8]">
-            <Cover project={project} />
-          </div>
-        </Reveal>
-
-        {/* Measured results, where they exist and are traceable */}
-        {project.metrics?.length > 0 && (
-          <Reveal>
-            <div className="mt-6 grid grid-cols-1 gap-8 rounded-[2rem] bg-dark p-8 text-paper sm:grid-cols-2 md:p-10">
-              {project.metrics.map((m) => (
-                <div key={m.k}>
-                  <p className="text-5xl font-medium tabular-nums md:text-6xl" style={{ color: project.accent }}>{m.v}</p>
-                  <p className="mt-3 text-sm text-paper/90">{m.k}</p>
-                  {m.sub && <p className="mt-1 font-mono text-[11px] leading-relaxed text-paper/60">{m.sub}</p>}
-                </div>
-              ))}
-            </div>
-          </Reveal>
-        )}
-
-        <Section id="overview" label="Overview">
-          <p className="max-w-3xl text-xl leading-relaxed md:text-2xl">{d.problem}</p>
-        </Section>
-
-        <Section id="build" label={buildLabel}>
-          {d.teamNote && (
-            <Reveal><p className="mb-8 max-w-3xl rounded-2xl border border-line bg-card p-5 text-sm leading-relaxed text-ink/80">{d.teamNote}</p></Reveal>
-          )}
-          <ol className="space-y-6">
-            {d.build.map((b, n) => (
-              <Reveal key={n}>
-                <li className="grid grid-cols-[auto_1fr] gap-5 border-t border-line pt-6">
-                  <span className="font-mono text-sm text-mute">{String(n + 1).padStart(2, '0')}</span>
-                  <p className="max-w-3xl text-[15px] leading-relaxed text-ink/85">{b}</p>
-                </li>
-              </Reveal>
-            ))}
-          </ol>
-        </Section>
-
-        {d.results && (
-          <Section id="results" label="Real vs simulated results">
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-              <Reveal>
-                <div className="overflow-hidden rounded-3xl bg-dark">
-                  <div className="aspect-[16/10]"><PeaksArt accent={project.accent} /></div>
-                </div>
-                <p className="mt-3 font-mono text-[11px] text-mute">
-                  Schematic of the problem: two close surfaces give two overlapping peaks that merge into one. Drawn for illustration; it is not lab data.
-                </p>
-              </Reveal>
-              <Reveal delay={0.06}>
-                <div className="card p-7">
-                  <RateChart rows={d.results.chart} accent={project.accent} />
-                </div>
-              </Reveal>
-            </div>
-
-            <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
-              {[
-                { title: 'Measured on the real sensor', rows: d.results.real },
-                { title: 'Simulated benchmark', rows: d.results.simulated },
-              ].map((g) => (
-                <Reveal key={g.title}>
-                  <div className="card h-full p-7">
-                    <h3 className="font-mono text-[11px] uppercase tracking-widest text-mute">{g.title}</h3>
-                    <div className="mt-6 flex flex-col gap-6">
-                      {g.rows.map((m) => (
-                        <div key={m.k}>
-                          <p className="text-3xl font-medium tabular-nums">{m.v}</p>
-                          <p className="mt-1 text-sm text-ink/85">{m.k}</p>
-                          {m.sub && <p className="mt-1 font-mono text-[11px] text-mute">{m.sub}</p>}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
-            {d.results.runtime && <p className="mt-6 max-w-3xl text-sm leading-relaxed text-mute">{d.results.runtime}</p>}
+      <div className="flex flex-col gap-24 pb-24 md:gap-36 md:pb-36">
+        {d.problem && (
+          <Section accent={p.accent} n={++n} label="Problem">
+            <Reveal as="p" className="max-w-3xl text-[clamp(1.25rem,2vw,1.75rem)] leading-[1.4] tracking-[-0.01em] text-bone/90">{d.problem}</Reveal>
           </Section>
         )}
 
-        {project.screenshots?.length > 0 && (
-          <Section id="screenshots" label="Screenshots">
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-              {project.screenshots.map((s) => (
-                <Reveal key={s.src}>
-                  <div className="overflow-hidden rounded-2xl border border-line bg-card">
-                    <img src={s.src} alt={s.alt} loading="lazy" decoding="async" className="w-full" />
-                  </div>
+        {(d.build || p.inProgress) && (
+          <Section accent={p.accent} n={++n} label={d.buildLabel || (p.inProgress ? 'What it will do' : 'What I built')}>
+            <ol>
+              {(d.build || p.highlights).map((b, i) => (
+                <Reveal as="li" key={i} className="group grid grid-cols-[3rem_1fr] gap-4 border-t border-line py-7 first:border-t-0 first:pt-0 md:grid-cols-[5rem_1fr]">
+                  <span className="font-mono text-sm text-mute transition-colors group-hover:text-bone">{pad(i + 1)}</span>
+                  <p className="max-w-3xl text-lg leading-relaxed text-bone/85 md:text-xl">{b}</p>
                 </Reveal>
               ))}
-            </div>
+            </ol>
+            {p.inProgress && <p className="mt-8 text-sm text-mute">Being built. No results yet, and none are claimed here.</p>}
           </Section>
         )}
 
-        <Section id="architecture" label="System architecture">
-          <Reveal><ArchStack layers={d.arch.layers} flow={d.arch.flow} accent={project.accent} /></Reveal>
-        </Section>
+        {/* Results as type */}
+        {(d.results || p.metrics) && (
+          <Section accent={p.accent} n={++n} label="Results">
+            {d.results ? (
+              <>
+                <h3 className="eyebrow mb-2 text-emerald-300">On real data</h3>
+                <dl className="mb-16">
+                  {d.results.real.map((r) => <Figure key={r.v} {...r} tag="Real sensor" />)}
+                </dl>
+                <h3 className="eyebrow mb-2 text-amber">Simulated benchmark</h3>
+                <p className="mb-4 max-w-2xl text-sm text-mute">Fixed benchmark from a realistic simulator (seed 2026, a different calibration from the one the detector uses). Every number in this group is simulated.</p>
+                <dl className="grid grid-cols-1 md:grid-cols-2 md:gap-x-10">
+                  {d.results.simulated.map((r) => <Figure key={r.v} {...r} tag="Simulated" tone="sim" small />)}
+                </dl>
+                {d.results.runtime && <p className="mt-10 max-w-2xl border-t border-line pt-6 text-sm leading-relaxed text-bone/70">{d.results.runtime}</p>}
+              </>
+            ) : (
+              <dl>{p.metrics.map((m) => <Figure key={m.v} {...m} tag="Out of sample" />)}</dl>
+            )}
+          </Section>
+        )}
 
-        <Section id="features" label="Key features">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {project.highlights.map((h) => (
-              <Reveal key={h}>
-                <div className="flex h-full items-start gap-3 rounded-2xl border border-line bg-card p-5">
-                  <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full" style={{ background: project.accent }} />
-                  <span className="text-sm leading-relaxed text-ink/85">{h}</span>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </Section>
+        {d.outcome && (
+          <Section accent={p.accent} n={++n} label="Outcome">
+            <ScrubWords text={d.outcome} className="max-w-4xl text-[clamp(1.5rem,2.8vw,2.6rem)] font-medium leading-[1.18] tracking-[-0.025em]" />
+          </Section>
+        )}
 
-        <Section id="outcome" label="Outcome">
-          <p className="max-w-3xl text-xl leading-relaxed md:text-2xl">{d.outcome}</p>
-          {d.limits?.length > 0 && (
-            <Reveal>
-              <div className="mt-10 rounded-2xl border border-line bg-card p-6 md:p-7">
-                <h3 className="font-mono text-[11px] uppercase tracking-widest text-mute">{d.limitsLabel || 'What it does not do'}</h3>
-                <ul className="mt-4 flex flex-col gap-3">
-                  {d.limits.map((l) => (
-                    <li key={l} className="flex items-start gap-3 text-sm leading-relaxed text-ink/80">
-                      <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-ink/50" />
-                      {l}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </Reveal>
-          )}
-        </Section>
+        {d.limits && (
+          <Section accent={p.accent} n={++n} label={d.limitsLabel || 'Limits'}>
+            <ul>
+              {d.limits.map((l) => (
+                <Reveal as="li" key={l} className="flex gap-4 border-t border-line py-5 text-bone/80 first:border-t-0 first:pt-0">
+                  <span aria-hidden="true" className="mt-[0.7em] h-px w-5 shrink-0 bg-bone/40" />{l}
+                </Reveal>
+              ))}
+            </ul>
+          </Section>
+        )}
 
-        {/* Prev / next */}
-        <nav aria-label="More projects" className="grid grid-cols-1 gap-4 border-t border-line py-12 sm:grid-cols-2">
-          <a data-cursor href={`#/p/${prev.id}`} className="group card p-6 transition-colors hover:bg-paper-2">
-            <span className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-mute"><ArrowLeft size={13} /> Previous</span>
-            <p className="mt-3 text-lg font-medium"><span className="link-line">{prev.name}</span></p>
-            <p className="mt-1 font-mono text-[11px] text-mute">{prev.kind}</p>
-          </a>
-          <a data-cursor href={`#/p/${next.id}`} className="group card p-6 text-right transition-colors hover:bg-paper-2">
-            <span className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-mute">Next <ArrowRight size={13} /></span>
-            <p className="mt-3 text-lg font-medium"><span className="link-line">{next.name}</span></p>
-            <p className="mt-1 font-mono text-[11px] text-mute">{next.kind}</p>
-          </a>
-        </nav>
+        <Section accent={p.accent} n={n + 1} label="Links">
+          <Links p={p} />
+        </Section>
       </div>
-    </Shell>
+
+      {/* Next project */}
+      <section aria-label="Next project" className="relative overflow-hidden border-t border-line">
+        <a href={`#/p/${next.id}`} data-cursor="next" className="group relative block px-5 py-24 md:px-10 md:py-40">
+          <div className="absolute inset-0 opacity-50 transition-opacity duration-700 group-hover:opacity-100"><Atmosphere accent={next.accent} /></div>
+          <div className="relative z-10 mx-auto max-w-[1600px]">
+            <p className="eyebrow mb-6 text-bone/70">Next project</p>
+            <p className="text-[clamp(3rem,10vw,10rem)] font-medium leading-[0.86] tracking-[-0.055em] transition-transform duration-[1.2s] ease-[cubic-bezier(.16,1,.3,1)] group-hover:translate-x-4">
+              {next.name.split(':')[0]}
+            </p>
+            <p className="mt-6 flex items-center gap-3 text-bone/75">{next.kind} <ArrowUpRight size={18} className="arrow-nudge" /></p>
+          </div>
+        </a>
+      </section>
+    </article>
   )
 }

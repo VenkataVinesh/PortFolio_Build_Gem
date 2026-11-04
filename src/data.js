@@ -96,13 +96,16 @@ export const projects = [
       'Priority computed with an explicit ITIL urgency x impact matrix instead of a trained model',
       'Tickets used as a retrieval library rather than training data, with the LLM used only where judgment was needed',
     ],
+    // Shortened summary for the home tile; same claims as `summary`.
+    teaser:
+      'A triage co-pilot for service desks: PII and prompt-injection screening, routing, a priority with a written reason, and a drafted reply an analyst approves, edits or rejects.',
     tech: ['Python', 'FastAPI', 'React', 'TypeScript', 'Azure AI Foundry', 'SQLite', 'Docker', 'Azure Container Apps'],
     accent: '#f59e0b',
     repo: 'https://github.com/DaPres/SwissAiWeeks_Team_8',
     screenshots: [
-      { src: './projects/triagemate/intake.jpg', alt: 'TriageMate intake screen: describe the problem, sample tickets to try' },
-      { src: './projects/triagemate/priority.jpg', alt: 'TriageMate priority result: ITIL urgency x impact matrix with written reasons and confidence' },
-      { src: './projects/triagemate/draft-reply.jpg', alt: 'TriageMate draft reply with knowledge-base citations, ready for analyst approval' },
+      { src: './projects/triagemate/intake.webp', alt: 'TriageMate intake screen: describe the problem, sample tickets to try' },
+      { src: './projects/triagemate/priority.webp', alt: 'TriageMate priority result: ITIL urgency x impact matrix with written reasons and confidence' },
+      { src: './projects/triagemate/draft-reply.webp', alt: 'TriageMate draft reply with knowledge-base citations, ready for analyst approval' },
     ],
   },
   {
@@ -129,6 +132,7 @@ export const projects = [
   },
   {
     id: 'maintenance-copilot',
+    motif: 'EN · FR · DE', // ghost type on the home tile; restates a highlight below
     name: 'Maintenance Copilot',
     kind: 'Agent over Sensor Telemetry and Manuals',
     period: 'Nov 2026 – in progress',
@@ -146,6 +150,7 @@ export const projects = [
   },
   {
     id: 'asset',
+    motif: 'LSTM / ARIMA', // ghost type on the home tile; restates a highlight below
     name: 'Asset Price Prediction Platform',
     kind: 'Sequence Models vs Classical Baselines',
     period: 'Jan 2026 – Jun 2026',
@@ -163,6 +168,7 @@ export const projects = [
   },
   {
     id: 'veltrix',
+    motif: '94.75%', // ghost type on the home tile; restates a highlight below
     name: 'Veltrix',
     kind: 'Market Analytics and Forecasting Terminal',
     period: 'Dec 2025 – Present',
@@ -186,6 +192,7 @@ export const projects = [
   },
   {
     id: 'rl',
+    motif: 'Q · SARSA', // ghost type on the home tile; restates a highlight below
     name: 'Reinforcement Learning Lab',
     kind: 'Tabular RL from Scratch',
     period: 'Feb 2026 – May 2026',
@@ -203,6 +210,7 @@ export const projects = [
   },
   {
     id: 'portfolio',
+    motif: 'max Sharpe', // ghost type on the home tile; restates a highlight below
     name: 'Portfolio Optimization',
     kind: 'Markowitz Mean-Variance',
     period: '2026',
@@ -219,6 +227,7 @@ export const projects = [
   },
   {
     id: 'weather',
+    motif: 'trend · season', // ghost type on the home tile; restates a highlight below
     name: 'Weather Time-Series Forecasting',
     kind: 'Deep Learning, Sequence Models',
     period: 'Jun 2025 – Jul 2025',
@@ -257,8 +266,8 @@ export const experience = [
   },
 ]
 
-// Per-project case-study content. Architecture is grounded in each repo's real
-// structure and README. No invented metrics.
+// Per-project case-study content, grounded in each repo's README. No invented
+// metrics. The site deliberately has no diagrams or charts: results render as type.
 export const projectDetails = {
   precitec: {
     tint: { a: [0.45, 0.10, 0.18], b: [0.72, 0.20, 0.30] },
@@ -276,13 +285,6 @@ export const projectDetails = {
       'Retrained the neural network on the realistic simulator, and integrated the detector into the team\'s app as a --peaks panel through a viewer hook, without changing acquisition.',
     ],
     results: {
-      chart: [
-        { label: 'Glass-slide channels with exactly 2 surfaces (120 of 120)', value: '100%', pct: 100, kind: 'real' },
-        { label: 'Close pairs found at 0.75 FWHM', value: '93%', pct: 93, kind: 'sim' },
-        { label: 'Close pairs found at 0.5 FWHM', value: '47%', pct: 47, kind: 'sim' },
-        { label: 'Single surfaces counted correctly', value: '97%', pct: 97, kind: 'sim' },
-        { label: 'Triples counted correctly', value: '100%', pct: 100, kind: 'sim' },
-      ],
       real: [
         { v: '120/120', k: 'glass-slide channels with exactly 2 surfaces found', sub: 'the old Gaussian method found 4' },
         { v: '0.77 FWHM', k: 'closest pair resolved on the live frame', sub: '4.7 px' },
@@ -295,15 +297,6 @@ export const projectDetails = {
         { v: '0.57 → 0.927', k: 'neural-network F1 after retraining on the simulator', sub: '0.85 s per line' },
       ],
       runtime: 'Runtime of the robust detector: about 2 s per 1,200-channel line live with warm start, and 22 to 37 s for the first image.',
-    },
-    arch: {
-      layers: [
-        { name: 'Sensor and acquisition', nodes: [{ t: 'CHRocodile CLS 2', s: '1,200 channels' }, { t: 'Acquisition and viewer', s: 'teammates' }] },
-        { name: 'Robust detector (live)', nodes: [{ t: 'Measured peak template', s: 'width and skew per peak' }, { t: 'Quasi-BIC peak count' }, { t: 'Neighbour-channel evidence' }] },
-        { name: 'Models and evaluation', nodes: [{ t: 'Realistic simulator', s: 'seed 2026 benchmark' }, { t: '1-D U-Net', s: 'about 2.06 M weights' }] },
-        { name: 'Application', nodes: [{ t: 'Qt app, --peaks panel', s: 'via viewer hook' }] },
-      ],
-      flow: 'Spectra per channel -> template fit and quasi-BIC peak count -> surface heights -> --peaks panel in the lab app · simulator and benchmark score the detector and the network offline',
     },
     outcome:
       'A detector that runs live inside the lab\'s Python app and, on a real glass slide, finds exactly the two surfaces that are there where the Gaussian baseline found four. It reaches the limit set by the current 5.6% knowledge of the peak shape, so better calibration is the next step. The neural network finds more very close pairs but invents surfaces on single peaks, so the robust detector makes the final decision.',
@@ -329,15 +322,6 @@ export const projectDetails = {
       'Used the tickets as a retrieval library for similar past cases rather than as training data, and used the LLM only where judgment was genuinely needed: classification, routing and drafting.',
       'Drafted a response for each ticket that an analyst can approve, edit or reject rather than sending automatically.',
     ],
-    arch: {
-      layers: [
-        { name: 'Intake', nodes: [{ t: 'PII screen' }, { t: 'Prompt-injection check' }] },
-        { name: 'Triage', nodes: [{ t: 'ITIL urgency x impact matrix' }, { t: 'Classification and routing' }] },
-        { name: 'Retrieval', nodes: [{ t: 'Similar past cases', s: '173 unique descriptions' }] },
-        { name: 'Response', nodes: [{ t: 'LLM draft' }, { t: 'Analyst approve / edit / reject' }] },
-      ],
-      flow: 'Ticket or email -> intake checks -> priority matrix + classification -> retrieval of similar cases -> drafted response -> analyst review',
-    },
     outcome:
       'A triage co-pilot that keeps the parts needing judgment testable: priority comes from an explicit matrix rather than a model trained on effectively random labels, and every drafted response goes through an analyst before it reaches anyone.',
     limits: [
@@ -357,16 +341,6 @@ export const projectDetails = {
       'Built and benchmarked ridge regression and gradient-boosted trees as alternatives, then removed both after they failed to beat the baseline while costing 123 to 443 times more per forecast.',
       'Migrated off an earlier FastAPI, PostgreSQL and Redis backend. Responsibilities now live in Next.js route handlers and Supabase, with row-level security on the Postgres tables and a seeded paper portfolio per account.',
     ],
-    arch: {
-      layers: [
-        { name: 'Client · Next.js', nodes: [{ t: 'Terminal UI', s: 'lightweight-charts' }, { t: 'Signal breakdown', s: 'per-indicator votes' }] },
-        { name: 'Route handlers · app/api', nodes: [{ t: 'Quote and series' }, { t: 'Signal engine' }, { t: 'Forecast + intervals' }] },
-        { name: 'Modelling', nodes: [{ t: 'Walk-forward harness' }, { t: 'GARCH(1,1) volatility' }, { t: 'Rejected: ridge, GBT' }] },
-        { name: 'Data providers', nodes: [{ t: 'Finnhub / Twelve Data' }, { t: 'CoinGecko' }] },
-        { name: 'Supabase', nodes: [{ t: 'Postgres + row-level security' }, { t: 'Auth and paper portfolio' }] },
-      ],
-      flow: 'UI → route handler → signal engine and forecast → provider data · auth and holdings ↔ Supabase',
-    },
     outcome:
       'A terminal that will tell you when it has no edge. The directional forecast does not beat a coin flip and says so; what is genuinely calibrated is the prediction interval, and the interface points you at the band rather than the midline. Paper trading only, with no broker integration and no order execution.',
     limits: [
@@ -386,15 +360,6 @@ export const projectDetails = {
       'Persisted scaler state alongside the model, so inference reproduces training-time normalisation exactly rather than re-fitting a scaler on the inference set.',
       'Served multi-step forecasts with confidence bounds from an async FastAPI backend to a React dashboard that overlays history against the projected path.',
     ],
-    arch: {
-      layers: [
-        { name: 'Frontend', nodes: [{ t: 'React dashboard', s: 'history vs forecast' }] },
-        { name: 'FastAPI (async)', nodes: [{ t: 'Forecast router' }, { t: 'Feature pipeline', s: 'SMA / EMA / RSI' }] },
-        { name: 'Models', nodes: [{ t: 'PyTorch LSTM' }, { t: 'Statsmodels ARIMA' }] },
-        { name: 'Artefacts', nodes: [{ t: 'Model weights' }, { t: 'Persisted scaler' }] },
-      ],
-      flow: 'Dashboard → /forecast → features → {LSTM | ARIMA} → multi-step path and bounds',
-    },
     outcome:
       'A service that switches between the LSTM and ARIMA per request and puts their forecast paths and confidence intervals on the same axes, on the same data, under the same preprocessing.',
   },
@@ -408,15 +373,6 @@ export const projectDetails = {
       'Ran classical decomposition to isolate trend, seasonality and residuals, and tuned hyperparameters against residual stationarity checks rather than against validation loss alone.',
       'Benchmarked the LSTM against ARIMA and SARIMA baselines, plotting train and validation loss curves to compare convergence and accuracy trade-offs.',
     ],
-    arch: {
-      layers: [
-        { name: 'Data', nodes: [{ t: 'Synthetic series', s: 'reproducible' }] },
-        { name: 'Preprocess', nodes: [{ t: 'Trend / seasonality / residual' }, { t: 'Windowing' }] },
-        { name: 'Models', nodes: [{ t: 'PyTorch LSTM' }, { t: 'ARIMA' }, { t: 'SARIMA' }] },
-        { name: 'Evaluation', nodes: [{ t: 'Loss curves' }, { t: 'Baseline comparison' }] },
-      ],
-      flow: 'Series → decompose → window → {LSTM | ARIMA | SARIMA} → loss and comparison',
-    },
     outcome:
       'A reproducible pipeline that trains the LSTM, plots its loss, and sets up an honest like-for-like comparison against statistical baselines. Because the series is synthetic and seeded, the comparison replicates on any machine.',
   },
@@ -430,15 +386,6 @@ export const projectDetails = {
       'Implemented Q-Learning (off-policy) and SARSA (on-policy) from scratch in NumPy, writing the temporal-difference updates directly rather than calling into a framework.',
       'Used epsilon-greedy exploration decaying from 1.0 to 0.05, and visualised the reward curve and the learned policy across training episodes to show how the two update rules diverge.',
     ],
-    arch: {
-      layers: [
-        { name: 'Environment', nodes: [{ t: 'GridWorld 5x5', s: 'Gym-style API' }] },
-        { name: 'Agents', nodes: [{ t: 'Q-Learning', s: 'off-policy' }, { t: 'SARSA', s: 'on-policy' }] },
-        { name: 'Update', nodes: [{ t: 'TD Bellman backup' }, { t: 'Epsilon-greedy 1.0 to 0.05' }] },
-        { name: 'Output', nodes: [{ t: 'Reward curve' }, { t: 'Learned policy' }] },
-      ],
-      flow: 'Env ⇄ agent (state, reward) → TD update → Q-table → policy and reward curve',
-    },
     outcome:
       'Two hand-written tabular agents that converge to the shortest path, with a clear view of how the on-policy and off-policy updates differ in the routes they settle on near the pit.',
   },
@@ -452,16 +399,17 @@ export const projectDetails = {
       'Solved it with the SciPy SLSQP constrained optimiser over the covariance matrix of asset returns, seeded from a sensible initial allocation.',
       'Traced the efficient frontier and plotted it with the maximum-Sharpe portfolio highlighted.',
     ],
-    arch: {
-      layers: [
-        { name: 'Input', nodes: [{ t: 'Daily returns matrix' }] },
-        { name: 'Statistics', nodes: [{ t: 'Expected returns' }, { t: 'Covariance matrix' }] },
-        { name: 'Optimiser', nodes: [{ t: 'SciPy SLSQP' }, { t: 'Constraints: sum w = 1, w >= 0' }] },
-        { name: 'Output', nodes: [{ t: 'Max-Sharpe weights' }, { t: 'Efficient frontier' }] },
-      ],
-      flow: 'Returns → mean and covariance → minimise negative Sharpe (SLSQP) → weights and frontier',
-    },
     outcome:
       'A compact, reproducible script that outputs the optimal weights and saves an efficient-frontier plot. It is a small project and it is scoped as one: the mathematics is the point.',
   },
 }
+
+// Headline figures for the home page. Each one is restated from a project entry
+// above (metrics or highlights); nothing here is new. `tag` says where each
+// was measured: real sensor, real data, or real out-of-sample runs.
+export const figures = [
+  { v: '120/120', k: 'real glass-slide channels with exactly 2 surfaces found', from: 'precitec', tag: 'Real sensor' },
+  { v: '0.77 FWHM', k: 'closest pair resolved on a live frame', from: 'precitec', tag: 'Real sensor' },
+  { v: '173', k: 'unique descriptions inside a 20,000-ticket dataset', from: 'triagemate', tag: 'Real data' },
+  { v: '94.75%', k: 'interval coverage vs 95% nominal, GARCH(1,1)', from: 'veltrix', tag: 'Out of sample' },
+]

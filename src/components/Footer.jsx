@@ -1,22 +1,24 @@
 import { profile } from '../data.js'
-import { Github, Linkedin } from '../Icons.jsx'
+import { Roll } from '../motion/ui.jsx'
+import { scrollToEl } from '../motion/core.js'
 
 export default function Footer() {
   return (
-    <footer className="mx-auto max-w-7xl px-6 pb-12 pt-10">
-      <div className="flex flex-col gap-6 border-t border-line pt-8 md:flex-row md:items-center md:justify-between">
-        <div>
-          <p className="font-mono text-xs text-ink/80">{profile.name}</p>
-          <p className="mt-1 font-mono text-xs text-mute">{profile.location}</p>
-        </div>
-        <div className="flex flex-wrap items-center gap-3 font-mono text-xs">
-          <a data-cursor href={`mailto:${profile.email}`} className="btn-fill rounded-full border border-ink/30 px-4 py-2">Email</a>
-          <a data-cursor href="#/resume" className="btn-fill rounded-full border border-ink/30 px-4 py-2">Résumé</a>
-          <a data-cursor aria-label="GitHub" href={profile.github} target="_blank" rel="noreferrer" className="btn-fill inline-flex h-9 w-9 items-center justify-center rounded-full border border-ink/30"><Github size={15} /></a>
-          <a data-cursor aria-label="LinkedIn" href={profile.linkedin} target="_blank" rel="noreferrer" className="btn-fill inline-flex h-9 w-9 items-center justify-center rounded-full border border-ink/30"><Linkedin size={15} /></a>
-        </div>
+    <footer className="relative border-t border-line">
+      <div className="mx-auto flex max-w-[1600px] flex-col gap-6 px-5 py-8 md:flex-row md:items-center md:justify-between md:px-10">
+        <p className="eyebrow text-mute">© 2026 {profile.name}</p>
+        <ul className="eyebrow flex flex-wrap items-center gap-x-7 gap-y-3 text-bone/75">
+          <li><a href={profile.github} target="_blank" rel="noreferrer" data-cursor="open" className="hover:text-bone"><Roll>GitHub</Roll></a></li>
+          <li><a href={profile.linkedin} target="_blank" rel="noreferrer" data-cursor="open" className="hover:text-bone"><Roll>LinkedIn</Roll></a></li>
+          <li><a href="#/resume" className="hover:text-bone"><Roll>Résumé</Roll></a></li>
+          <li>
+            <button type="button" onClick={() => scrollToEl(0)} className="eyebrow hover:text-bone">
+              <Roll>Back to top ↑</Roll>
+            </button>
+          </li>
+        </ul>
+        <p className="eyebrow text-mute">React · GSAP · Lenis · WebGL</p>
       </div>
-      <p className="mt-8 font-mono text-[11px] text-mute">© 2026 {profile.name}. Built with React, GSAP and Lenis.</p>
     </footer>
   )
 }

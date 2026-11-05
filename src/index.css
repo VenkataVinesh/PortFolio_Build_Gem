@@ -174,6 +174,13 @@ a:hover .arrow-nudge, button:hover .arrow-nudge { transform: translate(3px, -3px
   100% { transform: translate3d(8%, -6%, 0) scale(0.95); }
 }
 
+/* Still field on devices without a GPU: a slow compositor-only drift instead of shader frames. */
+.field-drift { transform-origin: 60% 45%; animation: field-drift 26s ease-in-out infinite alternate; }
+@keyframes field-drift {
+  from { transform: scale(1.02) translate3d(-0.8%, 0.4%, 0); }
+  to { transform: scale(1.09) translate3d(0.8%, -1%, 0); }
+}
+
 /* Film grain */
 .grain {
   position: fixed; inset: -50%; z-index: 900; pointer-events: none; opacity: 0.06;

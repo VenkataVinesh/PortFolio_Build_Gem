@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { ArrowUpRight } from 'lucide-react'
-import { Atmosphere } from '../motion/ui.jsx'
+import { Atmosphere, LazyImg } from '../motion/ui.jsx'
 import { gsap, reducedMotion, coarsePointer } from '../motion/core.js'
 
 const pad = (n) => String(n).padStart(2, '0')
@@ -46,7 +46,7 @@ export function TriageVisual({ shots, compact = false }) {
         {shots.map((s, i) => (
           <div key={s.src} data-shot className={`absolute ${pos[i]}`} style={{ zIndex: i + 1 }}>
             <div className="overflow-hidden rounded-[14px] border border-white/15 bg-ink shadow-[0_40px_120px_-20px_rgba(0,0,0,0.8)] transition-transform duration-700 ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-[1.02]">
-              <img src={s.src} alt={s.alt} width="800" height="450" loading="lazy" decoding="async" className="block h-auto w-full" />
+              <LazyImg src={s.src} alt={s.alt} width={800} height={450} className="block h-auto w-full" />
             </div>
           </div>
         ))}
@@ -64,7 +64,15 @@ export function ProjectTile({ project: p, index }) {
       <div data-depth className="absolute -inset-[8%] transition-transform duration-[1.4s] ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-[1.06]">
         <Atmosphere accent={p.accent} intensity={0.85} variant={index} />
       </div>
-      {p.motif && (
+      {p.screenshots ? (
+        <div aria-hidden="true" className="pointer-events-none absolute right-[-14%] top-[17%] z-0 w-[92%] rotate-[-4deg] transition-transform duration-[1.4s] ease-[cubic-bezier(.16,1,.3,1)] group-hover:-translate-x-3 group-hover:-translate-y-2 group-hover:rotate-[-2deg]">
+          <div className="overflow-hidden rounded-[12px] border border-white/15 bg-ink shadow-[0_40px_100px_-20px_rgba(0,0,0,0.85)]">
+            <LazyImg src={p.screenshots[0].small || p.screenshots[0].src} srcSet={p.screenshots[0].small ? `${p.screenshots[0].small} 800w, ${p.screenshots[0].src} ${p.screenshots[0].w}w` : undefined}
+              sizes="(max-width: 1023px) 76vw, 32vw" width={p.screenshots[0].w || 800} height={p.screenshots[0].h || 450} className="block h-auto w-full" />
+          </div>
+          <div className="absolute inset-0 rounded-[12px] bg-gradient-to-t from-ink via-ink/40 to-transparent" />
+        </div>
+      ) : p.motif && (
         <span aria-hidden="true" className="pointer-events-none absolute -right-[4%] top-[18%] z-0 select-none whitespace-nowrap text-[clamp(4rem,7.5vw,8rem)] font-medium leading-none tracking-[-0.06em] text-bone/[0.07] transition-transform duration-[1.4s] ease-[cubic-bezier(.16,1,.3,1)] group-hover:-translate-x-6">
           {p.motif}
         </span>
@@ -76,6 +84,7 @@ export function ProjectTile({ project: p, index }) {
           : <span>{p.period}</span>}
       </div>
       <div className="relative z-10">
+        {p.dataNote && <span className="chip mb-3 border-amber/50 bg-ink/40 text-amber backdrop-blur-sm">{p.dataNote}</span>}
         <p className="eyebrow mb-3 text-bone/70">{p.kind}</p>
         <h3 className="text-[clamp(2.2rem,3.6vw,3.8rem)] font-medium leading-[0.92] tracking-[-0.05em]">{name}</h3>
         <ul className="mt-5 space-y-1.5 text-sm leading-snug text-bone/75">

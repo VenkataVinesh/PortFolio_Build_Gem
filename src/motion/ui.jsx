@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react'
-import { gsap, ScrollTrigger, reducedMotion, coarsePointer, onEnter } from './core.js'
+import { useEffect, useRef, useState } from 'react'
+import { gsap, ScrollTrigger, reducedMotion, coarsePointer, onEnter, liteMode } from './core.js'
 
 /* Masked display lines. `trigger="enter"` plays when the page enters (hero),
    otherwise when scrolled into view. Each line: overflow mask + slide + de-blur. */
@@ -9,8 +9,10 @@ export function Lines({ lines, as: Tag = 'span', className = '', trigger = 'scro
     const el = ref.current; if (!el) return
     const inner = el.querySelectorAll('[data-line]')
     if (reducedMotion()) return
-    gsap.set(inner, { yPercent: 115, filter: 'blur(6px)' })
-    const play = () => gsap.to(inner, { yPercent: 0, filter: 'blur(0px)', duration: 1.25, ease: 'expo.out', stagger, delay, overwrite: true })
+    // Phones skip the de-blur: animating a filter on display type is a costly repaint there.
+    const blur = !liteMode()
+    gsap.set(inner, blur ? { yPercent: 115, filter: 'blur(6px)' } : { yPercent: 115 })
+    const play = () => gsap.to(inner, { yPercent: 0, ...(blur ? { filter: 'blur(0px)' } : {}), duration: 1.25, ease: 'expo.out', stagger, delay, overwrite: true })
     let cancel = () => {}, st
     if (trigger === 'enter') cancel = onEnter(play)
     else st = ScrollTrigger.create({ trigger: el, start: 'top 88%', once: true, onEnter: play })
@@ -31,8 +33,9 @@ export function Reveal({ children, as: Tag = 'div', className = '', y = 36, dela
   useEffect(() => {
     const el = ref.current; if (!el || reducedMotion()) return
     const targets = stagger ? el.children : el
-    gsap.set(targets, { y, opacity: 0, filter: 'blur(8px)' })
-    const play = () => gsap.to(targets, { y: 0, opacity: 1, filter: 'blur(0px)', duration: 1.1, delay, stagger, ease: 'expo.out', overwrite: true, clearProps: 'filter' })
+    const blur = !liteMode()
+    gsap.set(targets, blur ? { y, opacity: 0, filter: 'blur(8px)' } : { y, opacity: 0 })
+    const play = () => gsap.to(targets, { y: 0, opacity: 1, ...(blur ? { filter: 'blur(0px)', clearProps: 'filter' } : {}), duration: 1.1, delay, stagger, ease: 'expo.out', overwrite: true })
     let cancel = () => {}, st
     if (trigger === 'enter') cancel = onEnter(play)
     else st = ScrollTrigger.create({ trigger: el, start: 'top 90%', once: true, onEnter: play })
@@ -161,7 +164,7 @@ export function Parallax({ children, speed = 0.15, className = '' }) {
 }
 
 /* Image that unmasks on scroll and drifts inside its frame. */
-export function RevealImage({ src, alt, className = '', imgClassName = '', width, height, eager = false }) {
+export function RevealImage({ src, alt, className = '', imgClassName = '', width, height, eager = false, ratio }) {
   const ref = useRef(null)
   useEffect(() => {
     const el = ref.current; if (!el || reducedMotion()) return
@@ -171,15 +174,16 @@ export function RevealImage({ src, alt, className = '', imgClassName = '', width
         clipPath: 'inset(0% 0% 0% 0% round 20px)', duration: 1.4, ease: 'expo.out',
         scrollTrigger: { trigger: el, start: 'top 85%', once: true },
       })
-      gsap.fromTo(img, { scale: 1.18, yPercent: -4 }, {
-        scale: 1.04, yPercent: 4, ease: 'none',
+      // Product screenshots (ratio given) keep their edges: a gentle zoom that settles at 1.
+      gsap.fromTo(img, ratio ? { scale: 1.08 } : { scale: 1.18, yPercent: -4 }, {
+        ...(ratio ? { scale: 1 } : { scale: 1.04, yPercent: 4 }), ease: 'none',
         scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom top', scrub: true },
       })
     }, el)
     return () => ctx.revert()
-  }, [])
+  }, [ratio])
   return (
-    <div ref={ref} className={`overflow-hidden rounded-[20px] ${className}`}>
+    <div ref={ref} className={`overflow-hidden rounded-[20px] ${className}`} style={ratio ? { aspectRatio: ratio } : undefined}>
       <img src={src} alt={alt} width={width} height={height} loading={eager ? 'eager' : 'lazy'} decoding="async"
         className={`h-full w-full object-cover will-change-transform ${imgClassName}`} />
     </div>
@@ -206,5 +210,26 @@ export function Atmosphere({ accent = '#7c5cff', className = '', intensity = 1, 
         <i key={i} style={{ background: `radial-gradient(closest-side, ${b.c}, transparent)`, width: b.s, height: b.s, left: b.l, top: b.t, animationDelay: b.d, opacity: (i === 0 ? 0.6 : i === 1 ? 0.28 : 0.18) * intensity }} />
       ))}
     </div>
+  )
+}
+
+/* Image that is fetched only when it comes near the viewport. Native lazy-loading
+   starts far ahead of the fold on slow connections, which competes with first paint. */
+export function LazyImg({ src, srcSet, sizes, alt = '', className = '', width, height, rootMargin = '500px' }) {
+  const ref = useRef(null)
+  const [near, setNear] = useState(() => typeof IntersectionObserver === 'undefined')
+  const [loaded, setLoaded] = useState(false)
+  useEffect(() => {
+    const el = ref.current; if (!el || near) return
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) { setNear(true); io.disconnect() }
+    }, { rootMargin })
+    io.observe(el)
+    return () => io.disconnect()
+  }, [near, rootMargin])
+  return (
+    <img ref={ref} src={near ? src : undefined} srcSet={near ? srcSet : undefined} sizes={sizes} alt={alt}
+      width={width} height={height} decoding="async" onLoad={() => setLoaded(true)}
+      className={`${className} transition-opacity duration-700 ${loaded ? 'opacity-100' : 'opacity-0'}`} />
   )
 }

@@ -48,6 +48,7 @@ export default function Work() {
                   </span>
                   {x.inProgress && <span className="chip border-violet/60 bg-violet/15 text-bone">In progress</span>}
                   {x.codePrivate && <span className="chip text-mute">Code private</span>}
+                  {x.dataNote && <span className="chip border-amber/50 text-amber">{x.dataNote}</span>}
                 </span>
                 <span className="col-start-2 text-sm text-bone/65 md:col-start-auto">{x.kind}</span>
                 <span className="col-start-2 flex items-center justify-between font-mono text-[11px] text-mute md:col-start-auto md:justify-end md:gap-4">
@@ -66,7 +67,7 @@ export default function Work() {
             {projects.map((x, i) => (
               <div key={x.id} className={`absolute inset-0 transition-opacity duration-500 ${active === i ? 'opacity-100' : 'opacity-0'}`}>
                 {x.screenshots
-                  ? <img src={x.screenshots[1].src} alt="" width="800" height="450" loading="lazy" className="h-full w-full object-cover" />
+                  ? <img src={(x.screenshots[1] || x.screenshots[0]).src} alt="" width="800" height="450" loading="lazy" className="h-full w-full object-cover" />
                   : (
                     <>
                       <Atmosphere accent={x.accent} />

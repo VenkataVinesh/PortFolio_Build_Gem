@@ -33,7 +33,7 @@ function Section({ n, label, children, className = '', accent }) {
 
 /* A single result as large decoding type, with its provenance tag beside the number. */
 function Figure({ v, k, sub, tag, tone = 'real', small = false }) {
-  const tagCls = tone === 'sim' ? 'border-amber/50 text-amber' : 'border-emerald-400/40 text-emerald-300'
+  const tagCls = tone === 'sim' ? 'border-amber/50 text-amber' : tone === 'neutral' ? 'border-bone/30 text-bone/80' : 'border-emerald-400/40 text-emerald-300'
   return (
     <div className="border-t border-line py-8">
       <dt className="sr-only">{k}</dt>
@@ -77,6 +77,7 @@ function Hero({ p, idx }) {
         <div data-hero-type>
           <p data-fade className="eyebrow mb-6 flex flex-wrap items-center gap-3 text-bone/75">
             {p.inProgress && <span className="chip border-violet/60 bg-violet/15 text-bone">In progress</span>}
+            {p.dataNote && <span className="chip normal-case tracking-normal border-amber/50 text-amber">{p.dataNote}</span>}
             {p.kind}
           </p>
           <h1 className="text-hero font-medium leading-[0.88] tracking-[-0.055em]">
@@ -137,13 +138,13 @@ export default function ProjectDetail({ id }) {
       {p.screenshots && (
         <section aria-label="Screenshots" className="mx-auto max-w-[1600px] px-5 pb-24 md:px-10 md:pb-36">
           <figure>
-            <RevealImage src={p.screenshots[0].src} alt={p.screenshots[0].alt} width={800} height={450} className="aspect-[16/9] w-full md:mx-auto md:w-[82%]" />
+            <RevealImage src={p.screenshots[0].src} alt={p.screenshots[0].alt} width={p.screenshots[0].w || 800} height={p.screenshots[0].h || 450} ratio={`${p.screenshots[0].w || 16} / ${p.screenshots[0].h || 9}`} className="w-full md:mx-auto md:w-[82%]" />
             <figcaption className="mt-4 text-center font-mono text-[11px] text-mute">{p.screenshots[0].alt}</figcaption>
           </figure>
           <div className="mt-6 grid grid-cols-1 gap-6 md:mt-10 md:grid-cols-2">
             {p.screenshots.slice(1).map((s, i) => (
               <figure key={s.src} className={i === 1 ? 'md:mt-24' : ''}>
-                <RevealImage src={s.src} alt={s.alt} width={800} height={450} className="aspect-[16/9] w-full" />
+                <RevealImage src={s.src} alt={s.alt} width={s.w || 800} height={s.h || 450} ratio={`${s.w || 16} / ${s.h || 9}`} className="w-full" />
                 <figcaption className="mt-4 font-mono text-[11px] text-mute">{s.alt}</figcaption>
               </figure>
             ))}
@@ -189,7 +190,7 @@ export default function ProjectDetail({ id }) {
                 {d.results.runtime && <p className="mt-10 max-w-2xl border-t border-line pt-6 text-sm leading-relaxed text-bone/70">{d.results.runtime}</p>}
               </>
             ) : (
-              <dl>{p.metrics.map((m) => <Figure key={m.v} {...m} tag="Out of sample" />)}</dl>
+              <dl>{p.metrics.map((m) => <Figure key={m.v} {...m} tag={p.metricsTag || 'Out of sample'} tone={p.metricsTone || (p.dataNote ? 'sim' : 'real')} />)}</dl>
             )}
           </Section>
         )}

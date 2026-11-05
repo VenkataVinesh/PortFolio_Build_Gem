@@ -125,11 +125,11 @@ export default function Field({ tint = null, tintMix = 0.55, gain = 1, className
 
     const lite = liteMode()
     const still = reducedMotion()
-    // No GPU (software rasteriser): on phones, keep the field but make it tiny and slow.
+    // No GPU (software rasteriser): keep the field but make it tiny and slow.
     const dbg = gl.getExtension('WEBGL_debug_renderer_info')
     const renderer = dbg ? String(gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL)) : ''
     const software = /swiftshader|llvmpipe|software/i.test(renderer)
-    const weak = lite && software
+    const weak = software // any device without a GPU: software rasterisers block the main thread
     const compile = (type, src) => {
       const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s)
       return gl.getShaderParameter(s, gl.COMPILE_STATUS) ? s : null

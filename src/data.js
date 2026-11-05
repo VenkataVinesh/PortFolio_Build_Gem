@@ -5,6 +5,7 @@
 //   career-update/resume_en.tex
 //   career-update/resume_fr.tex
 //   career-update/linkedin_updates.md
+//   career-update/docs/COORDINATION.md (shared project one-liners and number rules)
 // Change one, change them all.
 
 export const profile = {
@@ -150,20 +151,30 @@ export const projects = [
   },
   {
     id: 'asset',
-    motif: 'LSTM / ARIMA', // ghost type on the home tile; restates a highlight below
+    motif: 'vs naive', // ghost type on the home tile
     name: 'Asset Price Prediction Platform',
-    kind: 'Sequence Models vs Classical Baselines',
+    kind: 'LSTM and ARIMA vs a Naive Baseline',
     period: 'Jan 2026 – Jun 2026',
+    dataNote: 'Simulated prices',
     summary:
-      'Puts a stacked LSTM and an ARIMA baseline on the same series so the trade-off between them is measured rather than assumed, with the leakage controls that make such a comparison mean anything.',
+      'A trained LSTM and an AIC-selected ARIMA, served by FastAPI behind a React dashboard and evaluated walk-forward against a naive "tomorrow = today" baseline. The prices are simulated (geometric Brownian motion). On that random walk neither model beats naive, and the dashboard says so.',
     highlights: [
-      'LSTM (PyTorch) against ARIMA (Statsmodels), like for like',
-      'Index-aligned windowing, so no look-ahead leakage',
-      'Scaler state persisted with the model for reproducible inference',
-      'Async FastAPI serving multi-step forecasts with intervals',
+      'Walk-forward on simulated prices: neither model beats the naive baseline, and the dashboard says so',
+      'Causal features, and a scaler fitted on training rows only and saved with the weights',
+      'ARIMA order chosen by AIC; on two of three series it picks (0,1,0), which is the naive model',
+      'Every API response is labelled simulated, with no invented fallback when a fit fails',
     ],
-    tech: ['Python', 'PyTorch', 'Statsmodels', 'FastAPI', 'React'],
+    // From the repo README (python evaluate.py). Simulated prices: always labelled.
+    metrics: [
+      { v: '1.32', k: 'naive "tomorrow = today" MAE on simulated AAPL, the best of the three', sub: 'LSTM 1.35, ARIMA(2,1,0) 1.40 · fit on 400 of 500 days, last 100 predicted walk-forward' },
+      { v: '(0,1,0)', k: 'ARIMA order chosen by AIC on two of three series, which is the naive model', sub: 'MSFT and BTC-USD' },
+    ],
+    metricsTag: 'Simulated',
+    tech: ['Python', 'PyTorch', 'Statsmodels', 'FastAPI', 'React', 'pytest'],
     repo: 'https://github.com/VenkataVinesh/Asset-Price-Prediction-Platform',
+    screenshots: [
+      { src: './projects/asset/dashboard.webp', w: 1600, h: 1301, small: './projects/asset/dashboard-800.webp', alt: 'Asset dashboard: simulated AAPL history, LSTM forecast with validation-residual band, SIMULATED DATA badge, and walk-forward MAE against naive' },
+    ],
     accent: '#22d3ee',
   },
   {
@@ -188,58 +199,83 @@ export const projects = [
     tech: ['TypeScript', 'Next.js', 'Supabase', 'lightweight-charts'],
     repo: 'https://github.com/VenkataVinesh/Veltrix',
     demo: 'https://veltrix-terminal-frontend.vercel.app',
+    screenshots: [
+      { src: './projects/veltrix/dashboard.webp', w: 1600, h: 1000, small: './projects/veltrix/dashboard-800.webp', alt: 'Veltrix dashboard: KPI strip, BTC chart with OHLC legend, composite signal with every indicator vote, markets table and the edge report' },
+      { src: './projects/veltrix/command-palette.webp', w: 1600, h: 1000, alt: 'Veltrix command palette (⌘K) filtering symbols for "eth"' },
+      { src: './projects/veltrix/trade.webp', w: 1600, h: 1000, alt: 'Veltrix paper-trade view: BTC/USD chart and a buy ticket against live prices; no real order is placed' },
+    ],
     accent: '#06b6d4',
   },
   {
     id: 'rl',
-    motif: 'Q · SARSA', // ghost type on the home tile; restates a highlight below
+    motif: 'Q · SARSA', // ghost type on the home tile
     name: 'Reinforcement Learning Lab',
     kind: 'Tabular RL from Scratch',
     period: 'Feb 2026 – May 2026',
     summary:
-      'Q-Learning and SARSA with the temporal-difference updates written by hand in NumPy on a custom GridWorld, built to understand on-policy against off-policy properly rather than to call a library.',
+      'Q-learning and SARSA written from scratch in NumPy on a 5×5 GridWorld, with the temporal-difference updates by hand and the bootstrap target as the only difference between the two agents. Over 10 seeds, both learn the optimal 8-step path every time.',
     highlights: [
-      'Q-Learning and SARSA, hand-written Bellman backups',
-      'Custom 5x5 GridWorld with a Gym-style API',
-      'Epsilon-greedy decay from 1.0 to 0.05',
-      'Reward-curve and learned-policy visualisations',
+      'Q-learning and SARSA from scratch in NumPy, compared over 10 seeds',
+      'Both learn the optimal 8-step path on 10 of 10 seeds',
+      'Same environment, seeds and schedule: only the bootstrap target differs',
+      'Tests for environment dynamics, targets, reproducibility and convergence',
     ],
-    tech: ['Python', 'NumPy', 'Matplotlib'],
+    // From the repo README (python train.py, 10 seeds x 1,000 episodes).
+    metrics: [
+      { v: '10/10', k: 'seeds where both agents learn the optimal 8-step path', sub: '5×5 GridWorld, 1,000 episodes per seed' },
+      { v: '2.60 ± 0.17', k: 'SARSA mean reward over the last 100 episodes', sub: 'Q-learning 2.45 ± 0.18; an optimal episode scores +3' },
+    ],
+    metricsTag: 'GridWorld · 10 seeds',
+    metricsTone: 'neutral',
+    tech: ['Python', 'NumPy', 'Matplotlib', 'pytest'],
     repo: 'https://github.com/VenkataVinesh/Reinforcement-Learning-Lab',
     accent: '#818cf8',
   },
   {
     id: 'portfolio',
-    motif: 'max Sharpe', // ghost type on the home tile; restates a highlight below
+    motif: 'max Sharpe', // ghost type on the home tile
     name: 'Portfolio Optimization',
     kind: 'Markowitz Mean-Variance',
     period: '2026',
+    dataNote: 'Synthetic data',
     summary:
-      'Markowitz mean-variance optimisation solved with a real numerical solver rather than a closed-form shortcut: maximum-Sharpe weights under long-only constraints, tracing the efficient frontier from the covariance structure of returns.',
+      'Long-only Markowitz mean-variance optimisation solved numerically with SciPy SLSQP: the maximum-Sharpe portfolio and the true efficient frontier, on synthetic, seeded returns, so the output shows the method, not a market.',
     highlights: [
-      'SciPy SLSQP constrained optimiser',
-      'Maximum-Sharpe weights, long-only',
-      'Efficient frontier traced and plotted',
+      'Max-Sharpe weights and the true efficient frontier, solved with SciPy SLSQP',
+      'Synthetic five-asset market with a one-factor covariance, positive-definite by construction',
+      'Tests check that no random long-only portfolio lies above the frontier',
     ],
-    tech: ['Python', 'SciPy', 'NumPy', 'Matplotlib'],
+    // From the repo README (python optimization.py). Synthetic: always labelled.
+    metrics: [
+      { v: '0.809', k: 'Sharpe ratio of the max-Sharpe portfolio', sub: 'expected return 16.55%, volatility 18.00%, risk-free rate 2%' },
+    ],
+    metricsTag: 'Synthetic',
+    tech: ['Python', 'SciPy', 'NumPy', 'Matplotlib', 'pytest'],
     repo: 'https://github.com/VenkataVinesh/Portfolio-Optimization-Dashboard',
     accent: '#34d399',
   },
   {
     id: 'weather',
-    motif: 'trend · season', // ghost type on the home tile; restates a highlight below
+    motif: 'noise floor', // ghost type on the home tile
     name: 'Weather Time-Series Forecasting',
-    kind: 'Deep Learning, Sequence Models',
+    kind: 'LSTM vs Baselines on a Known Noise Floor',
     period: 'Jun 2025 – Jul 2025',
+    dataNote: 'Synthetic data',
     summary:
-      'Stacked LSTM predictors benchmarked against ARIMA and SARIMA on a seasonal series, with trend and seasonality decomposition. Runs on a reproducible synthetic series, so anyone can rerun it without a dataset download.',
+      'A stacked LSTM for one-step-ahead hourly temperature, compared on a held-out test split with persistence, seasonal-naive and SARIMA baselines. The data is synthetic, a 24-hour cycle plus Gaussian noise, so the noise floor is known and every score can be read against it.',
     highlights: [
-      'Stacked two-layer LSTM, 64 units, dropout 0.2',
-      'Trend, seasonality and residual decomposition',
-      'ARIMA and SARIMA statistical baselines',
-      'Reproducible, no external dataset required',
+      'LSTM vs persistence, seasonal-naive and SARIMA baselines, on synthetic data',
+      'Scores read against the known noise floor of the data',
+      'Chronological 70 / 15 / 15 split, scaler fitted on the training slice only',
+      '2-layer LSTM, 32 units, dropout 0.2, best validation epoch kept',
     ],
-    tech: ['Python', 'PyTorch', 'Statsmodels', 'Matplotlib'],
+    // From the repo README (python train.py, 108 test hours, 3 seeds). Synthetic: always labelled.
+    metrics: [
+      { v: '1.03 °C', k: 'LSTM test MAE, 3 seeds (± 0.01)', sub: 'seasonal naive 1.13, SARIMA 1.14, persistence 1.71' },
+      { v: '0.80 °C', k: 'noise floor: the best any model could do on this data', sub: 'the LSTM closes about 30% of the gap to the floor' },
+    ],
+    metricsTag: 'Synthetic',
+    tech: ['Python', 'PyTorch', 'Statsmodels', 'Matplotlib', 'pytest'],
     repo: 'https://github.com/VenkataVinesh/Weather-Time-Series-Forecasting',
     accent: '#14b8a6',
   },
@@ -338,7 +374,7 @@ export const projectDetails = {
       'Built a signal engine that scores RSI, MACD, Bollinger bands, EMA/SMA trend and volume, sums the weighted votes, normalises the result to the range -1 to +1 and thresholds at 0.3. The full vote breakdown is shown in the interface, so a recommendation can be argued with.',
       'Validated forecasts walk-forward rather than on a single split. Pooled across 1,500 out-of-sample calls the directional hit-rate is 50.2 per cent with z = 0.16, which is a coin flip. The terminal reports that rather than a tuned backtest figure, and an earlier n=40 run that showed a far more exciting spread was traced to small-sample noise and discarded.',
       'Replaced an EWMA volatility estimate with GARCH(1,1) after measuring that the EWMA intervals were delivering only 91.67 per cent coverage against a 95 per cent nominal band. The GARCH model brought measured coverage to 94.75 per cent. The band is the part of the forecast worth using.',
-      'Built and benchmarked ridge regression and gradient-boosted trees as alternatives, then removed both after they failed to beat the baseline while costing 123 to 443 times more per forecast.',
+      'Built and benchmarked ridge regression and gradient-boosted stumps as alternatives, then cut both: RMSE changed by under 1%, hit-rates moved toward 50%, and they were 123 to 443 times slower.',
       'Migrated off an earlier FastAPI, PostgreSQL and Redis backend. Responsibilities now live in Next.js route handlers and Supabase, with row-level security on the Postgres tables and a seeded paper portfolio per account.',
     ],
     outcome:
@@ -351,56 +387,76 @@ export const projectDetails = {
   },
 
   asset: {
-    tint: { a: [0.07, 0.38, 0.56], b: [0.13, 0.62, 0.78] },
     problem:
-      'Where does a deep sequence model actually beat a well-fitted classical baseline on noisy data, and what does the extra complexity buy? This platform puts an LSTM and an ARIMA model on the same series so the trade-off is visible instead of assumed.',
+      'Where does a deep sequence model actually beat a well-fitted classical baseline, and how do you show it honestly when it does not? On a random walk the best forecast is the last price, so the harness has to be strict enough to show that rather than hide it.',
     build: [
-      'Built a PyTorch stacked LSTM (two layers, 64 hidden units, a 30-step window over close, volatility and RSI) and a Statsmodels ARIMA baseline with AIC-based order selection, so the comparison is like for like.',
-      'Engineered a feature pipeline computing SMA, EMA, RSI and volatility with strict index-aligned windowing, so no information from beyond the forecast horizon leaks into the window.',
-      'Persisted scaler state alongside the model, so inference reproduces training-time normalisation exactly rather than re-fitting a scaler on the inference set.',
-      'Served multi-step forecasts with confidence bounds from an async FastAPI backend to a React dashboard that overlays history against the projected path.',
+      'Trained a 2-layer, 32-unit PyTorch LSTM on a 30-day window of log return, RSI and 14-day volatility to predict the next log return, with a chronological split and the scaler fitted on training rows only and saved with the weights.',
+      'Used the last 15% of training rows for validation: they pick the best epoch and give the residual spread that sets the forecast band.',
+      'Fitted ARIMA(p,1,q) with p and q up to 2, chosen by AIC, with an analytical 95% interval. If a fit fails, the API returns an error instead of an invented fallback.',
+      'Evaluated both walk-forward against a naive "tomorrow = today" baseline: fit on the first 400 of 500 simulated days, then predict each of the last 100 using only earlier prices.',
+      'Served forecasts from FastAPI to a React dashboard. Every response carries "simulated": true and the UI shows a SIMULATED DATA badge. Tests cover causality, train-only scaling, AIC selection and API labelling.',
     ],
     outcome:
-      'A service that switches between the LSTM and ARIMA per request and puts their forecast paths and confidence intervals on the same axes, on the same data, under the same preprocessing.',
+      'On a random walk the best forecast is the last price, and the harness shows exactly that: AIC picks ARIMA(0,1,0), the naive model, on two of three series, and the LSTM lands within a few percent of naive but never below it. The evaluation is the deliverable, and it is ready for a real price series.',
+    limits: [
+      'No real market data has been evaluated yet. The loader accepts a date,close CSV, but any claim about real prices needs that run first.',
+      'A single LSTM seed in the evaluation, a 100-day test window and no hyperparameter search.',
+      'Recursive multi-step forecasts reuse the model\'s own outputs, so their bands assume independent errors.',
+    ],
   },
 
   weather: {
-    tint: { a: [0.05, 0.40, 0.40], b: [0.14, 0.64, 0.58] },
     problem:
-      'A clean testbed for sequence models on seasonal data: forecast meteorological metrics and find where a stacked LSTM earns its keep against ARIMA and SARIMA, on a series anyone can regenerate exactly.',
+      'A clean testbed for sequence models: forecast next-hour temperature on a series whose noise is known exactly, so a model\'s error can be measured against the best that is possible, not only against other models.',
     build: [
-      'Built stacked two-layer LSTM predictors in PyTorch (64 units, dropout 0.2) on a reproducible synthetic meteorological series, so the project runs without an external dataset download.',
-      'Ran classical decomposition to isolate trend, seasonality and residuals, and tuned hyperparameters against residual stationarity checks rather than against validation loss alone.',
-      'Benchmarked the LSTM against ARIMA and SARIMA baselines, plotting train and validation loss curves to compare convergence and accuracy trade-offs.',
+      'Generated 720 synthetic hours: temperature 20 + 8 sin(2πt/24) plus N(0,1) noise, humidity anti-correlated with it, and pressure as a random walk.',
+      'Split the series chronologically 70 / 15 / 15, fitted standardisation on the training slice only and saved it with the weights; 24-hour windows of all three features predict the next hour.',
+      'Trained a 2-layer, 32-unit PyTorch LSTM (dropout 0.2, L1 loss, Adam) and kept the epoch with the best validation loss.',
+      'Compared it on 108 held-out hours with persistence, seasonal-naive (24 h) and SARIMA(1,0,0)(1,0,0)₂₄ baselines, with tests for split order, train-only scaling and causal windows.',
     ],
     outcome:
-      'A reproducible pipeline that trains the LSTM, plots its loss, and sets up an honest like-for-like comparison against statistical baselines. Because the series is synthetic and seeded, the comparison replicates on any machine.',
+      'Seasonal naive\'s 1.13 °C matches the theory exactly (√2 × the 0.80 °C noise floor), which confirms the harness. The LSTM beats it by smoothing across the window instead of copying one noisy hour. On a clean synthetic sinusoid that is an easy job: the value here is the evaluation harness, not the number.',
+    limits: [
+      'Synthetic data only. Swapping in a real station series means replacing the generator.',
+      'One-step-ahead only; multi-step forecasting would need recursive or direct heads.',
+      'A small test set (108 points), so SARIMA and seasonal naive are effectively tied, and no hyperparameter search.',
+    ],
   },
 
   rl: {
-    tint: { a: [0.20, 0.18, 0.55], b: [0.34, 0.34, 0.78] },
     problem:
-      'Reinforcement learning is easiest to trust once you have written the update rule yourself. This lab implements the temporal-difference backups by hand and watches the policy and value estimates evolve, with no library doing the learning.',
+      'Reinforcement learning is easiest to trust once you have written the update rule yourself. This lab implements the temporal-difference backups by hand, with no library doing the learning, and compares an off-policy and an on-policy agent under identical conditions.',
     build: [
-      'Built a custom 5x5 GridWorld with a Gym-style API: a start state, a goal worth +10, a pit worth -10, and four actions.',
-      'Implemented Q-Learning (off-policy) and SARSA (on-policy) from scratch in NumPy, writing the temporal-difference updates directly rather than calling into a framework.',
-      'Used epsilon-greedy exploration decaying from 1.0 to 0.05, and visualised the reward curve and the learned policy across training episodes to show how the two update rules diverge.',
+      'Built a 5×5 GridWorld: start (0,0), a goal worth +10, a pit worth −10, −1 per step, and walls that block movement.',
+      'Implemented Q-learning (off-policy, bootstrapping from the greedy action) and SARSA (on-policy, bootstrapping from the action actually taken next) in NumPy, with α = 0.1 and γ = 0.95.',
+      'Explored ε-greedy with random tie-breaking, decaying ε from 1.0 by ×0.995 per episode to a floor of 0.05.',
+      'Ran both agents on the same environment, seeds and schedule, 10 seeds × 1,000 episodes, with tests that check the only difference is the bootstrap target.',
     ],
     outcome:
-      'Two hand-written tabular agents that converge to the shortest path, with a clear view of how the on-policy and off-policy updates differ in the routes they settle on near the pit.',
+      'Both agents learn the optimal 8-step path on every seed. SARSA scores slightly higher during training (2.60 against 2.45) because it learns the value of the policy it actually follows, exploration included, but the gap is about one standard deviation: on a grid this small it is a tendency, not a finding.',
+    limits: [
+      'A 25-state tabular problem: it shows the update rules, not anything about scale, and there is no function approximation.',
+      'The pit sits off the optimal route, so the classic cliff-walking contrast (SARSA choosing a safer path) does not show up here.',
+      'Hyperparameters are textbook defaults, not tuned.',
+    ],
   },
 
   portfolio: {
-    tint: { a: [0.07, 0.40, 0.30], b: [0.18, 0.64, 0.46] },
     problem:
-      'Implement the Markowitz mean-variance problem end to end with a real numerical solver rather than a closed-form shortcut, and watch the efficient frontier emerge from the covariance structure of the returns.',
+      'Implement the Markowitz mean-variance problem end to end with a real numerical solver rather than a closed-form shortcut, and trace the true efficient frontier from the covariance structure of the returns.',
     build: [
-      'Formulated the objective as minimising the negative Sharpe ratio subject to fully-invested, long-only weight constraints.',
-      'Solved it with the SciPy SLSQP constrained optimiser over the covariance matrix of asset returns, seeded from a sensible initial allocation.',
-      'Traced the efficient frontier and plotted it with the maximum-Sharpe portfolio highlighted.',
+      'Built a synthetic five-asset market with expected returns drawn from 5–20% and a one-factor covariance (B Bᵀ + D), positive-definite by construction.',
+      'Found the maximum-Sharpe portfolio by minimising the negative Sharpe ratio with SciPy SLSQP, fully invested and long-only, with a 2% risk-free rate.',
+      'Traced the efficient frontier: for each target return, from the minimum-variance portfolio up to the best single asset, minimise variance under the same constraints.',
+      'Overlaid 2,000 random long-only portfolios and tested that none lies above or to the left of the frontier.',
     ],
     outcome:
-      'A compact, reproducible script that outputs the optimal weights and saves an efficient-frontier plot. It is a small project and it is scoped as one: the mathematics is the point.',
+      'A compact, reproducible script that prints the optimal weights and draws the frontier. It is a small project and it is scoped as one: the mathematics is the point.',
+    limits: [
+      'Synthetic inputs. With real data the expected-return estimates dominate the result; shrinkage or Black-Litterman would be the next step.',
+      'Single period, long-only, no transaction costs and no turnover limits.',
+      'Despite the repository name, this is a script, not a dashboard.',
+    ],
   },
 }
 

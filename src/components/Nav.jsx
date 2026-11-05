@@ -97,7 +97,7 @@ export default function Nav({ route }) {
             Available Mar 2027
           </span>
           <Magnetic strength={0.3}>
-            <a href={`mailto:${profile.email}`} className="btn-pill eyebrow inline-flex rounded-full border border-bone/40 px-5 py-3">
+            <a href={`mailto:${profile.emailAlt}`} className="btn-pill eyebrow inline-flex rounded-full border border-bone/40 px-5 py-3">
               <Roll>Say hello</Roll>
             </a>
           </Magnetic>
@@ -128,7 +128,7 @@ export default function Nav({ route }) {
           <div className="flex gap-3 font-mono text-xs">
             <a href={profile.github} target="_blank" rel="noreferrer" className="chip px-4 py-2.5">GitHub</a>
             <a href={profile.linkedin} target="_blank" rel="noreferrer" className="chip px-4 py-2.5">LinkedIn</a>
-            <a href={`mailto:${profile.email}`} className="chip px-4 py-2.5">Email</a>
+            <a href={`mailto:${profile.emailAlt}`} className="chip px-4 py-2.5">Email</a>
           </div>
         </div>
       </div>

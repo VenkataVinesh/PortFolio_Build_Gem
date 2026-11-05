@@ -362,9 +362,20 @@ function Contact() {
           <Reveal className="md:col-span-7">
             <p className="text-lg text-bone md:text-xl">{profile.seeking.headline}</p>
             <p className="mt-1 text-lg text-bone/75 md:text-xl">{profile.seeking.where} <span className="text-bone/55">{profile.seeking.note}</span></p>
-            <a href={`mailto:${profile.email}`} className="mt-10 inline-block break-all text-[clamp(1.1rem,2.4vw,2rem)] font-medium tracking-tight">
-              <span className="link-spectrum">{profile.email}</span>
-            </a>
+            <ul className="mt-10 flex flex-col gap-3">
+              <li>
+                <span className="eyebrow mb-1 block text-mute">Personal</span>
+                <a href={`mailto:${profile.emailAlt}`} className="inline-block break-all text-[clamp(1.1rem,2.4vw,2rem)] font-medium tracking-tight">
+                  <span className="link-spectrum">{profile.emailAlt}</span>
+                </a>
+              </li>
+              <li>
+                <span className="eyebrow mb-1 block text-mute">École Centrale de Lyon</span>
+                <a href={`mailto:${profile.email}`} className="inline-block break-all text-[clamp(1rem,1.8vw,1.5rem)] font-medium tracking-tight text-bone/80">
+                  <span className="link-spectrum">{profile.email}</span>
+                </a>
+              </li>
+            </ul>
             <ul className="mt-8 flex flex-wrap gap-3">
               <li><a href={profile.github} target="_blank" rel="noreferrer" data-cursor="open" className="btn-pill inline-flex items-center gap-2 rounded-full border border-bone/30 px-5 py-3 text-sm"><Github size={15} /><Roll>GitHub</Roll></a></li>
               <li><a href={profile.linkedin} target="_blank" rel="noreferrer" data-cursor="open" className="btn-pill inline-flex items-center gap-2 rounded-full border border-bone/30 px-5 py-3 text-sm"><Linkedin size={15} /><Roll>LinkedIn</Roll></a></li>
@@ -373,7 +384,7 @@ function Contact() {
           </Reveal>
           <div className="flex md:col-span-5 md:justify-end">
             <Magnetic strength={0.45}>
-              <a href={`mailto:${profile.email}`} data-cursor="link"
+              <a href={`mailto:${profile.emailAlt}`} data-cursor="link"
                 className="group relative inline-flex h-40 w-40 items-center justify-center overflow-hidden rounded-full text-ink md:h-52 md:w-52">
                 <span aria-hidden="true" className="absolute inset-0" style={{ background: 'var(--spectrum)' }} />
                 <span aria-hidden="true" className="absolute inset-[2px] rounded-full bg-bone transition-transform duration-700 ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-0" />

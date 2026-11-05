@@ -96,7 +96,7 @@ export default function Resume() {
           </div>
         </Reveal>
 
-        <p className="mt-6 font-mono text-[11px] text-mute">{profile.email} · {profile.location}</p>
+        <p className="mt-6 font-mono text-[11px] text-mute">{profile.emailAlt} · {profile.email} · {profile.location}</p>
       </section>
     </div>
   )

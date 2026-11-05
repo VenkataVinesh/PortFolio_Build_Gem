@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { gsap, ScrollTrigger, reducedMotion, coarsePointer, onEnter } from './core.js'
+import { gsap, ScrollTrigger, reducedMotion, coarsePointer, onEnter, liteMode } from './core.js'
 
 /* Masked display lines. `trigger="enter"` plays when the page enters (hero),
    otherwise when scrolled into view. Each line: overflow mask + slide + de-blur. */
@@ -9,8 +9,10 @@ export function Lines({ lines, as: Tag = 'span', className = '', trigger = 'scro
     const el = ref.current; if (!el) return
     const inner = el.querySelectorAll('[data-line]')
     if (reducedMotion()) return
-    gsap.set(inner, { yPercent: 115, filter: 'blur(6px)' })
-    const play = () => gsap.to(inner, { yPercent: 0, filter: 'blur(0px)', duration: 1.25, ease: 'expo.out', stagger, delay, overwrite: true })
+    // Phones skip the de-blur: animating a filter on display type is a costly repaint there.
+    const blur = !liteMode()
+    gsap.set(inner, blur ? { yPercent: 115, filter: 'blur(6px)' } : { yPercent: 115 })
+    const play = () => gsap.to(inner, { yPercent: 0, ...(blur ? { filter: 'blur(0px)' } : {}), duration: 1.25, ease: 'expo.out', stagger, delay, overwrite: true })
     let cancel = () => {}, st
     if (trigger === 'enter') cancel = onEnter(play)
     else st = ScrollTrigger.create({ trigger: el, start: 'top 88%', once: true, onEnter: play })
@@ -31,8 +33,9 @@ export function Reveal({ children, as: Tag = 'div', className = '', y = 36, dela
   useEffect(() => {
     const el = ref.current; if (!el || reducedMotion()) return
     const targets = stagger ? el.children : el
-    gsap.set(targets, { y, opacity: 0, filter: 'blur(8px)' })
-    const play = () => gsap.to(targets, { y: 0, opacity: 1, filter: 'blur(0px)', duration: 1.1, delay, stagger, ease: 'expo.out', overwrite: true, clearProps: 'filter' })
+    const blur = !liteMode()
+    gsap.set(targets, blur ? { y, opacity: 0, filter: 'blur(8px)' } : { y, opacity: 0 })
+    const play = () => gsap.to(targets, { y: 0, opacity: 1, ...(blur ? { filter: 'blur(0px)', clearProps: 'filter' } : {}), duration: 1.1, delay, stagger, ease: 'expo.out', overwrite: true })
     let cancel = () => {}, st
     if (trigger === 'enter') cancel = onEnter(play)
     else st = ScrollTrigger.create({ trigger: el, start: 'top 90%', once: true, onEnter: play })

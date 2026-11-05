@@ -124,12 +124,13 @@ export default function Field({ tint = null, tintMix = 0.55, gain = 1, className
     if (!gl) { canvas.style.display = 'none'; return }
 
     const lite = liteMode()
-    const still = reducedMotion()
-    // No GPU (software rasteriser): keep the field but make it tiny and slow.
+    const reduced = reducedMotion()
+    // No GPU (a software rasteriser such as SwiftShader or llvmpipe): every animated frame
+    // blocks the main thread, so draw one still frame and let a CSS drift keep it alive.
     const dbg = gl.getExtension('WEBGL_debug_renderer_info')
     const renderer = dbg ? String(gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL)) : ''
     const software = /swiftshader|llvmpipe|software/i.test(renderer)
-    const weak = software // any device without a GPU: software rasterisers block the main thread
+    const still = reduced || software
     const compile = (type, src) => {
       const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s)
       return gl.getShaderParameter(s, gl.COMPILE_STATUS) ? s : null
@@ -167,9 +168,9 @@ export default function Field({ tint = null, tintMix = 0.55, gain = 1, className
 
     let w = 0, h = 0
     // Adaptive quality: if frames run slow, render fewer pixels (and the CSS stretches them).
-    const levels = weak ? [0.22] : lite ? [0.55, 0.42, 0.33] : [0.85, 0.6, 0.45, 0.33, 0.25]
+    const levels = software ? (lite ? [0.25] : [0.5]) : lite ? [0.55, 0.42, 0.33] : [0.85, 0.6, 0.45, 0.33, 0.25]
     let level = 0, slow = 0, lastFrame = 0, throttle = false
-    const minDt = weak ? 120 : lite ? 30 : 0 // ms between frames: ~8 fps without a GPU, ~30 fps on phones
+    const minDt = lite ? 30 : 0 // ms between frames: ~30 fps on phones
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, lite ? 1 : 1.5)
       const scale = levels[level]
@@ -223,19 +224,23 @@ export default function Field({ tint = null, tintMix = 0.55, gain = 1, className
     document.addEventListener('visibilitychange', onVis)
     const onLost = (e) => { e.preventDefault(); lost = true; canvas.style.opacity = '0' }
     canvas.addEventListener('webglcontextlost', onLost)
-    const ro = new ResizeObserver(resize); ro.observe(canvas)
+    // A still frame is redrawn only once a resize settles; animated frames pick up the new size anyway.
+    let resizeTimer = 0
+    const onResize = still ? () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(resize, 150) } : resize
+    const ro = new ResizeObserver(onResize); ro.observe(canvas)
     let idle = 0
     const begin = () => {
       resize()
       if (still) { focus = 0.7; draw(14) } else kick()
       requestAnimationFrame(() => canvas.classList.add('is-on'))
+      if (software && !reduced) canvas.classList.add('field-drift')
     }
     // Let the page paint first; the CSS gradient behind the canvas covers the gap.
     if ('requestIdleCallback' in window) idle = requestIdleCallback(begin, { timeout: 700 })
     else idle = setTimeout(begin, 200)
 
     return () => {
-      cancelAnimationFrame(raf); io.disconnect(); ro.disconnect()
+      cancelAnimationFrame(raf); io.disconnect(); ro.disconnect(); clearTimeout(resizeTimer)
       if ('cancelIdleCallback' in window) cancelIdleCallback(idle); clearTimeout(idle)
       document.removeEventListener('visibilitychange', onVis)
       window.removeEventListener('pointermove', onMove)

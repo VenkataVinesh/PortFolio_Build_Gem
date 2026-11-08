@@ -24,7 +24,6 @@ export const profile = {
   linkedin: 'https://www.linkedin.com/in/venkat-vinesh',
   photo: './profile.jpg',
   university: 'Mahindra University',
-  cgpa: '7.96 / 10',
   // What I am actually looking for. Kept explicit so recruiters do not guess.
   seeking: {
     headline: 'Seeking a 6-month ML / AI engineering internship from March 2027.',
@@ -53,9 +52,9 @@ export const education = [
     school: 'Mahindra University',
     place: 'Hyderabad, India',
     award: 'B.Tech, Computer Science and Engineering',
-    programme: 'CGPA 7.96 / 10',
+    programme: '3 years completed; final year on exchange at École Centrale de Lyon',
     period: 'Aug 2023 – 2027 (expected)',
-    note: 'Final year completed on exchange at École Centrale de Lyon. Relevant coursework: Deep Neural Networks, Reinforcement Learning, Computational Finance with Applications, Applied Time Series Analysis.',
+    note: 'Relevant coursework: Deep Neural Networks, Reinforcement Learning, Computational Finance with Applications, Applied Time Series Analysis.',
     current: false,
   },
 ]

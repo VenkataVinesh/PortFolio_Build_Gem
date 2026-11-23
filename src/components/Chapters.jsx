@@ -23,7 +23,7 @@ export const Eyebrow = ({ children }) => (
 export const Big = ({ children }) => <h2 className="text-[clamp(2.6rem,7.4vw,7.6rem)] font-medium leading-[0.9] tracking-[-0.05em] [text-shadow:0_4px_40px_rgba(0,0,0,0.6)]">{children}</h2>
 export const Num = ({ v, k }) => (
   <p>
-    <span className="block text-[clamp(4rem,13vw,13rem)] font-medium leading-[0.85] tracking-[-0.06em] [text-shadow:0_4px_60px_rgba(0,0,0,0.6)]">{v}</span>
+    <span data-count={v} className="block text-[clamp(4rem,13vw,13rem)] font-medium leading-[0.85] tracking-[-0.06em] [text-shadow:0_4px_60px_rgba(0,0,0,0.6)]">{v}</span>
     <span className="mt-4 block max-w-md text-base text-bone/85 md:text-lg">{k}</span>
   </p>
 )

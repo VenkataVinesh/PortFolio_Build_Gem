@@ -5,6 +5,10 @@ import Field from '../motion/Field.jsx'
 import { Lines, Reveal, Magnetic, ScrubWords, Decode, Roll, RevealImage, Atmosphere } from '../motion/ui.jsx'
 import { gsap, reducedMotion, onEnter } from '../motion/core.js'
 import NotFound from './NotFound.jsx'
+import { PageChapter } from '../components/Chapters.jsx'
+
+// Generated scene shown under each project's title, where one fits.
+const SCENE = { precitec: 'precitec', triagemate: 'triagemate', 'maintenance-copilot': 'copilot', veltrix: 'forecast', asset: 'forecast' }
 
 const pad = (n) => String(n).padStart(2, '0')
 
@@ -122,6 +126,7 @@ export default function ProjectDetail({ id }) {
   return (
     <article data-tone={p.accent}>
       <Hero p={p} idx={idx} />
+      {SCENE[p.id] && <PageChapter id={SCENE[p.id]} eyebrow={p.kind} title={p.name.split(':')[0]} length={220} />}
 
       {/* Summary */}
       <section className="mx-auto max-w-[1600px] px-5 py-24 md:px-10 md:py-36">

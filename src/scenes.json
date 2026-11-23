@@ -1,0 +1,37 @@
+{
+  "precitec": {
+    "frames": 96,
+    "phoneFrames": 48,
+    "aspect": 1.84
+  },
+  "triagemate": {
+    "frames": 96,
+    "phoneFrames": 48,
+    "aspect": 1.84
+  },
+  "forecast": {
+    "frames": 96,
+    "phoneFrames": 48,
+    "aspect": 1.84
+  },
+  "desk": {
+    "frames": 96,
+    "phoneFrames": 48,
+    "aspect": 1.84
+  },
+  "lyon": {
+    "frames": 96,
+    "phoneFrames": 48,
+    "aspect": 1.84
+  },
+  "work": {
+    "frames": 96,
+    "phoneFrames": 48,
+    "aspect": 1.84
+  },
+  "copilot": {
+    "frames": 96,
+    "phoneFrames": 48,
+    "aspect": 1.84
+  }
+}

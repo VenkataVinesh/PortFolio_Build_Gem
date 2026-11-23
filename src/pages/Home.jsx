@@ -1,10 +1,12 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { ArrowUpRight, ArrowRight, ArrowDown } from 'lucide-react'
 import { profile, projects, figures } from '../data.js'
+import scenes from '../scenes.json'
 import { Github, Linkedin } from '../Icons.jsx'
 import Field from '../motion/Field.jsx'
 import SensorStory from '../motion/SensorStory.jsx'
 import SignalTrace from '../motion/SignalTrace.jsx'
+import { TriageChapter, PrecitecChapter, ForecastChapter, DeskChapter } from '../components/Chapters.jsx'
 import { Lines, Reveal, Magnetic, Marquee, ScrubWords, Decode, Roll, Atmosphere } from '../motion/ui.jsx'
 import Glyph from '../components/Glyphs.jsx'
 import { GLYPH_FOR } from '../components/glyph-kinds.js'
@@ -177,13 +179,16 @@ function Features() {
 
   return (
     <section id="work" ref={root} className="relative mx-auto max-w-[1600px] px-3 md:px-6">
-      <div className="flex flex-col gap-6 px-2 pb-12 md:flex-row md:items-end md:justify-between md:px-4 md:pb-16">
-        <div>
-          <p className="eyebrow mb-5 text-mute">(02) Selected work</p>
-          <h2 className="text-display font-medium leading-[0.9] tracking-[-0.05em]">
-            <Lines lines={['Two projects,', <span key="b" className="font-serif-it tracking-[-0.02em]">on real data.</span>]} />
-          </h2>
-        </div>
+      <div className={`flex flex-col gap-6 px-2 md:flex-row md:items-end md:justify-between md:px-4 ${scenes.triagemate ? 'pb-8 pt-16 md:pb-10' : 'pb-12 md:pb-16'}`}>
+        {/* With the TriageMate chapter above, its footage already carries this title. */}
+        {scenes.triagemate ? <span /> : (
+          <div>
+            <p className="eyebrow mb-5 text-mute">(02) Selected work</p>
+            <h2 className="text-display font-medium leading-[0.9] tracking-[-0.05em]">
+              <Lines lines={['Two projects,', <span key="b" className="font-serif-it tracking-[-0.02em]">on real data.</span>]} />
+            </h2>
+          </div>
+        )}
         <Reveal><a href="#/work" className="group eyebrow inline-flex items-center gap-2 text-bone/75 hover:text-bone"><Roll>All {projects.length} projects</Roll><ArrowUpRight size={14} className="arrow-nudge" /></a></Reveal>
       </div>
 
@@ -446,9 +451,13 @@ export default function Home() {
       <Hero />
       <Availability />
       <Statement />
+      <TriageChapter />
       <Features />
+      <ForecastChapter />
       <Track />
+      <PrecitecChapter />
       <Figures />
+      <DeskChapter />
       <Contact />
     </>
   )

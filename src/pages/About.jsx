@@ -2,6 +2,7 @@ import { ArrowUpRight } from 'lucide-react'
 import { profile, skills, education, experience, certification, languages } from '../data.js'
 import { Lines, Reveal, RevealImage, ScrubWords, Roll, Magnetic } from '../motion/ui.jsx'
 import SignalTrace from '../motion/SignalTrace.jsx'
+import { PageChapter } from '../components/Chapters.jsx'
 
 function Block({ label, tone, children }) {
   return (
@@ -46,6 +47,8 @@ export default function About() {
           </div>
         </div>
       </section>
+
+      <PageChapter id="lyon" eyebrow={profile.location} title="Final year at" italic="École Centrale de Lyon." length={220} />
 
       <section data-tone="#7c5cff" className="mx-auto w-full max-w-[1600px] px-5 md:px-10">
         <ScrubWords className="max-w-5xl text-[clamp(1.8rem,4vw,4rem)] font-medium leading-[1.06] tracking-[-0.035em]"

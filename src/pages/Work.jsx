@@ -4,6 +4,7 @@ import { projects } from '../data.js'
 import { Lines, Reveal, Atmosphere } from '../motion/ui.jsx'
 import Glyph from '../components/Glyphs.jsx'
 import { GLYPH_FOR } from '../components/glyph-kinds.js'
+import { PageChapter } from '../components/Chapters.jsx'
 import { gsap, reducedMotion, coarsePointer } from '../motion/core.js'
 
 const pad = (n) => String(n).padStart(2, '0')
@@ -44,6 +45,8 @@ export default function Work() {
           LLM applications, signal processing, forecasting and the maths underneath. Ordered by what I would show first.
         </Reveal>
       </section>
+
+      <PageChapter id="work" eyebrow="Index" title={`${projects.length} projects,`} italic="ordered by what I would show first." length={200} />
 
       <section aria-label="All projects" data-tone="#22d3ee" className="relative mx-auto max-w-[1600px] px-5 pb-32 md:px-10" onPointerLeave={() => setActive(null)}>
         <ol className="border-b border-line">

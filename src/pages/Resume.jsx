@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { ArrowUpRight, Download } from 'lucide-react'
 import { profile, resumes } from '../data.js'
 import { Reveal, Lines, Roll, Magnetic } from '../motion/ui.jsx'
+import { PageChapter } from '../components/Chapters.jsx'
 
 const STORE_KEY = 'resume-lang'
 
@@ -37,6 +38,8 @@ export default function Resume() {
           <p className="mt-6 flex items-center gap-2.5 text-bone/85"><span aria-hidden="true" className="h-2 w-2 rounded-full bg-emerald-400" />{profile.seeking.headline} {profile.seeking.where}</p>
         </Reveal>
       </section>
+
+      <PageChapter id="desk" eyebrow="Résumé · EN / FR" title="The work," italic="on one page." length={180} />
 
       <section className="relative mx-auto max-w-[1600px] px-5 pb-32 md:px-10">
         <Reveal>

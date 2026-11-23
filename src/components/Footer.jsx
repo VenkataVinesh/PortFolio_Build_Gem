@@ -4,7 +4,14 @@ import { scrollToEl } from '../motion/core.js'
 
 export default function Footer() {
   return (
-    <footer className="relative border-t border-line">
+    <footer className="relative overflow-hidden border-t border-line">
+      {/* Signature: the site's thesis, set huge and quiet. Decorative; the name is in the row below. */}
+      <div aria-hidden="true" className="mx-auto max-w-[1600px] select-none px-5 pt-16 md:px-10 md:pt-24">
+        <p className="whitespace-nowrap text-[clamp(3.4rem,13.2vw,15rem)] font-medium leading-[0.82] tracking-[-0.06em] text-bone/[0.07]">
+          Signal <span className="font-serif-it tracking-[-0.02em]">from noise.</span>
+        </p>
+        <div className="mt-6 h-px w-full origin-left" style={{ background: 'var(--spectrum)', opacity: 0.5 }} />
+      </div>
       <div className="mx-auto flex max-w-[1600px] flex-col gap-6 px-5 py-8 md:flex-row md:items-center md:justify-between md:px-10">
         <p className="eyebrow text-mute">© 2026 {profile.name}</p>
         <ul className="eyebrow flex flex-wrap items-center gap-x-7 gap-y-3 text-bone/75">

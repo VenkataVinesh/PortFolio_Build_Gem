@@ -1,7 +1,9 @@
 import { useEffect, useRef } from 'react'
 import { ArrowUpRight } from 'lucide-react'
 import { Atmosphere, LazyImg } from '../motion/ui.jsx'
-import { gsap, reducedMotion, coarsePointer } from '../motion/core.js'
+import Glyph from './Glyphs.jsx'
+import { GLYPH_FOR } from './glyph-kinds.js'
+import { gsap, reducedMotion, coarsePointer, useTilt } from '../motion/core.js'
 
 const pad = (n) => String(n).padStart(2, '0')
 
@@ -58,9 +60,12 @@ export function TriageVisual({ shots, compact = false }) {
 /* Horizontal-track tile for the remaining projects. Atmosphere + type, no diagrams. */
 export function ProjectTile({ project: p, index }) {
   const name = p.name.split(':')[0]
+  const tilt = useTilt(6)
+  const glyph = GLYPH_FOR[p.id]
   return (
-    <a href={`#/p/${p.id}`} data-cursor="view"
+    <a ref={tilt} href={`#/p/${p.id}`} data-cursor="view"
       className="group relative flex h-[min(74vh,640px)] w-[82vw] flex-col justify-between overflow-hidden rounded-[22px] border border-line p-6 sm:w-[52vw] md:p-8 lg:w-[34vw] lg:min-w-[440px]">
+      <span aria-hidden="true" className="tilt-sheen" />
       <div data-depth className="absolute -inset-[8%] transition-transform duration-[1.4s] ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-[1.06]">
         <Atmosphere accent={p.accent} intensity={0.85} variant={index} />
       </div>
@@ -71,6 +76,10 @@ export function ProjectTile({ project: p, index }) {
               sizes="(max-width: 1023px) 76vw, 32vw" width={p.screenshots[0].w || 800} height={p.screenshots[0].h || 450} className="block h-auto w-full" />
           </div>
           <div className="absolute inset-0 rounded-[12px] bg-gradient-to-t from-ink via-ink/40 to-transparent" />
+        </div>
+      ) : glyph ? (
+        <div aria-hidden="true" className="pointer-events-none absolute right-6 top-[13%] z-0 w-[76%] opacity-90 transition-transform duration-[1.4s] ease-[cubic-bezier(.16,1,.3,1)] group-hover:-translate-y-2 group-hover:scale-[1.03] md:inset-x-8">
+          <Glyph kind={glyph} accent={p.accent} className="h-auto w-full" />
         </div>
       ) : p.motif && (
         <span aria-hidden="true" className="pointer-events-none absolute -right-[4%] top-[18%] z-0 select-none whitespace-nowrap text-[clamp(4rem,7.5vw,8rem)] font-medium leading-none tracking-[-0.06em] text-bone/[0.07] transition-transform duration-[1.4s] ease-[cubic-bezier(.16,1,.3,1)] group-hover:-translate-x-6">

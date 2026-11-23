@@ -181,6 +181,35 @@ a:hover .arrow-nudge, button:hover .arrow-nudge { transform: translate(3px, -3px
   to { transform: scale(1.09) translate3d(0.8%, -1%, 0); }
 }
 
+/* ---- Tactile cards: pointer tilt (GSAP) + a specular sheen and lit border that follow the pointer ---- */
+.tilt-sheen {
+  position: absolute; inset: 0; z-index: 30; pointer-events: none; border-radius: inherit;
+  opacity: 0; transition: opacity 0.5s var(--ease-expo);
+  background: radial-gradient(520px circle at var(--mx, 50%) var(--my, 50%), rgb(255 255 255 / 0.08), transparent 42%);
+}
+.tilt-sheen::after {
+  content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1px;
+  background: radial-gradient(360px circle at var(--mx, 50%) var(--my, 50%), rgb(255 255 255 / 0.6), transparent 45%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+}
+[data-lit] > .tilt-sheen { opacity: 1; }
+
+/* ---- Glyphs: line motifs that draw on when they scroll into view ---- */
+.glyph .glyph-draw { stroke-dasharray: 1; stroke-dashoffset: 1; }
+.glyph .glyph-fade { opacity: 0; transition: opacity 1.4s var(--ease-expo) 0.6s; }
+.glyph.is-in .glyph-draw { animation: glyph-draw 2.6s var(--ease-expo) forwards; }
+.glyph.is-in .glyph-d2 { animation-delay: 0.7s; }
+.glyph.is-in .glyph-fade { opacity: 1; }
+.glyph-glow { filter: drop-shadow(0 0 6px rgb(34 211 238 / 0.6)); }
+.glyph-ping { transform-box: fill-box; transform-origin: center; animation: glyph-ping 2.4s ease-out infinite; }
+.glyph-ping-soft { animation: glyph-soft 2.4s ease-in-out infinite alternate; }
+.glyph-scan { animation: glyph-scan 5s linear infinite; }
+@keyframes glyph-draw { to { stroke-dashoffset: 0; } }
+@keyframes glyph-ping { from { transform: scale(1); opacity: 0.9; } to { transform: scale(3.2); opacity: 0; } }
+@keyframes glyph-soft { from { opacity: 0.18; } to { opacity: 0.5; } }
+@keyframes glyph-scan { from { transform: translateX(0); } to { transform: translateX(400px); } }
+
 /* Film grain */
 .grain {
   position: fixed; inset: -50%; z-index: 900; pointer-events: none; opacity: 0.06;

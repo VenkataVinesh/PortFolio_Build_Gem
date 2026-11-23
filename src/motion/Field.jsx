@@ -8,6 +8,11 @@ import { liteMode, reducedMotion, coarsePointer, getLenis } from './core.js'
   split into a prism-like dispersion fringe. The pointer is a lens: around it
   the filaments tighten, sharpen and brighten. Scroll pulls the field into
   depth. Paused off-screen and in background tabs; static on reduced motion.
+
+  With `signal` (the home hero, "Signal from noise"): toward the right the
+  noise drains out of the field and the filaments settle into a stack of
+  spectral traces with two narrow, glowing peaks, the two surfaces a confocal
+  sensor reads as one. The lens sharpens the peaks further.
 */
 
 const VERT = 'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}'
@@ -23,6 +28,7 @@ uniform float u_vel;
 uniform vec3 u_tint;
 uniform float u_tintMix;
 uniform float u_gain;
+uniform float u_signal;
 
 vec3 permute(vec3 x){ return mod(((x*34.0)+1.0)*x, 289.0); }
 float snoise(vec2 v){
@@ -61,6 +67,7 @@ float lines(float f, float w){
   return smoothstep(0.5 - w, 0.5, d) + 0.35 * smoothstep(0.5 - w * 5.0, 0.5, d);
 }
 float hash(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
+float gauss(float x, float c, float s){ float z = (x - c) / s; return exp(-0.5 * z * z); }
 
 void main(){
   vec2 uv = gl_FragCoord.xy / u_res;
@@ -78,7 +85,17 @@ void main(){
 
   float n1 = fbm(q * 0.7 + vec2(t, -t * 0.7));
   float n2 = fbm(q * 1.05 + n1 * 0.75 + vec2(-t * 0.6, t * 0.4));
-  float field = n2 * 0.65 + n1 * 0.4 + p.y * 0.8 - p.x * 0.18;
+  // Signal from noise: r = 0 is pure noise (left), 1 is the resolved signal (right).
+  float r = smoothstep(-0.12 * asp, 0.3 * asp, p.x) * u_signal;
+  // Two surface peaks: wide and merged where noise remains, about 2 FWHM apart once resolved.
+  // Peak height stays below the trace spacing so neighbouring traces never merge into one bundle.
+  // k narrows the pair on portrait screens so both peaks stay in frame.
+  float k = min(asp, 1.0);
+  float s = mix(0.1, 0.05, r) * k * (1.0 - lens * 0.25);
+  float c1 = 0.12 * asp, c2 = c1 + 0.24 * k;
+  float bump = (gauss(p.x, c1, s) + 0.78 * gauss(p.x, c2, s)) * (0.13 + 0.008 * sin(t * 6.0));
+  float field = (n2 * 0.65 + n1 * 0.4) * (1.0 - r * 0.9) + p.y * 0.8 - p.x * 0.18 * (1.0 - r) - bump * r;
+  float peakGlow = (gauss(p.x, c1, s * 1.8) + 0.78 * gauss(p.x, c2, s * 1.8)) * r;
 
   float freq = 5.5 + lens * 7.0;
   float w = 0.022 + lens * 0.012;
@@ -89,6 +106,7 @@ void main(){
   float Lb = lines((field - disp) * freq, w);
 
   float ribbon = smoothstep(-0.35, 0.55, fbm(q * 0.45 - vec2(t * 0.35, t * 0.2)) + lens * 0.6);
+  ribbon = mix(ribbon, 1.0, r * 0.75);       // resolved traces stay lit end to end
   vec3 hue = spectrum(field * 0.22 + uv.x * 0.18 + t * 0.4);
   hue = mix(hue, u_tint, u_tintMix);
   vec3 violet = vec3(0.486, 0.361, 1.0), amber = vec3(0.961, 0.722, 0.29);
@@ -99,8 +117,9 @@ void main(){
 
   vec3 col = vec3(0.014, 0.014, 0.026);
   col += hue * (0.035 + 0.055 * smoothstep(-0.3, 0.9, n1));            // nebula
-  col += L * ribbon * (0.42 + lens * 0.9);                               // filaments
+  col += L * ribbon * (0.42 + lens * 0.9) * (1.0 + peakGlow * 1.4);      // filaments, brighter on the peaks
   col += mix(hue, vec3(1.0), 0.3) * lens * 0.05;
+  col += mix(hue, vec3(1.0), 0.4) * peakGlow * 0.045;                    // soft bloom around the peaks
 
   float vig = smoothstep(1.25, 0.2, length((uv - vec2(0.55, 0.6)) * vec2(1.0, 1.25)));
   col *= mix(0.45, 1.0, vig);
@@ -115,7 +134,7 @@ const hexToRgb = (hex) => {
   return [((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255]
 }
 
-export default function Field({ tint = null, tintMix = 0.55, gain = 1, className = '', interactive = true }) {
+export default function Field({ tint = null, tintMix = 0.55, gain = 1, className = '', interactive = true, signal = false }) {
   const canvasRef = useRef(null)
 
   useEffect(() => {
@@ -147,12 +166,13 @@ export default function Field({ tint = null, tintMix = 0.55, gain = 1, className
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW)
     const loc = gl.getAttribLocation(prog, 'p')
     gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0)
-    const U = Object.fromEntries(['u_res', 'u_t', 'u_mouse', 'u_focus', 'u_scroll', 'u_vel', 'u_tint', 'u_tintMix', 'u_gain'].map((n) => [n, gl.getUniformLocation(prog, n)]))
+    const U = Object.fromEntries(['u_res', 'u_t', 'u_mouse', 'u_focus', 'u_scroll', 'u_vel', 'u_tint', 'u_tintMix', 'u_gain', 'u_signal'].map((n) => [n, gl.getUniformLocation(prog, n)]))
 
     const rgb = tint ? hexToRgb(tint) : [0.5, 0.5, 0.5]
     gl.uniform3f(U.u_tint, ...rgb)
     gl.uniform1f(U.u_tintMix, tint ? tintMix : 0)
     gl.uniform1f(U.u_gain, gain)
+    gl.uniform1f(U.u_signal, signal ? 1 : 0)
 
     // Pointer: until the visitor moves, the lens drifts on its own so the hero is alive at once.
     const mouse = { x: 0.62, y: 0.55 }, target = { x: 0.62, y: 0.55 }
@@ -247,7 +267,7 @@ export default function Field({ tint = null, tintMix = 0.55, gain = 1, className
       canvas.removeEventListener('webglcontextlost', onLost)
       gl.getExtension('WEBGL_lose_context')?.loseContext()
     }
-  }, [tint, tintMix, gain, interactive])
+  }, [tint, tintMix, gain, interactive, signal])
 
   return (
     <div aria-hidden="true" className={`pointer-events-none ${className}`}

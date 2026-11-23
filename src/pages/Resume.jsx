@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { ArrowUpRight, Download } from 'lucide-react'
 import { profile, resumes } from '../data.js'
 import { Reveal, Lines, Roll, Magnetic } from '../motion/ui.jsx'
+import Field from '../motion/Field.jsx'
 
 const STORE_KEY = 'resume-lang'
 
@@ -24,8 +25,11 @@ export default function Resume() {
   }, [lang])
 
   return (
-    <div>
-      <section className="mx-auto max-w-[1600px] px-5 pb-12 pt-36 md:px-10 md:pt-48">
+    <div className="relative">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-[85vh] overflow-hidden [mask-image:linear-gradient(to_bottom,#000_35%,transparent)]">
+        <Field className="absolute inset-0" tint="#22d3ee" tintMix={0.35} gain={0.55} interactive={false} />
+      </div>
+      <section className="relative mx-auto max-w-[1600px] px-5 pb-12 pt-36 md:px-10 md:pt-48">
         <p className="eyebrow mb-6 text-mute">Résumé</p>
         <h1 className="text-hero font-medium leading-[0.86] tracking-[-0.055em]">
           <Lines trigger="enter" lines={['One page,', <span key="i" className="font-serif-it tracking-[-0.02em]">two languages.</span>]} />
@@ -38,7 +42,7 @@ export default function Resume() {
         </Reveal>
       </section>
 
-      <section className="mx-auto max-w-[1600px] px-5 pb-32 md:px-10">
+      <section className="relative mx-auto max-w-[1600px] px-5 pb-32 md:px-10">
         <Reveal>
           <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div role="tablist" aria-label="Résumé language" className="inline-flex rounded-full border border-line bg-ink-2 p-1">

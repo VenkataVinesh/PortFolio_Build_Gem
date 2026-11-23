@@ -1,16 +1,22 @@
-import { useEffect, useLayoutEffect, useRef } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { ArrowUpRight, ArrowRight, ArrowDown } from 'lucide-react'
 import { profile, projects, figures } from '../data.js'
 import { Github, Linkedin } from '../Icons.jsx'
 import Field from '../motion/Field.jsx'
+import SensorStory from '../motion/SensorStory.jsx'
 import { Lines, Reveal, Magnetic, Marquee, ScrubWords, Decode, Roll, Atmosphere } from '../motion/ui.jsx'
-import { gsap, ScrollTrigger, reducedMotion, onEnter, getLenis } from '../motion/core.js'
+import Glyph from '../components/Glyphs.jsx'
+import { GLYPH_FOR } from '../components/glyph-kinds.js'
+import { gsap, ScrollTrigger, reducedMotion, onEnter, getLenis, canRunStory, useTilt } from '../motion/core.js'
 import { ProjectTile, TriageVisual } from '../components/Tiles.jsx'
 
 const pad = (n) => String(n).padStart(2, '0')
 
 function Hero() {
   const root = useRef(null)
+  // With a real GPU and motion allowed the hero is the scroll-through sensor story;
+  // otherwise (and in the prerendered HTML) it is the single-screen shader hero.
+  const [story] = useState(canRunStory)
   useEffect(() => {
     const el = root.current
     if (reducedMotion()) return
@@ -19,19 +25,24 @@ function Hero() {
       const cancel = onEnter(() => {
         gsap.to('[data-hero-fade]', { opacity: 1, y: 0, duration: 1.2, ease: 'expo.out', stagger: 0.08, delay: 0.45 })
       })
-      // Scroll: type lifts away faster than the page; the field dims into depth.
-      gsap.to('[data-hero-type]', { yPercent: -28, ease: 'none', scrollTrigger: { trigger: el, start: 'top top', end: 'bottom top', scrub: true } })
-      gsap.to('[data-hero-field]', { opacity: 0.25, scale: 1.08, ease: 'none', scrollTrigger: { trigger: el, start: 'top top', end: 'bottom top', scrub: true } })
+      if (!story) {
+        // Scroll: type lifts away faster than the page; the field dims into depth.
+        gsap.to('[data-hero-type]', { yPercent: -28, ease: 'none', scrollTrigger: { trigger: el, start: 'top top', end: 'bottom top', scrub: true } })
+        gsap.to('[data-hero-field]', { opacity: 0.25, scale: 1.08, ease: 'none', scrollTrigger: { trigger: el, start: 'top top', end: 'bottom top', scrub: true } })
+      }
       return cancel
     }, el)
     return () => ctx.revert()
-  }, [])
+  }, [story])
 
+  const Wrap = story ? SensorStory : FlatHero
   return (
-    <section ref={root} id="top" className="relative flex h-[100svh] min-h-[620px] flex-col overflow-hidden">
-      <div data-hero-field className="absolute inset-0 will-change-transform">
-        <Field className="absolute inset-0" />
-      </div>
+    <Wrap ref={root}>
+      {!story && (
+        <div data-hero-field className="absolute inset-0 will-change-transform">
+          <Field className="absolute inset-0" signal />
+        </div>
+      )}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(6,6,9,0.96)_0%,rgba(6,6,9,0.78)_38%,rgba(6,6,9,0.1)_70%)] md:bg-[radial-gradient(120%_70%_at_20%_100%,rgba(6,6,9,0.92)_0%,rgba(6,6,9,0.4)_45%,transparent_70%)]" />
 
       <div className="relative z-10 mx-auto flex w-full max-w-[1600px] flex-1 flex-col justify-end px-5 pb-8 pt-28 md:px-10 md:pb-10">
@@ -86,8 +97,12 @@ function Hero() {
           </div>
         </div>
       </div>
-    </section>
+    </Wrap>
   )
+}
+
+function FlatHero({ ref, children }) {
+  return <section ref={ref} id="top" className="relative flex h-[100svh] min-h-[620px] flex-col overflow-hidden">{children}</section>
 }
 
 function Availability() {
@@ -136,6 +151,7 @@ function Statement() {
 function Features() {
   const root = useRef(null)
   const [tm, pr] = projects
+  const tmTilt = useTilt(2.5), prTilt = useTilt(2.5)
   useEffect(() => {
     const el = root.current
     if (reducedMotion()) return
@@ -167,8 +183,9 @@ function Features() {
       <div className="flex flex-col gap-4 md:gap-0">
         {/* TriageMate */}
         <div className="md:sticky md:top-[5vh] md:h-[100vh]">
-          <a data-stack-card href={`#/p/${tm.id}`} data-cursor="view"
+          <a ref={tmTilt} data-stack-card href={`#/p/${tm.id}`} data-cursor="view"
             className="group relative block h-[min(92vh,880px)] min-h-[640px] overflow-hidden rounded-[22px] border border-line md:rounded-[30px]">
+            <span aria-hidden="true" className="tilt-sheen" />
             <Atmosphere accent={tm.accent} />
             <div className="relative z-10 grid h-full grid-cols-1 gap-6 p-6 md:grid-cols-12 md:p-12">
               <div className="flex flex-col justify-between md:col-span-5">
@@ -197,9 +214,13 @@ function Features() {
 
         {/* PRECITEC */}
         <div className="md:sticky md:top-[5vh] md:h-[100vh]">
-          <a data-stack-card href={`#/p/${pr.id}`} data-cursor="view"
+          <a ref={prTilt} data-stack-card href={`#/p/${pr.id}`} data-cursor="view"
             className="group relative block h-[min(92vh,880px)] min-h-[640px] overflow-hidden rounded-[22px] border border-line md:rounded-[30px]">
+            <span aria-hidden="true" className="tilt-sheen" />
             <Atmosphere accent={pr.accent} intensity={0.9} />
+            <div aria-hidden="true" className="pointer-events-none absolute right-[6%] top-[12%] z-0 w-[70%] opacity-80 md:top-[9%] md:w-[44%] lg:right-[5%] lg:w-[36%]">
+              <Glyph kind="peaks" accent={pr.accent} className="h-auto w-full" />
+            </div>
             <div className="relative z-10 flex h-full flex-col justify-between p-6 md:p-12">
               <div className="flex flex-wrap items-center justify-between gap-3 font-mono text-[11px] uppercase tracking-[0.18em] text-bone/70">
                 <span>02 · {pr.period}</span>
@@ -329,6 +350,11 @@ function Figures() {
           const p = projects.find((x) => x.id === f.from)
           return (
             <div key={f.v} className={`group relative border-b border-line py-10 md:py-14 ${i % 2 === 0 ? 'md:border-r md:pr-10' : 'md:pl-10'}`}>
+              {GLYPH_FOR[f.from] && (
+                <div aria-hidden="true" className={`pointer-events-none absolute bottom-8 w-[34%] max-w-[260px] opacity-35 transition-opacity duration-700 group-hover:opacity-90 ${i % 2 === 0 ? 'right-0 md:right-10' : 'right-0'}`}>
+                  <Glyph kind={GLYPH_FOR[f.from]} accent={p.accent} className="h-auto w-full" />
+                </div>
+              )}
               <dt className="sr-only">{f.k}</dt>
               <dd>
                 <Decode value={f.v} className="block whitespace-nowrap text-[clamp(3.4rem,7.6vw,9.5rem)] font-medium leading-[0.9] tracking-[-0.06em]" />
@@ -351,7 +377,7 @@ function Figures() {
 function Contact() {
   return (
     <section id="contact" className="relative overflow-hidden border-t border-line">
-      <Atmosphere accent="#7c5cff" className="opacity-80" />
+      <Field className="absolute inset-0 opacity-80" gain={0.75} />
       <div className="relative z-10 mx-auto max-w-[1600px] px-5 pb-16 pt-28 md:px-10 md:pb-20 md:pt-40">
         <p className="eyebrow mb-6 text-bone/70">(05) Contact</p>
         <h2 className="text-hero font-medium leading-[0.86] tracking-[-0.055em]">

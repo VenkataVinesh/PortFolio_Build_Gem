@@ -13,7 +13,7 @@ import scenes from '../scenes.json'
 */
 const BASE = import.meta.env.BASE_URL
 const W = 96, H = 54
-const FALLBACK = 'work'
+const FALLBACK = 'film3'
 const LAYER = 'absolute inset-0 h-full w-full opacity-0 transition-opacity duration-[1600ms] ease-out'
 
 function drawScene(canvas, id) {

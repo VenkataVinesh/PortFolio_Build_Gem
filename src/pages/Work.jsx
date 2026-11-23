@@ -46,7 +46,7 @@ export default function Work() {
         </Reveal>
       </section>
 
-      <PageChapter id="work" eyebrow="Index" title={`${projects.length} projects,`} italic="ordered by what I would show first." length={200} />
+      <PageChapter id="film3" eyebrow="Index" title={`${projects.length} projects,`} italic="ordered by what I would show first." length={200} />
 
       <section aria-label="All projects" className="relative mx-auto max-w-[1600px] px-5 pb-32 md:px-10" onPointerLeave={() => setActive(null)}>
         <ol className="border-b border-line">

@@ -39,7 +39,7 @@ export default function Resume() {
         </Reveal>
       </section>
 
-      <PageChapter id="desk" eyebrow="Résumé · EN / FR" title="The work," italic="on one page." length={180} />
+      <PageChapter id="film2" eyebrow="Résumé · EN / FR" title="The work," italic="on one page." length={180} />
 
       <section className="relative mx-auto max-w-[1600px] px-5 pb-32 md:px-10">
         <Reveal>

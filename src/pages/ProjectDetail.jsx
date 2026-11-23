@@ -7,7 +7,7 @@ import NotFound from './NotFound.jsx'
 import { PageChapter } from '../components/Chapters.jsx'
 
 // Generated scene shown under each project's title, where one fits.
-const SCENE = { precitec: 'precitec', triagemate: 'triagemate', 'maintenance-copilot': 'copilot', veltrix: 'forecast', asset: 'forecast' }
+const SCENE = { precitec: 'film1', veltrix: 'film2', asset: 'film2', triagemate: 'film3', 'maintenance-copilot': 'film4' }
 
 const pad = (n) => String(n).padStart(2, '0')
 

@@ -1,42 +1,27 @@
 {
-  "precitec": {
-    "frames": 96,
-    "phoneFrames": 48,
-    "aspect": 1.84
+  "film1": {
+    "frames": 97,
+    "phoneFrames": 49,
+    "aspect": 1.7778
   },
-  "triagemate": {
-    "frames": 96,
-    "phoneFrames": 48,
-    "aspect": 1.84
+  "film2": {
+    "frames": 97,
+    "phoneFrames": 49,
+    "aspect": 1.7778
   },
-  "forecast": {
-    "frames": 96,
-    "phoneFrames": 48,
-    "aspect": 1.84
+  "film3": {
+    "frames": 97,
+    "phoneFrames": 49,
+    "aspect": 1.7778
   },
-  "desk": {
-    "frames": 96,
-    "phoneFrames": 48,
-    "aspect": 1.84
+  "film4": {
+    "frames": 97,
+    "phoneFrames": 49,
+    "aspect": 1.7778
   },
-  "lyon": {
-    "frames": 96,
-    "phoneFrames": 48,
-    "aspect": 1.84
-  },
-  "work": {
-    "frames": 96,
-    "phoneFrames": 48,
-    "aspect": 1.84
-  },
-  "copilot": {
-    "frames": 96,
-    "phoneFrames": 48,
-    "aspect": 1.84
-  },
-  "hero": {
-    "frames": 96,
-    "phoneFrames": 48,
+  "film5": {
+    "frames": 97,
+    "phoneFrames": 49,
     "aspect": 1.7778
   }
 }

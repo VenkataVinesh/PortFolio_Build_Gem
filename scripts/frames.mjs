@@ -4,8 +4,8 @@
 //   CHROME_PATH=... node scripts/frames.mjs precitec   (one scene)
 //
 // Headless Chrome decodes the clip (no ffmpeg needed), seeks to evenly spaced
-// times and exports each frame as WebP: a desktop set (1440 px wide) and a
-// lighter phone set (800 px, every other frame). Output goes to
+// times and exports each frame as WebP: a desktop set (1920 px wide) and a
+// lighter phone set (900 px, every other frame). Output goes to
 // public/scenes/<id>/{d,m}/NNN.webp, and src/scenes.json records what exists,
 // which is how the site knows a scene is ready (scenes without frames stay hidden).
 
@@ -20,7 +20,8 @@ const ROOT = resolve(import.meta.dirname, '..')
 const SRC = join(ROOT, 'scenes-src')
 const OUT = join(ROOT, 'public', 'scenes')
 const MANIFEST = join(ROOT, 'src', 'scenes.json')
-const FRAMES = 96, DESKTOP_W = 1440, PHONE_W = 640, QUALITY = 0.8
+// 12 frames per second of footage: smooth when scrubbed, without flooding the page.
+const FPS = 12, DESKTOP_W = 1920, PHONE_W = 900, QUALITY = 0.82
 
 const chromePath = process.env.CHROME_PATH
 if (!chromePath) { console.error('frames: CHROME_PATH is not set'); process.exit(1) }
@@ -93,6 +94,7 @@ try {
 
     // Stay a hair inside both ends: the very last timestamp often has no frame.
     const span = Math.max(0, meta.d - 0.06)
+    const FRAMES = Math.max(48, Math.round(meta.d * FPS))
     let m = 0
     for (let i = 0; i < FRAMES; i++) {
       const t = 0.02 + (span * i) / (FRAMES - 1)

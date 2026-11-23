@@ -48,7 +48,7 @@ export default function About() {
         </div>
       </section>
 
-      <PageChapter id="lyon" eyebrow={profile.location} title="Final year at" italic="École Centrale de Lyon." length={220} />
+      <PageChapter id="film5" eyebrow={profile.location} title="Final year at" italic="École Centrale de Lyon." length={220} />
 
       <section className="mx-auto w-full max-w-[1600px] px-5 md:px-10">
         <ScrubWords className="max-w-5xl text-[clamp(1.8rem,4vw,4rem)] font-medium leading-[1.06] tracking-[-0.035em]"

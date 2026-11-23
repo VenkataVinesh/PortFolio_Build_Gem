@@ -5,7 +5,7 @@ import scenes from '../scenes.json'
 import { Github, Linkedin } from '../Icons.jsx'
 import FrameScene from '../motion/FrameScene.jsx'
 import SignalTrace from '../motion/SignalTrace.jsx'
-import { Beat, Eyebrow, Big, TriageChapter, PrecitecChapter, ForecastChapter, DeskChapter } from '../components/Chapters.jsx'
+import { Beat, Eyebrow, Big, Num, CaseLink } from '../components/Chapters.jsx'
 import { Lines, Reveal, Magnetic, Marquee, ScrubWords, Decode, Roll, Atmosphere } from '../motion/ui.jsx'
 import Glyph from '../components/Glyphs.jsx'
 import { GLYPH_FOR } from '../components/glyph-kinds.js'
@@ -15,9 +15,14 @@ import { ProjectTile, TriageVisual } from '../components/Tiles.jsx'
 const pad = (n) => String(n).padStart(2, '0')
 
 /*
-  The opening shot: generated footage of noise settling into two clean spectral lines,
-  scrubbed by scroll like every other chapter, with the title over its first half.
+  The home page opens on one continuous film, scrubbed by scroll: a sensor lens in the
+  noise, the beam resolving into two spectral lines (PRECITEC), the lines becoming
+  forecast curves (Veltrix), the curves breaking into tickets that sort themselves
+  (TriageMate), the light flowing into a compressor's telemetry (Maintenance Copilot),
+  and out over Lyon. Five generated clips, each starting where the last one ends.
+  The title holds the first beat; each project gets its stretch of the shot.
 */
+const FILM = ['film1', 'film2', 'film3', 'film4', 'film5']
 function Hero() {
   const root = useRef(null)
   useEffect(() => {
@@ -32,8 +37,8 @@ function Hero() {
   }, [])
 
   return (
-    <FrameScene id="hero" sectionId="top" length={190} label="Illustration · generated">
-      <div ref={root} data-beat="0,0.55" className="absolute inset-0 flex flex-col">
+    <FrameScene id={FILM} sectionId="top" length={1000} label="Illustration · generated">
+      <div ref={root} data-beat="0,0.09" className="absolute inset-0 flex flex-col">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(6,6,9,0.9)_0%,rgba(6,6,9,0.6)_38%,transparent_70%)] md:bg-[radial-gradient(120%_70%_at_20%_100%,rgba(6,6,9,0.85)_0%,rgba(6,6,9,0.35)_45%,transparent_70%)]" />
 
       <div className="relative z-10 mx-auto flex w-full max-w-[1600px] flex-1 flex-col justify-end px-5 pb-12 pt-28 md:px-10 md:pb-16">
@@ -89,7 +94,26 @@ function Hero() {
         </div>
       </div>
       </div>
-      <Beat at="0.62,1" align="right"><Eyebrow>How I work</Eyebrow><Big>Noise in. <span className="font-serif-it tracking-[-0.02em]">Clean signal out.</span></Big></Beat>
+      <Beat at="0.11,0.19"><Eyebrow>PRECITEC sensor · LTDS lab</Eyebrow><Big>White light in. <span className="font-serif-it tracking-[-0.02em]">Two surfaces out.</span></Big></Beat>
+      <Beat at="0.19,0.27" align="right">
+        <Num v="120/120" k="real glass-slide channels with exactly 2 surfaces found. The old Gaussian method found 4." />
+        <CaseLink href="#/p/precitec" />
+      </Beat>
+      <Beat at="0.3,0.38"><Eyebrow>Veltrix · forecasting</Eyebrow><Big>Forecasts, <span className="font-serif-it tracking-[-0.02em]">and the band ahead.</span></Big></Beat>
+      <Beat at="0.38,0.46" align="right">
+        <Num v="94.75%" k="interval coverage against a 95% nominal band, after replacing EWMA with GARCH(1,1)." />
+        <CaseLink href="#/p/veltrix" />
+      </Beat>
+      <Beat at="0.5,0.57"><Eyebrow>TriageMate · Swiss {'{ai}'} Weeks Zurich</Eyebrow><Num v="20,000" k="support tickets in the dataset." /></Beat>
+      <Beat at="0.57,0.65" align="right">
+        <Num v="173" k="unique descriptions inside them. So I stopped training a classifier and built a triage co-pilot instead." />
+        <CaseLink href="#/p/triagemate" />
+      </Beat>
+      <Beat at="0.7,0.84"><Eyebrow>Maintenance Copilot · in progress</Eyebrow><Big>Telemetry, manuals, <span className="font-serif-it tracking-[-0.02em]">a work order.</span></Big>
+        <p className="mt-6 max-w-lg text-base text-bone/80 md:text-lg">An agent for compressor maintenance, being built now. No results claimed yet.</p>
+        <CaseLink href="#/p/maintenance-copilot">See what it will do</CaseLink>
+      </Beat>
+      <Beat at="0.9,1" align="center"><Eyebrow>{profile.location}</Eyebrow><Big>{profile.seeking.headline}</Big></Beat>
     </FrameScene>
   )
 }
@@ -437,13 +461,9 @@ export default function Home() {
       <Hero />
       <Availability />
       <Statement />
-      <TriageChapter />
       <Features />
-      <ForecastChapter />
       <Track />
-      <PrecitecChapter />
       <Figures />
-      <DeskChapter />
       <Contact />
     </>
   )

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import scenes from '../scenes.json'
-import { gsap, ScrollTrigger, reducedMotion, coarsePointer, holdWorld } from './core.js'
+import { gsap, ScrollTrigger, reducedMotion, coarsePointer } from './core.js'
+import { whoosh } from './sound.js'
 
 /*
   A cinematic chapter: a pinned, full-screen clip that plays frame by frame as you
@@ -15,7 +16,7 @@ import { gsap, ScrollTrigger, reducedMotion, coarsePointer, holdWorld } from './
 
 const BASE = import.meta.env.BASE_URL
 
-export default function FrameScene({ id, length = 320, label = 'Illustration', children, className = '' }) {
+export default function FrameScene({ id, sectionId, length = 320, label = 'Illustration', children, className = '' }) {
   const meta = scenes[id]
   const section = useRef(null)
   const canvasRef = useRef(null)
@@ -83,13 +84,12 @@ export default function FrameScene({ id, length = 320, label = 'Illustration', c
     const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) start() }, { rootMargin: '150% 0px' })
     io.observe(el)
 
-    let held = false
-    const hold = (on) => { if (on !== held) { held = on; holdWorld(on) } }
     const ctxG = gsap.context(() => {
       ScrollTrigger.create({
         trigger: el, start: 'top top', end: 'bottom bottom',
         onUpdate: (s) => { if (!reduced) { target = s.progress * (count - 1); kick() } },
-        onToggle: (s) => hold(s.isActive),
+        onEnter: whoosh,
+        onEnterBack: whoosh,
       })
       // Overlay beats: fade in over the first 12% of their span, out over the last 12%.
       const tl = gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: { trigger: el, start: 'top top', end: 'bottom bottom', scrub: 0.5 } })
@@ -104,18 +104,21 @@ export default function FrameScene({ id, length = 320, label = 'Illustration', c
       tl.set({}, {}, 1)
     }, el)
 
-    return () => { dead = true; cancelAnimationFrame(raf); ro.disconnect(); io.disconnect(); hold(false); ctxG.revert() }
+    return () => { dead = true; cancelAnimationFrame(raf); ro.disconnect(); io.disconnect(); ctxG.revert() }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, meta])
 
   if (!meta) return null
   return (
-    <section ref={section} className={`relative ${className}`} style={{ height: `${length}vh` }}>
-      <div className="sticky top-0 h-[100svh] overflow-hidden bg-ink">
-        <canvas ref={canvasRef} aria-hidden="true"
-          className={`absolute inset-0 h-full w-full transition-opacity duration-[1200ms] ${ready ? 'opacity-100' : 'opacity-0'}`} />
-        {/* Veils: keep type readable at the edges without dulling the centre of the shot. */}
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(6,6,9,0.92)_0%,rgba(6,6,9,0.25)_40%,transparent_60%),linear-gradient(to_bottom,rgba(6,6,9,0.6)_0%,transparent_22%)]" />
+    <section ref={section} id={sectionId} data-scene={id} className={`relative ${className}`} style={{ height: `${length}vh` }}>
+      <div className="sticky top-0 h-[100svh] overflow-hidden">
+        {/* Shot and veils feather out top and bottom, dissolving into the same footage, blurred, behind the page (World.jsx). */}
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 [mask-image:linear-gradient(to_bottom,transparent_0%,#000_14%,#000_78%,transparent_100%)]">
+          <canvas ref={canvasRef}
+            className={`absolute inset-0 h-full w-full transition-opacity duration-[1200ms] ${ready ? 'opacity-100' : 'opacity-0'}`} />
+          {/* Veils: keep type readable at the edges without dulling the centre of the shot. */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(6,6,9,0.85)_0%,rgba(6,6,9,0.25)_40%,transparent_60%),linear-gradient(to_bottom,rgba(6,6,9,0.6)_0%,transparent_22%)]" />
+        </div>
         <div className="relative z-10 h-full">{children}</div>
         <p className="pointer-events-none absolute bottom-6 right-5 z-10 font-mono text-[10px] uppercase tracking-[0.2em] text-bone/45 md:right-10">{label}</p>
         <div aria-hidden="true" className="absolute inset-x-5 bottom-4 z-10 h-px bg-bone/10 md:inset-x-10">

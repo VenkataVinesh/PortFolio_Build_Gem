@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import SoundToggle from './SoundToggle.jsx'
 import { profile } from '../data.js'
 import { Roll, Magnetic } from '../motion/ui.jsx'
 import { gsap, reducedMotion, lockScroll, onEnter } from '../motion/core.js'
@@ -92,6 +93,7 @@ export default function Nav({ route }) {
         </ul>
 
         <div className="hidden items-center gap-3 md:flex">
+          <SoundToggle />
           <span className="eyebrow hidden items-center gap-2 text-mute lg:flex">
             <span aria-hidden="true" className="relative flex h-2 w-2"><span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60 motion-safe:animate-ping" /><span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" /></span>
             Available Mar 2027
@@ -103,6 +105,7 @@ export default function Nav({ route }) {
           </Magnetic>
         </div>
 
+        <SoundToggle className="ml-auto mr-2 md:hidden" />
         <button ref={btn} type="button" aria-expanded={open} aria-controls="mobile-menu" aria-label={open ? 'Close menu' : 'Open menu'}
           onClick={() => setOpen(!open)} className="relative flex h-11 w-11 flex-col items-center justify-center gap-[6px] rounded-full border border-line bg-ink/40 backdrop-blur md:hidden">
           <span aria-hidden="true" className={`h-px w-5 bg-bone transition-transform duration-500 ${open ? 'translate-y-[3.5px] rotate-45' : ''}`} />

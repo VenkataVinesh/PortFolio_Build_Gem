@@ -15,35 +15,7 @@ export const coarsePointer = () => mq('(pointer: coarse)')
 export const liteMode = () =>
   reducedMotion() || navigator.connection?.saveData === true || (coarsePointer() && mq('(max-width: 900px)'))
 
-// A real GPU (not a software rasteriser such as SwiftShader or llvmpipe). Checked once.
-let gpu
-export function hasGpu() {
-  if (gpu !== undefined) return gpu
-  gpu = false
-  try {
-    const c = document.createElement('canvas')
-    const gl = c.getContext('webgl2') || c.getContext('webgl')
-    if (gl) {
-      const dbg = gl.getExtension('WEBGL_debug_renderer_info')
-      const r = dbg ? String(gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL)) : ''
-      gpu = !/swiftshader|llvmpipe|software/i.test(r)
-      gl.getExtension('WEBGL_lose_context')?.loseContext()
-    }
-  } catch { gpu = false }
-  return gpu
-}
-// The scroll-through 3D hero runs only with motion allowed and a real GPU.
-export const canRunStory = () => hasWindow && !reducedMotion() && hasGpu()
 
-// The site-wide background pauses while any full-screen scene covers it. Scenes hold
-// and release; a count, so two overlapping scenes cannot unpause each other early.
-let holds = 0
-export const worldPaused = () => holds > 0
-export function holdWorld(on) {
-  const was = holds > 0
-  holds = Math.max(0, holds + (on ? 1 : -1))
-  if (was && holds === 0 && hasWindow) window.dispatchEvent(new Event('world:resume'))
-}
 
 /* ---- Lenis, driven from the GSAP ticker so scroll and ScrollTrigger share a frame ---- */
 let lenis = null

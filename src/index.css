@@ -174,13 +174,6 @@ a:hover .arrow-nudge, button:hover .arrow-nudge { transform: translate(3px, -3px
   100% { transform: translate3d(8%, -6%, 0) scale(0.95); }
 }
 
-/* Still field on devices without a GPU: a slow compositor-only drift instead of shader frames. */
-.field-drift { transform-origin: 60% 45%; animation: field-drift 26s ease-in-out infinite alternate; }
-@keyframes field-drift {
-  from { transform: scale(1.02) translate3d(-0.8%, 0.4%, 0); }
-  to { transform: scale(1.09) translate3d(0.8%, -1%, 0); }
-}
-
 /* ---- Tactile cards: pointer tilt (GSAP) + a specular sheen and lit border that follow the pointer ---- */
 .tilt-sheen {
   position: absolute; inset: 0; z-index: 30; pointer-events: none; border-radius: inherit;
@@ -209,6 +202,15 @@ a:hover .arrow-nudge, button:hover .arrow-nudge { transform: translate(3px, -3px
 @keyframes glyph-ping { from { transform: scale(1); opacity: 0.9; } to { transform: scale(3.2); opacity: 0; } }
 @keyframes glyph-soft { from { opacity: 0.18; } to { opacity: 0.5; } }
 @keyframes glyph-scan { from { transform: translateX(0); } to { transform: translateX(400px); } }
+
+/* Site-wide footage backdrop: a slow push-in and pan, like a held camera. */
+.world-drift { animation: world-drift 38s ease-in-out infinite alternate; will-change: transform; }
+@keyframes world-drift { from { transform: scale(1.04) translate(-1.5%, -1%); } to { transform: scale(1.14) translate(1.5%, 1.5%); } }
+
+/* Sound toggle: bars dance while the score plays, lie flat when muted. */
+.sound-bar { height: 3px; transition: height 0.4s var(--ease-expo); }
+.sound-bar.is-on { animation: sound-bar 1.1s ease-in-out infinite alternate; }
+@keyframes sound-bar { 0% { height: 3px; } 50% { height: 14px; } 100% { height: 6px; } }
 
 /* Film grain */
 .grain {

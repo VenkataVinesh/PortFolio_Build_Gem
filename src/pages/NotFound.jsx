@@ -1,11 +1,9 @@
 import { ArrowLeft } from 'lucide-react'
-import Field from '../motion/Field.jsx'
 import { Lines, Roll } from '../motion/ui.jsx'
 
 export default function NotFound() {
   return (
     <section className="relative flex min-h-[100svh] flex-col justify-end overflow-hidden">
-      <Field className="absolute inset-0" gain={0.6} />
       <div className="relative z-10 mx-auto w-full max-w-[1600px] px-5 pb-16 md:px-10 md:pb-24">
         <p className="eyebrow mb-6 text-mute">404</p>
         <h1 className="text-hero font-medium leading-[0.88] tracking-[-0.055em]">

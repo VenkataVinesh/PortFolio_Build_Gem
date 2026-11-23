@@ -33,5 +33,10 @@
     "frames": 96,
     "phoneFrames": 48,
     "aspect": 1.84
+  },
+  "hero": {
+    "frames": 96,
+    "phoneFrames": 48,
+    "aspect": 1.7778
   }
 }

@@ -36,7 +36,7 @@ export default function Work() {
 
   return (
     <div className="relative">
-      <section data-tone="#7c5cff" className="relative mx-auto max-w-[1600px] px-5 pb-16 pt-36 md:px-10 md:pb-24 md:pt-48">
+      <section className="relative mx-auto max-w-[1600px] px-5 pb-16 pt-36 md:px-10 md:pb-24 md:pt-48">
         <p className="eyebrow mb-6 text-mute">Index · {projects.length} projects</p>
         <h1 className="text-hero font-medium leading-[0.86] tracking-[-0.055em]">
           <Lines trigger="enter" lines={['Selected', <span key="b" className="font-serif-it tracking-[-0.02em]">work.</span>]} />
@@ -48,7 +48,7 @@ export default function Work() {
 
       <PageChapter id="work" eyebrow="Index" title={`${projects.length} projects,`} italic="ordered by what I would show first." length={200} />
 
-      <section aria-label="All projects" data-tone="#22d3ee" className="relative mx-auto max-w-[1600px] px-5 pb-32 md:px-10" onPointerLeave={() => setActive(null)}>
+      <section aria-label="All projects" className="relative mx-auto max-w-[1600px] px-5 pb-32 md:px-10" onPointerLeave={() => setActive(null)}>
         <ol className="border-b border-line">
           {projects.map((x, i) => (
             <Reveal as="li" key={x.id} className="border-t border-line">

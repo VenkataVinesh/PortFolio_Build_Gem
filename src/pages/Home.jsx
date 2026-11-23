@@ -1,54 +1,42 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef } from 'react'
 import { ArrowUpRight, ArrowRight, ArrowDown } from 'lucide-react'
 import { profile, projects, figures } from '../data.js'
 import scenes from '../scenes.json'
 import { Github, Linkedin } from '../Icons.jsx'
-import Field from '../motion/Field.jsx'
-import SensorStory from '../motion/SensorStory.jsx'
+import FrameScene from '../motion/FrameScene.jsx'
 import SignalTrace from '../motion/SignalTrace.jsx'
-import { TriageChapter, PrecitecChapter, ForecastChapter, DeskChapter } from '../components/Chapters.jsx'
+import { Beat, Eyebrow, Big, TriageChapter, PrecitecChapter, ForecastChapter, DeskChapter } from '../components/Chapters.jsx'
 import { Lines, Reveal, Magnetic, Marquee, ScrubWords, Decode, Roll, Atmosphere } from '../motion/ui.jsx'
 import Glyph from '../components/Glyphs.jsx'
 import { GLYPH_FOR } from '../components/glyph-kinds.js'
-import { gsap, ScrollTrigger, reducedMotion, onEnter, getLenis, canRunStory, useTilt } from '../motion/core.js'
+import { gsap, ScrollTrigger, reducedMotion, onEnter, getLenis, useTilt } from '../motion/core.js'
 import { ProjectTile, TriageVisual } from '../components/Tiles.jsx'
 
 const pad = (n) => String(n).padStart(2, '0')
 
+/*
+  The opening shot: generated footage of noise settling into two clean spectral lines,
+  scrubbed by scroll like every other chapter, with the title over its first half.
+*/
 function Hero() {
   const root = useRef(null)
-  // With a real GPU and motion allowed the hero is the scroll-through sensor story;
-  // otherwise (and in the prerendered HTML) it is the single-screen shader hero.
-  const [story] = useState(canRunStory)
   useEffect(() => {
-    const el = root.current
     if (reducedMotion()) return
     const ctx = gsap.context(() => {
       gsap.set('[data-hero-fade]', { opacity: 0, y: 24 })
-      const cancel = onEnter(() => {
+      return onEnter(() => {
         gsap.to('[data-hero-fade]', { opacity: 1, y: 0, duration: 1.2, ease: 'expo.out', stagger: 0.08, delay: 0.45 })
       })
-      if (!story) {
-        // Scroll: type lifts away faster than the page; the field dims into depth.
-        gsap.to('[data-hero-type]', { yPercent: -28, ease: 'none', scrollTrigger: { trigger: el, start: 'top top', end: 'bottom top', scrub: true } })
-        gsap.to('[data-hero-field]', { opacity: 0.25, scale: 1.08, ease: 'none', scrollTrigger: { trigger: el, start: 'top top', end: 'bottom top', scrub: true } })
-      }
-      return cancel
-    }, el)
+    }, root.current)
     return () => ctx.revert()
-  }, [story])
+  }, [])
 
-  const Wrap = story ? SensorStory : FlatHero
   return (
-    <Wrap ref={root}>
-      {!story && (
-        <div data-hero-field className="absolute inset-0 will-change-transform">
-          <Field className="absolute inset-0" signal />
-        </div>
-      )}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(6,6,9,0.96)_0%,rgba(6,6,9,0.78)_38%,rgba(6,6,9,0.1)_70%)] md:bg-[radial-gradient(120%_70%_at_20%_100%,rgba(6,6,9,0.92)_0%,rgba(6,6,9,0.4)_45%,transparent_70%)]" />
+    <FrameScene id="hero" sectionId="top" length={190} label="Illustration · generated">
+      <div ref={root} data-beat="0,0.55" className="absolute inset-0 flex flex-col">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(6,6,9,0.9)_0%,rgba(6,6,9,0.6)_38%,transparent_70%)] md:bg-[radial-gradient(120%_70%_at_20%_100%,rgba(6,6,9,0.85)_0%,rgba(6,6,9,0.35)_45%,transparent_70%)]" />
 
-      <div className="relative z-10 mx-auto flex w-full max-w-[1600px] flex-1 flex-col justify-end px-5 pb-8 pt-28 md:px-10 md:pb-10">
+      <div className="relative z-10 mx-auto flex w-full max-w-[1600px] flex-1 flex-col justify-end px-5 pb-12 pt-28 md:px-10 md:pb-16">
         {/* Selected index, top right on large screens: the first project link is here. */}
         <nav aria-label="Selected projects" data-hero-fade className="absolute right-10 top-32 hidden w-64 lg:block">
           <p className="eyebrow mb-4 text-mute">Selected</p>
@@ -100,12 +88,10 @@ function Hero() {
           </div>
         </div>
       </div>
-    </Wrap>
+      </div>
+      <Beat at="0.62,1" align="right"><Eyebrow>How I work</Eyebrow><Big>Noise in. <span className="font-serif-it tracking-[-0.02em]">Clean signal out.</span></Big></Beat>
+    </FrameScene>
   )
-}
-
-function FlatHero({ ref, children }) {
-  return <section ref={ref} id="top" className="relative flex h-[100svh] min-h-[620px] flex-col overflow-hidden">{children}</section>
 }
 
 function Availability() {
@@ -128,7 +114,7 @@ function Availability() {
 
 function Statement() {
   return (
-    <section data-tone="#7c5cff" className="mx-auto max-w-[1600px] px-5 py-28 md:px-10 md:py-44">
+    <section className="mx-auto max-w-[1600px] px-5 py-28 md:px-10 md:py-44">
       <div className="grid grid-cols-1 gap-10 md:grid-cols-12">
         <p className="eyebrow text-mute md:col-span-3">(01) How I work</p>
         <div className="md:col-span-9">
@@ -194,7 +180,7 @@ function Features() {
 
       <div className="flex flex-col gap-4 md:gap-0">
         {/* TriageMate */}
-        <div data-tone={tm.accent} className="md:sticky md:top-[5vh] md:h-[100vh]">
+        <div className="md:sticky md:top-[5vh] md:h-[100vh]">
           <a ref={tmTilt} data-stack-card href={`#/p/${tm.id}`} data-cursor="view"
             className="group relative block h-[min(92vh,880px)] min-h-[640px] overflow-hidden rounded-[22px] border border-line md:rounded-[30px]">
             <span aria-hidden="true" className="tilt-sheen" />
@@ -225,7 +211,7 @@ function Features() {
         </div>
 
         {/* PRECITEC */}
-        <div data-tone={pr.accent} className="md:sticky md:top-[5vh] md:h-[100vh]">
+        <div className="md:sticky md:top-[5vh] md:h-[100vh]">
           <a ref={prTilt} data-stack-card href={`#/p/${pr.id}`} data-cursor="view"
             className="group relative block h-[min(92vh,880px)] min-h-[640px] overflow-hidden rounded-[22px] border border-line md:rounded-[30px]">
             <span aria-hidden="true" className="tilt-sheen" />
@@ -306,7 +292,7 @@ function Track() {
   }
 
   return (
-    <section aria-label="More projects" data-tone="#22d3ee" className="relative">
+    <section aria-label="More projects" className="relative">
      {/* GSAP pins this inner div (it inserts a pin-spacer around it), so the React-owned parent stays intact. */}
      <div ref={root} className="relative overflow-hidden py-24 lg:flex lg:h-screen lg:items-center lg:py-0">
       <div ref={track} onFocus={onFocus} data-cursor="drag"
@@ -350,7 +336,7 @@ function FigureCell({ className, children }) {
 
 function Figures() {
   return (
-    <section data-tone="#34d399" className="mx-auto max-w-[1600px] px-5 py-28 md:px-10 md:py-40">
+    <section className="mx-auto max-w-[1600px] px-5 py-28 md:px-10 md:py-40">
       <div className="mb-14 flex flex-col gap-6 md:mb-20 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="eyebrow mb-5 text-mute">(04) Measured, not tuned</p>
@@ -393,7 +379,7 @@ function Figures() {
 
 function Contact() {
   return (
-    <section id="contact" data-tone="#7c5cff" className="relative overflow-hidden border-t border-line">
+    <section id="contact" className="relative overflow-hidden border-t border-line">
       <div aria-hidden="true" className="pointer-events-none absolute -bottom-40 left-1/2 h-[520px] w-[120%] -translate-x-1/2 opacity-60 blur-3xl" style={{ background: 'radial-gradient(closest-side, #7c5cff55, transparent)' }} />
       <div className="relative z-10 mx-auto max-w-[1600px] px-5 pb-16 pt-28 md:px-10 md:pb-20 md:pt-40">
         <p className="eyebrow mb-6 text-bone/70">(05) Contact</p>

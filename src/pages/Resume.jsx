@@ -25,7 +25,7 @@ export default function Resume() {
   }, [lang])
 
   return (
-    <div className="relative" data-tone="#22d3ee">
+    <div className="relative">
       <section className="relative mx-auto max-w-[1600px] px-5 pb-12 pt-36 md:px-10 md:pt-48">
         <p className="eyebrow mb-6 text-mute">Résumé</p>
         <h1 className="text-hero font-medium leading-[0.86] tracking-[-0.055em]">

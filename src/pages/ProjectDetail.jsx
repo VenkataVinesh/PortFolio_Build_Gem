@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { ArrowLeft, ArrowUpRight, Lock } from 'lucide-react'
 import { projects, projectDetails } from '../data.js'
-import Field from '../motion/Field.jsx'
 import { Lines, Reveal, Magnetic, ScrubWords, Decode, Roll, RevealImage, Atmosphere } from '../motion/ui.jsx'
 import { gsap, reducedMotion, onEnter } from '../motion/core.js'
 import NotFound from './NotFound.jsx'
@@ -20,7 +19,7 @@ function titleLines(name) {
 
 function Section({ n, label, children, className = '', accent }) {
   return (
-    <section data-gain="0.45" className={`relative mx-auto max-w-[1600px] px-5 md:px-10 ${className}`}>
+    <section className={`relative mx-auto max-w-[1600px] px-5 md:px-10 ${className}`}>
       {accent && <div aria-hidden="true" className="pointer-events-none absolute -left-[10%] -top-24 h-[420px] w-[60%] opacity-60" style={{ background: `radial-gradient(closest-side, ${accent}1f, transparent)` }} />}
       <div className="relative grid grid-cols-1 gap-8 border-t border-line pt-10 md:grid-cols-12 md:gap-10 md:pt-14">
         <div className="md:col-span-3">
@@ -60,7 +59,6 @@ function Hero({ p, idx }) {
     const ctx = gsap.context(() => {
       gsap.set('[data-fade]', { opacity: 0, y: 20 })
       const cancel = onEnter(() => gsap.to('[data-fade]', { opacity: 1, y: 0, duration: 1.1, stagger: 0.07, ease: 'expo.out', delay: 0.35 }))
-      gsap.to('[data-hero-field]', { opacity: 0.2, ease: 'none', scrollTrigger: { trigger: root.current, start: 'top top', end: 'bottom top', scrub: true } })
       gsap.to('[data-hero-type]', { yPercent: -20, ease: 'none', scrollTrigger: { trigger: root.current, start: 'top top', end: 'bottom top', scrub: true } })
       return cancel
     }, root.current)
@@ -69,7 +67,6 @@ function Hero({ p, idx }) {
 
   return (
     <section ref={root} className="relative flex min-h-[100svh] flex-col overflow-hidden">
-      <div data-hero-field className="absolute inset-0"><Field className="absolute inset-0" tint={p.accent} tintMix={0.6} gain={0.9} /></div>
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,#060609_5%,rgba(6,6,9,0.55)_45%,rgba(6,6,9,0.2)_100%)]" />
       <div className="relative z-10 mx-auto flex w-full max-w-[1600px] flex-1 flex-col justify-between px-5 pb-10 pt-28 md:px-10 md:pb-14 md:pt-36">
         <div data-fade className="flex items-center justify-between">
@@ -124,7 +121,7 @@ export default function ProjectDetail({ id }) {
   let n = 0
 
   return (
-    <article data-tone={p.accent}>
+    <article>
       <Hero p={p} idx={idx} />
       {SCENE[p.id] && <PageChapter id={SCENE[p.id]} eyebrow={p.kind} title={p.name.split(':')[0]} length={220} />}
 

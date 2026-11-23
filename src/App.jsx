@@ -3,6 +3,7 @@ import Home from './pages/Home.jsx'
 import Nav from './components/Nav.jsx'
 import Footer from './components/Footer.jsx'
 import Cursor from './motion/Cursor.jsx'
+import World from './motion/World.jsx'
 import { projects } from './data.js'
 import { startLenis, scrollToTop, ScrollTrigger, reducedMotion } from './motion/core.js'
 import { runLoader, curtainCover, curtainReveal } from './motion/transitions.js'
@@ -93,15 +94,16 @@ export default function App() {
         className="sr-only z-[3001] rounded-full bg-bone px-5 py-2.5 text-sm font-medium text-ink focus:not-sr-only focus:fixed focus:left-4 focus:top-4">
         Skip to content
       </a>
+      <World route={route} />
       <Cursor />
       <div className="grain" aria-hidden="true" />
       <Nav route={route} />
-      <main id="main" tabIndex={-1} className="outline-none">
+      <main id="main" tabIndex={-1} className="relative z-[1] outline-none">
         <Suspense fallback={<div className="min-h-screen" />}>
           <Page route={route} />
         </Suspense>
       </main>
-      <Footer />
+      <div className="relative z-[1]"><Footer /></div>
 
       {/* Route curtain */}
       <div ref={curtain} aria-hidden="true" style={{ display: 'none' }}

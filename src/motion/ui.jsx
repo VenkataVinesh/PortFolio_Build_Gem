@@ -11,8 +11,10 @@ export function Lines({ lines, as: Tag = 'span', className = '', trigger = 'scro
     if (reducedMotion()) return
     // Phones skip the de-blur: animating a filter on display type is a costly repaint there.
     const blur = !liteMode()
-    gsap.set(inner, blur ? { yPercent: 115, filter: 'blur(6px)' } : { yPercent: 115 })
-    const play = () => gsap.to(inner, { yPercent: 0, ...(blur ? { filter: 'blur(0px)' } : {}), duration: 1.25, ease: 'expo.out', stagger, delay, overwrite: true })
+    // Each line tips up out of its mask (3D, hinged at the baseline) and de-blurs.
+    const from = { yPercent: 115, rotationX: -70, transformOrigin: '50% 100%', transformPerspective: 900 }
+    gsap.set(inner, blur ? { ...from, filter: 'blur(6px)' } : from)
+    const play = () => gsap.to(inner, { yPercent: 0, rotationX: 0, ...(blur ? { filter: 'blur(0px)' } : {}), duration: 1.35, ease: 'expo.out', stagger, delay, overwrite: true })
     let cancel = () => {}, st
     if (trigger === 'enter') cancel = onEnter(play)
     else st = ScrollTrigger.create({ trigger: el, start: 'top 88%', once: true, onEnter: play })
@@ -82,6 +84,9 @@ export function Marquee({ children, className = '', duration = 40 }) {
         const boost = Math.min(Math.abs(v) / 250, 7)
         gsap.to(tween, { timeScale: dir * (1 + boost), duration: 0.25, overwrite: true })
         gsap.to(tween, { timeScale: dir, duration: 1.2, delay: 0.25, ease: 'power2.out' })
+        // The band leans into the scroll, then springs upright.
+        gsap.to(ref.current, { skewX: Math.max(-9, Math.min(9, -v / 260)), duration: 0.35, overwrite: true })
+        gsap.to(ref.current, { skewX: 0, duration: 1.1, delay: 0.3, ease: 'elastic.out(1, 0.5)' })
       },
     })
     return () => { st.kill(); tween.kill() }

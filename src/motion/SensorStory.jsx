@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { ArrowUpRight } from 'lucide-react'
-import { gsap, ScrollTrigger, liteMode, coarsePointer } from './core.js'
+import { gsap, ScrollTrigger, liteMode, coarsePointer, setWorldPaused } from './core.js'
 
 /*
   The home hero as a pinned 3D story (see sensorScene.js). The section is tall;
@@ -56,7 +56,13 @@ export default function SensorStory({ ref, children }) {
       .catch(() => { /* no scene: the dark stage and the hero content still stand */ })
 
     const ctx = gsap.context(() => {
-      st = ScrollTrigger.create({ trigger: el, start: 'top top', end: 'bottom bottom', onUpdate: (s) => scene?.setProgress(s.progress) })
+      // While the pinned stage fills the screen, the site-wide background has nothing to show: pause it.
+      st = ScrollTrigger.create({
+        trigger: el, start: 'top top', end: 'bottom bottom',
+        onUpdate: (s) => scene?.setProgress(s.progress),
+        onToggle: (s) => setWorldPaused(s.isActive),
+      })
+      setWorldPaused(st.isActive)
       // One timeline of length 1 = the whole section, scrubbed with the scroll.
       const tl = gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: { trigger: el, start: 'top top', end: 'bottom bottom', scrub: 0.5 } })
       tl.to('[data-story-hero]', { autoAlpha: 0, y: -70, duration: 0.1 }, 0.03)
@@ -70,7 +76,7 @@ export default function SensorStory({ ref, children }) {
       tl.set({}, {}, 1)
     }, el)
 
-    return () => { dead = true; ctx.revert(); scene?.dispose() }
+    return () => { dead = true; setWorldPaused(false); ctx.revert(); scene?.dispose() }
   }, [])
 
   return (

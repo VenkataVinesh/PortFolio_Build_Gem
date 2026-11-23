@@ -16,7 +16,7 @@ function titleLines(name) {
 
 function Section({ n, label, children, className = '', accent }) {
   return (
-    <section className={`relative mx-auto max-w-[1600px] px-5 md:px-10 ${className}`}>
+    <section data-gain="0.45" className={`relative mx-auto max-w-[1600px] px-5 md:px-10 ${className}`}>
       {accent && <div aria-hidden="true" className="pointer-events-none absolute -left-[10%] -top-24 h-[420px] w-[60%] opacity-60" style={{ background: `radial-gradient(closest-side, ${accent}1f, transparent)` }} />}
       <div className="relative grid grid-cols-1 gap-8 border-t border-line pt-10 md:grid-cols-12 md:gap-10 md:pt-14">
         <div className="md:col-span-3">
@@ -120,7 +120,7 @@ export default function ProjectDetail({ id }) {
   let n = 0
 
   return (
-    <article>
+    <article data-tone={p.accent}>
       <Hero p={p} idx={idx} />
 
       {/* Summary */}

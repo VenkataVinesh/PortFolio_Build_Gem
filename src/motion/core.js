@@ -35,6 +35,15 @@ export function hasGpu() {
 // The scroll-through 3D hero runs only with motion allowed and a real GPU.
 export const canRunStory = () => hasWindow && !reducedMotion() && hasGpu()
 
+// The site-wide background pauses while a full-screen scene (the home 3D story) covers it.
+let paused = false
+export const worldPaused = () => paused
+export function setWorldPaused(v) {
+  if (v === paused) return
+  paused = v
+  if (!v && hasWindow) window.dispatchEvent(new Event('world:resume'))
+}
+
 /* ---- Lenis, driven from the GSAP ticker so scroll and ScrollTrigger share a frame ---- */
 let lenis = null
 export function startLenis() {

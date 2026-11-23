@@ -1,10 +1,11 @@
 import { ArrowUpRight } from 'lucide-react'
 import { profile, skills, education, experience, certification, languages } from '../data.js'
 import { Lines, Reveal, RevealImage, ScrubWords, Roll, Magnetic } from '../motion/ui.jsx'
+import SignalTrace from '../motion/SignalTrace.jsx'
 
-function Block({ label, children }) {
+function Block({ label, tone, children }) {
   return (
-    <section className="mx-auto max-w-[1600px] px-5 md:px-10">
+    <section data-tone={tone} data-gain="0.45" className="mx-auto max-w-[1600px] px-5 md:px-10">
       <div className="grid grid-cols-1 gap-8 border-t border-line pt-10 md:grid-cols-12 md:pt-14">
         <h2 className="eyebrow text-mute md:col-span-3">{label}</h2>
         <div className="md:col-span-9">{children}</div>
@@ -16,7 +17,7 @@ function Block({ label, children }) {
 export default function About() {
   return (
     <div className="flex flex-col gap-24 pb-32 md:gap-36">
-      <section className="mx-auto w-full max-w-[1600px] px-5 pt-36 md:px-10 md:pt-48">
+      <section data-tone="#f5b84a" className="mx-auto w-full max-w-[1600px] px-5 pt-36 md:px-10 md:pt-48">
         <p className="eyebrow mb-6 text-mute">About</p>
         <h1 className="text-display font-medium leading-[0.9] tracking-[-0.05em]">
           <Lines trigger="enter" lines={['I build the math myself', <span key="b" className="font-serif-it tracking-[-0.02em]">before reaching for a library.</span>]} />
@@ -46,12 +47,18 @@ export default function About() {
         </div>
       </section>
 
-      <section className="mx-auto w-full max-w-[1600px] px-5 md:px-10">
+      <section data-tone="#7c5cff" className="mx-auto w-full max-w-[1600px] px-5 md:px-10">
         <ScrubWords className="max-w-5xl text-[clamp(1.8rem,4vw,4rem)] font-medium leading-[1.06] tracking-[-0.035em]"
           text="I would rather report that a method has no edge, or that a number is simulated, than dress up a result." />
+        <div className="mt-14 max-w-5xl">
+          <div className="mb-3 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.2em] text-mute">
+            <span>Raw spectrum</span><span>Two surfaces, resolved</span>
+          </div>
+          <SignalTrace height={130} />
+        </div>
       </section>
 
-      <Block label="Technical skills">
+      <Block label="Technical skills" tone="#22d3ee">
         <ul>
           {skills.map((s) => (
             <Reveal as="li" key={s.group} className="grid grid-cols-1 gap-2 border-t border-line py-6 first:border-t-0 first:pt-0 md:grid-cols-[14rem_1fr] md:gap-8">
@@ -62,7 +69,7 @@ export default function About() {
         </ul>
       </Block>
 
-      <Block label="Education">
+      <Block label="Education" tone="#34d399">
         <ul>
           {education.map((e) => (
             <Reveal as="li" key={e.school} className="border-t border-line py-8 first:border-t-0 first:pt-0">
@@ -88,7 +95,7 @@ export default function About() {
         </Reveal>
       </Block>
 
-      <Block label="Languages">
+      <Block label="Languages" tone="#fb7185">
         <ul className="grid grid-cols-2 gap-6 md:grid-cols-4">
           {languages.map((l) => (
             <Reveal as="li" key={l.name}>
@@ -99,7 +106,7 @@ export default function About() {
         </ul>
       </Block>
 
-      <Block label="Leadership">
+      <Block label="Leadership" tone="#f5b84a">
         <ul>
           {experience.map((e) => (
             <Reveal as="li" key={e.role} className="grid grid-cols-1 gap-3 border-t border-line py-7 first:border-t-0 first:pt-0 md:grid-cols-[1fr_1.4fr] md:gap-10">

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { liteMode, reducedMotion, coarsePointer, getLenis } from './core.js'
+import { liteMode, reducedMotion, coarsePointer, getLenis, worldPaused } from './core.js'
 
 /*
   The "Spectral" field. One raw-WebGL fragment shader (no Three.js):
@@ -134,8 +134,19 @@ const hexToRgb = (hex) => {
   return [((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255]
 }
 
-export default function Field({ tint = null, tintMix = 0.55, gain = 1, className = '', interactive = true, signal = false }) {
+/*
+  `tint`, `tintMix` and `gain` change smoothly without rebuilding the GL context, so one
+  canvas can follow the page (see World.jsx). `world`: the site-wide fixed background;
+  it scrolls without limit and pauses while a full-screen scene covers it.
+*/
+export default function Field({ tint = null, tintMix = 0.55, gain = 1, className = '', interactive = true, signal = false, world = false }) {
   const canvasRef = useRef(null)
+  const look = useRef({ tint, tintMix, gain })
+  const redraw = useRef(null)
+  useEffect(() => {
+    look.current = { tint, tintMix, gain }
+    redraw.current?.()
+  }, [tint, tintMix, gain])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -168,10 +179,19 @@ export default function Field({ tint = null, tintMix = 0.55, gain = 1, className
     gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0)
     const U = Object.fromEntries(['u_res', 'u_t', 'u_mouse', 'u_focus', 'u_scroll', 'u_vel', 'u_tint', 'u_tintMix', 'u_gain', 'u_signal'].map((n) => [n, gl.getUniformLocation(prog, n)]))
 
-    const rgb = tint ? hexToRgb(tint) : [0.5, 0.5, 0.5]
-    gl.uniform3f(U.u_tint, ...rgb)
-    gl.uniform1f(U.u_tintMix, tint ? tintMix : 0)
-    gl.uniform1f(U.u_gain, gain)
+    // Current look, eased toward look.current every frame.
+    const cur = { rgb: look.current.tint ? hexToRgb(look.current.tint) : [0.5, 0.5, 0.5], mix: look.current.tint ? look.current.tintMix : 0, gain: look.current.gain }
+    const ease = (k) => {
+      const L = look.current
+      const rgb = L.tint ? hexToRgb(L.tint) : cur.rgb
+      for (let i = 0; i < 3; i++) cur.rgb[i] += (rgb[i] - cur.rgb[i]) * k
+      cur.mix += ((L.tint ? L.tintMix : 0) - cur.mix) * k
+      cur.gain += (L.gain - cur.gain) * k
+      gl.uniform3f(U.u_tint, ...cur.rgb)
+      gl.uniform1f(U.u_tintMix, cur.mix)
+      gl.uniform1f(U.u_gain, cur.gain)
+    }
+    ease(1)
     gl.uniform1f(U.u_signal, signal ? 1 : 0)
 
     // Pointer: until the visitor moves, the lens drifts on its own so the hero is alive at once.
@@ -209,13 +229,14 @@ export default function Field({ tint = null, tintMix = 0.55, gain = 1, className
       gl.uniform2f(U.u_mouse, mouse.x, mouse.y)
       gl.uniform1f(U.u_focus, focus)
       const sc = getLenis()?.scroll ?? window.scrollY
-      gl.uniform1f(U.u_scroll, Math.min(2, sc / Math.max(1, window.innerHeight)))
+      const sv = sc / Math.max(1, window.innerHeight)
+      gl.uniform1f(U.u_scroll, world ? sv * 0.45 : Math.min(2, sv))
       gl.uniform1f(U.u_vel, vel)
       gl.drawArrays(gl.TRIANGLES, 0, 3)
     }
     const frame = () => {
       raf = 0
-      if (!visible || lost || document.hidden) { running = false; return }
+      if (!visible || lost || document.hidden || (world && worldPaused())) { running = false; return }
       const now = performance.now(), t = (now - start) / 1000
       const dt = lastFrame ? now - lastFrame : 999
       if ((throttle && dt < 30) || dt < minDt) { raf = requestAnimationFrame(frame); return }
@@ -233,11 +254,16 @@ export default function Field({ tint = null, tintMix = 0.55, gain = 1, className
       mouse.x += (target.x - mouse.x) * 0.06; mouse.y += (target.y - mouse.y) * 0.06
       focus += (focusTarget - focus) * 0.04
       vel *= 0.94
+      ease(0.035)
       draw(t + 20)
       raf = requestAnimationFrame(frame)
     }
     const kick = () => { if (!running && !still && visible && !document.hidden && !lost) { running = true; raf = requestAnimationFrame(frame) } }
 
+    // Look changes: a still canvas redraws once; a paused or idle one restarts.
+    redraw.current = () => { if (still) { ease(1); draw(14) } else kick() }
+    const onWorld = () => kick()
+    if (world) window.addEventListener('world:resume', onWorld)
     const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; kick() }, { rootMargin: '100px' })
     io.observe(canvas)
     const onVis = () => kick()
@@ -263,11 +289,13 @@ export default function Field({ tint = null, tintMix = 0.55, gain = 1, className
       cancelAnimationFrame(raf); io.disconnect(); ro.disconnect(); clearTimeout(resizeTimer)
       if ('cancelIdleCallback' in window) cancelIdleCallback(idle); clearTimeout(idle)
       document.removeEventListener('visibilitychange', onVis)
+      window.removeEventListener('world:resume', onWorld)
+      redraw.current = null
       window.removeEventListener('pointermove', onMove)
       canvas.removeEventListener('webglcontextlost', onLost)
       gl.getExtension('WEBGL_lose_context')?.loseContext()
     }
-  }, [tint, tintMix, gain, interactive, signal])
+  }, [interactive, signal, world])
 
   return (
     <div aria-hidden="true" className={`pointer-events-none ${className}`}

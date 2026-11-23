@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import { ArrowUpRight } from 'lucide-react'
 import { projects } from '../data.js'
 import { Lines, Reveal, Atmosphere } from '../motion/ui.jsx'
-import Field from '../motion/Field.jsx'
 import Glyph from '../components/Glyphs.jsx'
 import { GLYPH_FOR } from '../components/glyph-kinds.js'
 import { gsap, reducedMotion, coarsePointer } from '../motion/core.js'
@@ -36,10 +35,7 @@ export default function Work() {
 
   return (
     <div className="relative">
-      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-[92vh] overflow-hidden [mask-image:linear-gradient(to_bottom,#000_40%,transparent)]">
-        <Field className="absolute inset-0" gain={0.6} interactive={false} />
-      </div>
-      <section className="relative mx-auto max-w-[1600px] px-5 pb-16 pt-36 md:px-10 md:pb-24 md:pt-48">
+      <section data-tone="#7c5cff" className="relative mx-auto max-w-[1600px] px-5 pb-16 pt-36 md:px-10 md:pb-24 md:pt-48">
         <p className="eyebrow mb-6 text-mute">Index · {projects.length} projects</p>
         <h1 className="text-hero font-medium leading-[0.86] tracking-[-0.055em]">
           <Lines trigger="enter" lines={['Selected', <span key="b" className="font-serif-it tracking-[-0.02em]">work.</span>]} />
@@ -49,7 +45,7 @@ export default function Work() {
         </Reveal>
       </section>
 
-      <section aria-label="All projects" className="relative mx-auto max-w-[1600px] px-5 pb-32 md:px-10" onPointerLeave={() => setActive(null)}>
+      <section aria-label="All projects" data-tone="#22d3ee" className="relative mx-auto max-w-[1600px] px-5 pb-32 md:px-10" onPointerLeave={() => setActive(null)}>
         <ol className="border-b border-line">
           {projects.map((x, i) => (
             <Reveal as="li" key={x.id} className="border-t border-line">

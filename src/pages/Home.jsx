@@ -4,6 +4,7 @@ import { profile, projects, figures } from '../data.js'
 import { Github, Linkedin } from '../Icons.jsx'
 import Field from '../motion/Field.jsx'
 import SensorStory from '../motion/SensorStory.jsx'
+import SignalTrace from '../motion/SignalTrace.jsx'
 import { Lines, Reveal, Magnetic, Marquee, ScrubWords, Decode, Roll, Atmosphere } from '../motion/ui.jsx'
 import Glyph from '../components/Glyphs.jsx'
 import { GLYPH_FOR } from '../components/glyph-kinds.js'
@@ -125,14 +126,20 @@ function Availability() {
 
 function Statement() {
   return (
-    <section className="mx-auto max-w-[1600px] px-5 py-28 md:px-10 md:py-44">
+    <section data-tone="#7c5cff" className="mx-auto max-w-[1600px] px-5 py-28 md:px-10 md:py-44">
       <div className="grid grid-cols-1 gap-10 md:grid-cols-12">
         <p className="eyebrow text-mute md:col-span-3">(01) How I work</p>
         <div className="md:col-span-9">
           <ScrubWords
             className="text-[clamp(1.9rem,4.4vw,4.6rem)] font-medium leading-[1.05] tracking-[-0.035em]"
             text="I would rather report that a method has no edge, or that a number is simulated, than dress up a result." />
-          <Reveal className="mt-14 grid grid-cols-1 gap-8 border-t border-line pt-8 md:grid-cols-2">
+          <div className="mt-14">
+            <div className="mb-3 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.2em] text-mute">
+              <span>Raw spectrum</span><span>Two surfaces, resolved</span>
+            </div>
+            <SignalTrace height={150} />
+          </div>
+          <Reveal className="mt-10 grid grid-cols-1 gap-8 border-t border-line pt-8 md:grid-cols-2">
             <p className="max-w-lg leading-relaxed text-bone/70">{profile.blurb}</p>
             <div className="flex items-end md:justify-end">
               <a href="#/about" className="group inline-flex items-center gap-3 text-lg">
@@ -182,7 +189,7 @@ function Features() {
 
       <div className="flex flex-col gap-4 md:gap-0">
         {/* TriageMate */}
-        <div className="md:sticky md:top-[5vh] md:h-[100vh]">
+        <div data-tone={tm.accent} className="md:sticky md:top-[5vh] md:h-[100vh]">
           <a ref={tmTilt} data-stack-card href={`#/p/${tm.id}`} data-cursor="view"
             className="group relative block h-[min(92vh,880px)] min-h-[640px] overflow-hidden rounded-[22px] border border-line md:rounded-[30px]">
             <span aria-hidden="true" className="tilt-sheen" />
@@ -213,7 +220,7 @@ function Features() {
         </div>
 
         {/* PRECITEC */}
-        <div className="md:sticky md:top-[5vh] md:h-[100vh]">
+        <div data-tone={pr.accent} className="md:sticky md:top-[5vh] md:h-[100vh]">
           <a ref={prTilt} data-stack-card href={`#/p/${pr.id}`} data-cursor="view"
             className="group relative block h-[min(92vh,880px)] min-h-[640px] overflow-hidden rounded-[22px] border border-line md:rounded-[30px]">
             <span aria-hidden="true" className="tilt-sheen" />
@@ -294,7 +301,7 @@ function Track() {
   }
 
   return (
-    <section aria-label="More projects" className="relative">
+    <section aria-label="More projects" data-tone="#22d3ee" className="relative">
      {/* GSAP pins this inner div (it inserts a pin-spacer around it), so the React-owned parent stays intact. */}
      <div ref={root} className="relative overflow-hidden py-24 lg:flex lg:h-screen lg:items-center lg:py-0">
       <div ref={track} onFocus={onFocus} data-cursor="drag"
@@ -331,9 +338,14 @@ function Track() {
   )
 }
 
+function FigureCell({ className, children }) {
+  const ref = useTilt(0)
+  return <div ref={ref} className={className}><span aria-hidden="true" className="tilt-sheen" />{children}</div>
+}
+
 function Figures() {
   return (
-    <section className="mx-auto max-w-[1600px] px-5 py-28 md:px-10 md:py-40">
+    <section data-tone="#34d399" className="mx-auto max-w-[1600px] px-5 py-28 md:px-10 md:py-40">
       <div className="mb-14 flex flex-col gap-6 md:mb-20 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="eyebrow mb-5 text-mute">(04) Measured, not tuned</p>
@@ -349,7 +361,7 @@ function Figures() {
         {figures.map((f, i) => {
           const p = projects.find((x) => x.id === f.from)
           return (
-            <div key={f.v} className={`group relative border-b border-line py-10 md:py-14 ${i % 2 === 0 ? 'md:border-r md:pr-10' : 'md:pl-10'}`}>
+            <FigureCell key={f.v} className={`group relative border-b border-line py-10 md:py-14 ${i % 2 === 0 ? 'md:border-r md:pr-10' : 'md:pl-10'}`}>
               {GLYPH_FOR[f.from] && (
                 <div aria-hidden="true" className={`pointer-events-none absolute bottom-8 w-[34%] max-w-[260px] opacity-35 transition-opacity duration-700 group-hover:opacity-90 ${i % 2 === 0 ? 'right-0 md:right-10' : 'right-0'}`}>
                   <Glyph kind={GLYPH_FOR[f.from]} accent={p.accent} className="h-auto w-full" />
@@ -366,7 +378,7 @@ function Figures() {
                   <a href={`#/p/${p.id}`} data-cursor="view" className="eyebrow text-mute hover:text-bone"><span className="link-line">{p.name.split(':')[0]}</span></a>
                 </span>
               </dd>
-            </div>
+            </FigureCell>
           )
         })}
       </dl>
@@ -376,8 +388,8 @@ function Figures() {
 
 function Contact() {
   return (
-    <section id="contact" className="relative overflow-hidden border-t border-line">
-      <Field className="absolute inset-0 opacity-80" gain={0.75} />
+    <section id="contact" data-tone="#7c5cff" className="relative overflow-hidden border-t border-line">
+      <div aria-hidden="true" className="pointer-events-none absolute -bottom-40 left-1/2 h-[520px] w-[120%] -translate-x-1/2 opacity-60 blur-3xl" style={{ background: 'radial-gradient(closest-side, #7c5cff55, transparent)' }} />
       <div className="relative z-10 mx-auto max-w-[1600px] px-5 pb-16 pt-28 md:px-10 md:pb-20 md:pt-40">
         <p className="eyebrow mb-6 text-bone/70">(05) Contact</p>
         <h2 className="text-hero font-medium leading-[0.86] tracking-[-0.055em]">

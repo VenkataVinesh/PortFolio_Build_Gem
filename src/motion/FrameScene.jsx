@@ -20,7 +20,8 @@ import { whoosh } from './sound.js'
 */
 
 const BASE = import.meta.env.BASE_URL
-const AHEAD = 36, BEHIND = 12, PARALLEL = 4
+// Fetch this far around the playhead first; keep this many decoded frames (each ~8 MB at 1920 px).
+const AHEAD = 36, BEHIND = 12, PARALLEL = 4, DECODE_AHEAD = 14, DECODE_BEHIND = 5
 
 export default function FrameScene({ id, sectionId, length = 320, label = 'Illustration', children, className = '' }) {
   const ids = [].concat(id)
@@ -45,36 +46,70 @@ export default function FrameScene({ id, sectionId, length = 320, label = 'Illus
     const src = (i) => { const p = partAt(i); return `${BASE}scenes/${p.k}/${set}/${String(i - p.from).padStart(3, '0')}.webp` }
 
     const reduced = reducedMotion()
-    const imgs = new Array(count)
-    let target = reduced ? count - 1 : 0, cur = target, drawn = -1, raf = 0, started = false, dead = false
+    const blobs = new Array(count)           // compressed frames, as fetched (false while in flight)
+    const bmps = new Map()                   // decoded, canvas-sized frames near the playhead
+    let target = reduced ? count - 1 : 0, cur = target, drawnAt = -1, raf = 0, started = false, dead = false, speed = 0
+    let cw = 0, ch = 0
 
-    const loaded = (i) => imgs[i]?.complete && imgs[i].naturalWidth
-    const nearestLoaded = (i) => {
-      for (let d = 0; d < count; d++) {
-        if (loaded(i - d)) return i - d
-        if (loaded(i + d)) return i + d
-      }
-      return -1
-    }
+    // Never draw bigger than the footage: a 2880 px canvas only costs fill rate.
     const fit = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2)
-      canvas.width = Math.round(canvas.clientWidth * dpr); canvas.height = Math.round(canvas.clientHeight * dpr)
-      drawn = -1
+      const w = canvas.clientWidth * dpr, k = Math.min(1, 1920 / w)
+      cw = canvas.width = Math.round(w * k); ch = canvas.height = Math.round(canvas.clientHeight * dpr * k)
+      bmps.forEach((b) => b?.close?.()); bmps.clear()
+      drawnAt = -1
     }
+    // Cover-fit size and offset of a frame of the given aspect on the canvas.
+    const place = (aspect) => { const s = Math.max(cw / aspect, ch); const w = Math.round(aspect * s), h = Math.round(s); return [Math.round((cw - w) / 2), Math.round((ch - h) / 2), w, h] }
+
+    // Decode just ahead of the playhead, off the main thread and already scaled
+    // (createImageBitmap from a Blob), and release what falls behind. On a fast scroll,
+    // decode every n-th frame ahead (n grows with speed) so there is always a near frame
+    // to show; the gaps fill in once the scroll slows.
+    let decoding = 0
+    const want = (i) => i >= 0 && i < count && blobs[i] && !bmps.has(i)
+    const pump = () => {
+      if (dead) return
+      const t = Math.round(cur), step = Math.max(1, Math.min(8, Math.round(speed * 1.5))), dir = target >= cur ? 1 : -1
+      const lo = t - (dir > 0 ? DECODE_BEHIND : DECODE_AHEAD * step), hi = t + (dir > 0 ? DECODE_AHEAD * step : DECODE_BEHIND)
+      for (const [i, bm] of bmps) if (bm && (i < lo || i > hi)) { bm.close?.(); bmps.delete(i) }
+      while (decoding < 3) {
+        let i = -1
+        for (let d = 0; d <= DECODE_AHEAD && i < 0; d++) { if (want(t + dir * d * step)) i = t + dir * d * step; else if (d <= DECODE_BEHIND && want(t - dir * d)) i = t - dir * d }
+        if (i < 0) return
+        const [, , w, h] = place(metas[ids.indexOf(partAt(i).k)].aspect)
+        bmps.set(i, null); decoding++
+        createImageBitmap(blobs[i], { resizeWidth: w, resizeHeight: h, resizeQuality: 'medium' })
+          .then((bm) => { if (dead || !bmps.has(i)) return bm.close?.(); bmps.set(i, bm); if (Math.abs(i - cur) < 2) { drawnAt = -1; kick() } })
+          .catch(() => bmps.delete(i))
+          .finally(() => { decoding--; pump() })
+      }
+    }
+    const frame = (i) => bmps.get(i) || null
+    const nearest = (i) => {
+      for (let d = 0; d < count; d++) { if (frame(i - d)) return i - d; if (frame(i + d)) return i + d }
+      return -1
+    }
+    const paint = (bm, alpha) => { ctx.globalAlpha = alpha; ctx.drawImage(bm, Math.round((cw - bm.width) / 2), Math.round((ch - bm.height) / 2)) }
+    // Between two frames, blend them by the fraction: 12 fps footage reads as continuous motion.
     const draw = () => {
-      const k = nearestLoaded(Math.round(cur)); if (k < 0 || k === drawn) return
-      const img = imgs[k], cw = canvas.width, ch = canvas.height
-      const s = Math.max(cw / img.naturalWidth, ch / img.naturalHeight) // cover
-      const w = img.naturalWidth * s, h = img.naturalHeight * s
-      ctx.drawImage(img, (cw - w) / 2, (ch - h) / 2, w, h)
-      drawn = k
+      if (Math.abs(cur - drawnAt) < 0.01) return
+      const i0 = Math.floor(cur), f = cur - i0
+      const a = frame(i0) ? i0 : nearest(i0); if (a < 0) return
+      paint(frame(a), 1)
+      if (a === i0 && f > 0.03 && frame(i0 + 1)) paint(frame(i0 + 1), f)
+      ctx.globalAlpha = 1
+      drawnAt = cur
       if (!ready) setReady(true)
     }
     const tick = () => {
       raf = 0
-      cur += (target - cur) * 0.2
-      draw()
-      if (Math.abs(target - cur) > 0.05) raf = requestAnimationFrame(tick)
+      const was = cur
+      cur += (target - cur) * 0.18
+      speed = speed * 0.8 + Math.abs(cur - was) * 0.2
+      if (Math.abs(target - cur) < 0.005) cur = target
+      draw(); pump()
+      if (cur !== target) raf = requestAnimationFrame(tick); else speed = 0
     }
     const kick = () => { if (!raf) raf = requestAnimationFrame(tick) }
 
@@ -85,19 +120,17 @@ export default function FrameScene({ id, sectionId, length = 320, label = 'Illus
     const next = () => {
       const t = Math.round(target)
       for (let d = 0; d <= AHEAD; d++) {
-        const a = t + d; if (a < count && !imgs[a]) return a
-        if (d <= BEHIND) { const b = t - d; if (b >= 0 && !imgs[b]) return b }
+        const a = t + d; if (a < count && blobs[a] === undefined) return a
+        if (d <= BEHIND) { const b = t - d; if (b >= 0 && blobs[b] === undefined) return b }
       }
-      while (cursor < order.length && imgs[order[cursor]]) cursor++
+      while (cursor < order.length && blobs[order[cursor]] !== undefined) cursor++
       return cursor < order.length ? order[cursor] : -1
     }
-    const fetchOne = (i) => new Promise((ok) => {
-      const img = new Image()
-      img.decoding = 'async'
-      img.onload = img.onerror = () => { if (!dead) { drawn = -1; kick() } ok() }
-      img.src = src(i)
-      imgs[i] = img
-    })
+    const fetchOne = async (i) => {
+      blobs[i] = false
+      try { blobs[i] = await (await fetch(src(i))).blob() } catch { blobs[i] = undefined; return }
+      if (!dead && Math.abs(i - cur) <= DECODE_AHEAD) pump()
+    }
     const worker = async () => {
       for (let i = next(); i >= 0 && !dead; i = next()) await fetchOne(i)
     }
@@ -109,7 +142,7 @@ export default function FrameScene({ id, sectionId, length = 320, label = 'Illus
     }
 
     fit()
-    const ro = new ResizeObserver(() => { fit(); kick() }); ro.observe(canvas)
+    const ro = new ResizeObserver(() => { fit(); kick(); pump() }); ro.observe(canvas)
     const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) start() }, { rootMargin: '150% 0px' })
     io.observe(el)
 
@@ -138,7 +171,7 @@ export default function FrameScene({ id, sectionId, length = 320, label = 'Illus
       tl.set({}, {}, 1)
     }, el)
 
-    return () => { dead = true; cancelAnimationFrame(raf); ro.disconnect(); io.disconnect(); ctxG.revert() }
+    return () => { dead = true; cancelAnimationFrame(raf); ro.disconnect(); io.disconnect(); ctxG.revert(); bmps.forEach((b) => b?.close?.()) }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key, missing])
 
@@ -146,13 +179,10 @@ export default function FrameScene({ id, sectionId, length = 320, label = 'Illus
   return (
     <section ref={section} id={sectionId} data-scene={ids[0]} className={`relative ${className}`} style={{ height: `${length}vh` }}>
       <div className="sticky top-0 h-[100svh] overflow-hidden">
-        {/* Shot and veils feather out top and bottom, dissolving into the same footage, blurred, behind the page (World.jsx). */}
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0 [mask-image:linear-gradient(to_bottom,transparent_0%,#000_14%,#000_78%,transparent_100%)]">
-          <canvas ref={canvasRef}
-            className={`absolute inset-0 h-full w-full transition-opacity duration-[1200ms] ${ready ? 'opacity-100' : 'opacity-0'}`} />
-          {/* Veils: keep type readable at the edges without dulling the centre of the shot. */}
-          <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(6,6,9,0.85)_0%,rgba(6,6,9,0.25)_40%,transparent_60%),linear-gradient(to_bottom,rgba(6,6,9,0.6)_0%,transparent_22%)]" />
-        </div>
+        {/* The shot fades out top and bottom into the dark (gradients, not a mask: a mask recomposites on every frame). */}
+        <canvas ref={canvasRef} aria-hidden="true"
+          className={`absolute inset-0 h-full w-full transition-opacity duration-[1200ms] ${ready ? 'opacity-100' : 'opacity-0'}`} />
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(6,6,9,0.95)_0%,rgba(6,6,9,0.3)_35%,transparent_58%),linear-gradient(to_bottom,rgba(6,6,9,0.85)_0%,transparent_20%)]" />
         <div className="relative z-10 h-full">{children}</div>
         <p className="pointer-events-none absolute bottom-6 right-5 z-10 font-mono text-[10px] uppercase tracking-[0.2em] text-bone/45 md:right-10">{label}</p>
         <div aria-hidden="true" className="absolute inset-x-5 bottom-4 z-10 h-px bg-bone/10 md:inset-x-10">

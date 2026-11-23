@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { getLenis, reducedMotion, coarsePointer } from './core.js'
+import { getLenis, reducedMotion, coarsePointer, filmOnScreen } from './core.js'
 
 /*
   Lumen: a live layer of drifting light over the film, so the scene never freezes when
@@ -7,6 +7,8 @@ import { getLenis, reducedMotion, coarsePointer } from './core.js'
   drift and twinkle on their own, part around the pointer, and rush past (nearer ones
   faster) when you scroll. One raw-WebGL point shader, additive blending, no library.
   Runs only while on screen and in a visible tab; off for reduced motion.
+  `yieldToFilm`: the site-wide copy goes dark while a pinned film fills the screen
+  (the film has its own), so two light layers never run at once.
 */
 
 const VERT = `
@@ -51,7 +53,7 @@ void main(){
   gl_FragColor = vec4(col * a, a); // premultiplied: transparent outside the glow
 }`
 
-export default function Lumen({ className = '' }) {
+export default function Lumen({ className = '', density = 1, yieldToFilm = false }) {
   const ref = useRef(null)
 
   useEffect(() => {
@@ -66,7 +68,7 @@ export default function Lumen({ className = '' }) {
     if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return
     gl.useProgram(prog)
 
-    const N = coarsePointer() ? 260 : 720
+    const N = Math.round((coarsePointer() ? 260 : 720) * density)
     const data = new Float32Array(N * 4)
     for (let i = 0; i < N; i++) {
       const z = Math.pow(Math.random(), 0.6) // more far motes than near
@@ -93,12 +95,17 @@ export default function Lumen({ className = '' }) {
     const onMove = (e) => { const r = canvas.getBoundingClientRect(); mouse.tx = (e.clientX - r.left) / r.width; mouse.ty = 1 - (e.clientY - r.top) / r.height }
     window.addEventListener('pointermove', onMove, { passive: true })
 
-    let raf = 0, visible = false, vel = 0, scroll = 0, lastY = window.scrollY
+    let raf = 0, visible = false, vel = 0, scroll = 0, lastY = window.scrollY, idle = false
     const t0 = performance.now()
     const frame = (now) => {
       raf = 0
       if (!visible || document.hidden) return
       const y = getLenis()?.scroll ?? window.scrollY
+      if (yieldToFilm && filmOnScreen()) {
+        if (!idle) { gl.clear(gl.COLOR_BUFFER_BIT); idle = true }
+        lastY = y; raf = requestAnimationFrame(frame); return
+      }
+      idle = false
       const dy = y - lastY; lastY = y
       scroll += dy / window.innerHeight * 0.35
       vel += (Math.min(1, Math.abs(dy) / 40) - vel) * 0.08
@@ -123,7 +130,7 @@ export default function Lumen({ className = '' }) {
       window.removeEventListener('pointermove', onMove); document.removeEventListener('visibilitychange', kick)
       gl.getExtension('WEBGL_lose_context')?.loseContext()
     }
-  }, [])
+  }, [density, yieldToFilm])
 
   return <canvas ref={ref} aria-hidden="true" className={`pointer-events-none mix-blend-screen ${className}`} />
 }

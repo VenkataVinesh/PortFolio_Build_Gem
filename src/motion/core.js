@@ -17,6 +17,12 @@ export const liteMode = () =>
 
 
 
+// Full-screen films hold the stage while pinned; the site-wide light layer yields to them
+// (a count, so two overlapping films cannot release each other early).
+let films = 0
+export const filmOnScreen = () => films > 0
+export function holdStage(on) { films = Math.max(0, films + (on ? 1 : -1)) }
+
 /* ---- Lenis, driven from the GSAP ticker so scroll and ScrollTrigger share a frame ---- */
 let lenis = null
 export function startLenis() {

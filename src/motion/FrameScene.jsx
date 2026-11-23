@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import scenes from '../scenes.json'
-import { gsap, ScrollTrigger, reducedMotion, coarsePointer } from './core.js'
+import { gsap, ScrollTrigger, reducedMotion, coarsePointer, holdStage } from './core.js'
 import { whoosh } from './sound.js'
 import Lumen from './Lumen.jsx'
 
@@ -84,7 +84,9 @@ export default function FrameScene({ id, sectionId, length = 320, label = 'Illus
     let decoding = 0
     const want = (i) => i >= 0 && i < count && blobs[i] && !bmps.has(i)
     const pump = () => {
-      if (dead) return
+      // No size yet (hidden, or mid route change): nothing to decode to. A zero-sized
+      // decode rejects at once, and retrying at once would spin the main thread.
+      if (dead || !cw || !ch) return
       const t = Math.round(pos), step = Math.max(1, Math.min(8, Math.round(speed * 1.5))), dir = target >= cur ? 1 : -1
       const lo = t - (dir > 0 ? DECODE_BEHIND : DECODE_AHEAD * step), hi = t + (dir > 0 ? DECODE_AHEAD * step : DECODE_BEHIND)
       for (const [i, bm] of bmps) if (bm && (i < lo || i > hi)) { bm.close?.(); bmps.delete(i) }
@@ -96,8 +98,7 @@ export default function FrameScene({ id, sectionId, length = 320, label = 'Illus
         bmps.set(i, null); decoding++
         createImageBitmap(blobs[i], { resizeWidth: w, resizeHeight: h, resizeQuality: 'medium' })
           .then((bm) => { if (dead || !bmps.has(i)) return bm.close?.(); bmps.set(i, bm); if (Math.abs(i - cur) < 2) { drawnAt = -1; kick() } })
-          .catch(() => bmps.delete(i))
-          .finally(() => { decoding--; pump() })
+          .then(() => { decoding--; pump() }, () => { decoding--; bmps.delete(i); blobs[i] = undefined }) // on failure, refetch later rather than retry in a tight loop
       }
     }
     const frame = (i) => bmps.get(i) || null
@@ -170,6 +171,8 @@ export default function FrameScene({ id, sectionId, length = 320, label = 'Illus
     document.addEventListener('visibilitychange', kick)
 
     // The shot leans a little toward the pointer: depth without a 3D engine.
+    let held = false
+    const hold = (on) => { if (on !== held) { held = on; holdStage(on) } }
     let unpoint = () => {}
     if (!reduced && !coarsePointer()) {
       gsap.set(canvas, { scale: 1.06 })
@@ -188,6 +191,7 @@ export default function FrameScene({ id, sectionId, length = 320, label = 'Illus
           const k = partAt(Math.round(target)).k
           if (el.dataset.scene !== k) el.dataset.scene = k
         },
+        onToggle: (s) => hold(s.isActive),
         onEnter: whoosh,
         onEnterBack: whoosh,
       })
@@ -206,7 +210,7 @@ export default function FrameScene({ id, sectionId, length = 320, label = 'Illus
     }, el)
 
     return () => {
-      dead = true; cancelAnimationFrame(raf); ro.disconnect(); io.disconnect(); seen.disconnect(); unpoint()
+      dead = true; cancelAnimationFrame(raf); ro.disconnect(); io.disconnect(); seen.disconnect(); unpoint(); hold(false)
       document.removeEventListener('visibilitychange', kick); ctxG.revert(); bmps.forEach((b) => b?.close?.())
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
